@@ -1,0 +1,9 @@
+node_modules/
+out/
+.capture-raw/
+public/*.webm
+public/*.mp4
+public/*.timeline.json
+*.log
+.DS_Store
+Thumbs.db
