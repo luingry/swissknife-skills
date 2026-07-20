@@ -24,6 +24,12 @@ being re-edited by hand.
 - **Two production types.** *Walkthrough* (teach how it works) and *pitch* (alternating
   statement card → demo proving it).
 - **Transitions.** `softCut` (default), `containerZoom`, `circleReveal`, `slidePush`.
+- **Component replication.** Extracts a real component from a live page into independently
+  animatable parts — every text run, icon and row measured separately — so a component can be
+  presented in isolation with staggered reveals, part-level morphs and ripples, instead of a
+  flat screenshot sliding in.
+- **Grid discipline.** Placement, framing and camera focus snap to a 12×8 grid; alignment is
+  what separates a designed piece from a set of improvised frames.
 - **Desktop and mobile.** Arrow cursor in a browser frame, or a touch blob with real gestures
   inside a phone bezel; landscape, square, and portrait cuts from one story.
 - **Ships a validated template** — copy `assets/template/`, `npm install`, and the engine is

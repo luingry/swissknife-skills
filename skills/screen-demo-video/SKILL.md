@@ -11,7 +11,8 @@ description: >-
   (Reels/Shorts/app-store) cuts from one story. Use when asked to "create a product
   demo video", "screencast", "video de produto", "demo animation showing screens
   being used", "Screen Studio style", "animated cursor / clicks / zoom on a
-  recording", "app demo video", "turn screenshots into a demo video", or
+  recording", "app demo video", "animate a component's parts", "present a component in isolation",
+  "turn screenshots into a demo video", or
   "programmatic marketing video of an app".
 ---
 
@@ -96,6 +97,11 @@ These are non-negotiable taste rules. Most "AI-looking" demos violate 3+ of them
   tell. A human operator lingers on hard parts and breezes through obvious ones.
 - **Cut dead air, keep reading time.** Trim idle mouse wandering and load spinners; keep
   every moment a viewer needs to actually read text (reading-time formula in the roteiro).
+- **Everything lands on the grid.** Element placement, framing, and camera focus points snap to
+  a 12×8 grid ([references/grid-system.md](references/grid-system.md)). The eye reads alignment
+  as intent long before conscious attention, so misalignment reads as amateur even when a viewer
+  cannot say why. The exceptions are coordinates that come from reality — real click points, and
+  a replicated component's internal parts — where fidelity outranks tidiness.
 
 ## Workflow
 
@@ -268,6 +274,8 @@ model are in the roteiro reference.
 | [references/production-types.md](references/production-types.md) | **Step 0a:** walkthrough vs pitch, the statement-card structure, and the four vetted fonts (default: Inter) |
 | [references/interaction-fidelity.md](references/interaction-fidelity.md) | **Capture:** why interaction must be real, the capture-script format, viewport pinning, wiring a capture timeline into the film |
 | [references/transitions.md](references/transitions.md) | Composition-to-composition transitions: `softCut` (default), `containerZoom`, `circleReveal`, `slidePush` — and when each applies |
+| [references/component-replication.md](references/component-replication.md) | **Presenting a component in isolation:** extract a real component into independently-animatable parts, then stagger / morph / ripple them |
+| [references/grid-system.md](references/grid-system.md) | The standing grid directive: what snaps, what must not, and why alignment carries so much perceived quality |
 | [references/fast-workflow.md](references/fast-workflow.md) | **Read before building.** Where the time actually goes: template vs hand-scaffolding, bundle-once verification, coordinate grid, draft scale, scene chunking for long videos |
 | [references/devices-and-formats.md](references/devices-and-formats.md) | **Step 0:** choosing desktop vs mobile, aspect ratio, phone/browser frames, gesture vocabulary, caption sizing, safe areas, sharing one roteiro across both |
 | [references/roteiro-and-pacing.md](references/roteiro-and-pacing.md) | Writing the script: beat structure, ordering, durations, reading-time model, caption copy, storyboard table |
