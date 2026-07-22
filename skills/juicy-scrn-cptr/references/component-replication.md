@@ -114,3 +114,21 @@ and looks mushy; override with `reveal.select` only when you mean it.
 
 Always render one still and **look at it** before building the choreography. The replica is
 close, not pixel-perfect, and the gaps are obvious on sight and invisible in the JSON.
+
+## 5. The fidelity loop (mandatory for anything rebuilt)
+
+A replica earns the right to be animated only after it survives a **side-by-side against the
+real system**. This applies to `replicate.mjs` output and, doubly, to screens rebuilt by hand
+for a [UI story](production-types.md):
+
+1. Capture a reference screenshot of the real screen at the exact viewport the composition
+   uses (Playwright/adb/simctl — see [setup-and-render.md](setup-and-render.md)).
+2. Render a still of the rebuild at the same size.
+3. Put them side by side (or difference them) and fix what differs: font family and weight,
+   line-height, paddings, colors, radii, icon geometry, shadow softness. Colors must be
+   sampled from the original, never eyeballed — this is also where the production's palette
+   (caption accents etc.) is read from.
+4. Repeat until a cold viewer could not say which is the product.
+
+Only then choreograph. Fidelity outranks schedule: a beautiful animation of a screen that
+doesn't quite exist is a worse deliverable than a plain animation of the real one.

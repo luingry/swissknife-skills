@@ -1,22 +1,24 @@
 ---
-name: screen-demo-video
+name: juicy-scrn-cptr
 description: >-
-  Create polished, Screen Studio-style product demo videos programmatically with
-  Remotion, for desktop AND mobile targets — animated cursor or touch gestures
-  (tap/swipe/scroll/long-press), click ripples, dynamic auto-zoom/pan that follows
-  the action, motion blur, phone/browser device frames, captions, and a
-  director-grade script (roteiro). Drives motion from a declarative event timeline
-  (or from a real tap/gesture log), so the whole video is code and re-renders
-  headlessly with no manual editing. Handles landscape, square, and portrait
-  (Reels/Shorts/app-store) cuts from one story. Use when asked to "create a product
-  demo video", "screencast", "video de produto", "demo animation showing screens
-  being used", "Screen Studio style", "animated cursor / clicks / zoom on a
-  recording", "app demo video", "animate a component's parts", "present a component in isolation",
-  "turn screenshots into a demo video", or
-  "programmatic marketing video of an app".
+  Create polished, Screen Studio-style product demo videos AND device-framed
+  screenshots programmatically with Remotion, for desktop and mobile targets —
+  animated cursor or touch gestures (tap/swipe/scroll/long-press), click ripples,
+  dynamic auto-zoom/pan that follows the action, motion blur, subtle film grain,
+  phone/browser device frames over a blurred-self backdrop, typewriter caption
+  boxes, element-level UI choreography (staggered reveals, in-UI typing, highlight
+  rings), and a director-grade script (roteiro). Drives motion from a declarative
+  event timeline (or from a real tap/gesture log), so the whole video is code and
+  re-renders headlessly with no manual editing. Handles landscape, square, and
+  portrait (Reels/Shorts/app-store) cuts from one story. Use when asked to "create
+  a product demo video", "screencast", "video de produto", "demo animation showing
+  screens being used", "Screen Studio style", "animated cursor / clicks / zoom on
+  a recording", "app demo video", "animate a component's parts", "present a
+  component in isolation", "turn screenshots into a demo video", "mobile mockup
+  screenshot", or "programmatic marketing video of an app".
 ---
 
-# Screen Demo Video
+# Juicy Scrn Cptr
 
 Build product-demo videos that feel like they were captured with Screen Studio — a
 recording (or synthetic screens) that **auto-zooms toward the action**, a **pointer
@@ -30,6 +32,11 @@ touch blob with real gestures (tap, swipe, scroll, long-press) inside a phone be
 landscape, square, or portrait. Same timeline schema either way — pick the mode and the
 geometry. **Confirm the target format with the user before writing the roteiro** if it
 isn't stated; a landing-page hero loop and a Reels cut are different films.
+
+Besides videos, the same stack produces **polished static screenshots** — a capture inside
+the device/browser frame on the blurred backdrop, rendered as a single still
+(`npx remotion still`). A mobile screenshot is always wrapped in the phone frame so it
+visually reads as a device; same layer stack, no timeline needed.
 
 This skill exists because the "wow" is not the footage — it's the **choreography**:
 where the camera looks, how the pointer arrives, when things breathe. Get that right and
@@ -50,7 +57,13 @@ even plain screenshots look premium. Get it wrong and a 4K capture looks robotic
 
 A Screen Studio-grade frame is a stack. Skipping a layer is why cheap versions look cheap.
 
-1. **Background** — solid, gradient, or wallpaper. Never let the recording touch the edges.
+1. **Background** — **default: a frame of the capture itself, scaled past the edges and
+   heavily, diffusely blurred** (`<BlurBackdrop>`), with a light scrim. This ties the backdrop
+   to the product's palette automatically and is what premium demos actually do. A solid /
+   gradient / wallpaper backdrop only when the user asks for one. If the user opts out of a
+   backdrop entirely, the capture renders **fullscreen and frameless** — no padding, no
+   radius, no shadow, no bezel (`backdrop="none"`). Never let a framed recording touch the
+   edges.
 2. **Framed screen** — desktop: the recording inset with **generous padding** (6–10% of the
    canvas), **rounded corners** (16–28px), and a **soft, large drop shadow** (optionally
    browser chrome). Mobile: a **phone bezel** with correct radius, notch/island, and shadow.
@@ -60,15 +73,22 @@ A Screen Studio-grade frame is a stack. Skipping a layer is why cheap versions l
    (see [references/camera-zoom.md](references/camera-zoom.md)). Rest at 1.0×, punches in to
    1.6–2.2× on desktop — but only **1.0–1.4× on mobile**, where deeper crops the bezel and
    breaks the device illusion.
-4. **Pointer** — desktop: an arrow cursor moving in **human arcs with a settle**, dwelling
-   before clicking. Mobile: a **touch blob** that presses on contact and stays down through
-   swipes. Both carry **motion blur** on fast moves
-   ([references/cursor-and-clicks.md](references/cursor-and-clicks.md)).
-5. **Interaction feedback** — an expanding ripple at the click/tap point, plus an optional
-   whole-frame "press" dip.
-6. **Captions / callouts** — short labels that enter a beat *after* the action (spring +
-   fade), never before it.
-7. **Audio (optional)** — soft bed music + subtle whoosh/click SFX via `<Audio>`.
+4. **Pointer** — desktop: a **modern, minimalist arrow** (slim, rounded joins, soft drop
+   shadow) moving in **human arcs with a settle**, dwelling before clicking. Mobile: a **touch
+   blob** that presses on contact and stays down through swipes. Both carry **motion blur** on
+   fast moves ([references/cursor-and-clicks.md](references/cursor-and-clicks.md)).
+5. **Interaction feedback** — an expanding ripple at the click/tap point, plus a brief **press
+   dip on the pointer only**. A click never scales the framed screen — a whole-frame dip reads
+   as the page bouncing, not as a tap ([references/cursor-and-clicks.md](references/cursor-and-clicks.md) §3).
+6. **Captions / callouts** — short labels that enter a beat *after* the action, never before
+   it. The box is **squared (no rounded corners), shadowed**, and enters by **expanding its
+   width while the text types itself in, character by character, with no caret** (see
+   "Caption identity" below).
+7. **Film grain** — a subtle, animated, luminance-only grain over the **whole frame,
+   captions included** (`<FilmGrain>`, on by default). Natural and restrained — noticeable
+   on flat areas at 100%, never gritty — it is the finishing texture that separates
+   award-site motion work from a sterile screen render. Turn it off only if the user asks.
+8. **Audio (optional)** — soft bed music + subtle whoosh/click SFX via `<Audio>`.
 
 The copy-paste component library for all of this is in
 [references/remotion-toolkit.md](references/remotion-toolkit.md).
@@ -102,6 +122,17 @@ These are non-negotiable taste rules. Most "AI-looking" demos violate 3+ of them
   as intent long before conscious attention, so misalignment reads as amateur even when a viewer
   cannot say why. The exceptions are coordinates that come from reality — real click points, and
   a replicated component's internal parts — where fidelity outranks tidiness.
+- **The subject project's palette rules the frame.** Every element the production adds —
+  caption accents, statement cards, custom backdrops, highlight rings — draws its colors from
+  the palette of the product being demoed, not from this skill's defaults. Read the palette
+  off the product's real UI (surface, text, brand accent) before authoring, and set
+  `accent` in the caption/statement themes to the product's brand color. The blurred-self
+  backdrop follows the palette automatically; anything hand-colored must too.
+- **Rebuilt screens are replicas, not impressions.** When a screen is reconstructed to enable
+  animation, its fidelity to the original must be maximal: render a still of the rebuild and
+  compare it **side by side with a screenshot of the real system at the same viewport** —
+  fonts, spacing, colors, radii, icons, shadows — and iterate until the pair is hard to tell
+  apart. A demo of a screen that doesn't quite exist reads as fake instantly.
 
 ## Workflow
 
@@ -109,8 +140,9 @@ Copy and track this checklist:
 
 ```text
 Demo video progress:
-- [ ] Step 0a: Confirm production type — walkthrough or pitch
-- [ ] Step 0: Confirm target — desktop or mobile, and aspect ratio
+- [ ] Step 0a: Confirm production type — walkthrough, pitch, or UI story
+- [ ] Step 0: Confirm target — desktop or mobile, aspect ratio, video or still screenshot
+- [ ] Step 0b: Ask the user — caption/text font, and contrast (light | dark)
 - [ ] Step 1: Write the roteiro (beats, order, one idea each, pacing)
 - [ ] Step 2: Get the source (real recording, screenshots, or React-rebuilt screens)
 - [ ] Step 3: Scaffold the Remotion project + drop in the toolkit components
@@ -121,13 +153,27 @@ Demo video progress:
 ```
 
 0a. **Decide the production type.** **Walkthrough** (teach how it works — one continuous
-   journey, captions labelling actions) or **pitch** (sell why it matters — alternating
-   statement card → demo proving it)? They differ in structure, pacing, runtime and typography.
+   journey, captions labelling actions), **pitch** (sell why it matters — alternating
+   statement card → demo proving it), or **UI story** (reconstructed UI, element-level
+   choreography, no pointer — the premium hero-loop register)? They differ in structure,
+   pacing, runtime and typography.
    See [references/production-types.md](references/production-types.md); ask if unstated.
-0. **Decide the target.** Desktop or mobile? Landscape, square, or portrait? This changes beat
-   count, zoom ceiling, caption size, and the pointer renderer — so settle it first. Table of
-   formats in [references/devices-and-formats.md](references/devices-and-formats.md). Ask the
-   user if unstated. If they want both, author the story once and the geometry twice (§4 there).
+0. **Decide the target.** Desktop or mobile? Landscape, square, or portrait? **Video or a
+   static screenshot** (a framed still uses the same stack minus the timeline)? This changes
+   beat count, zoom ceiling, caption size, and the pointer renderer — so settle it first.
+   Table of formats in [references/devices-and-formats.md](references/devices-and-formats.md).
+   Ask the user if unstated. If they want both, author the story once and the geometry twice
+   (§4 there).
+0b. **Ask the user two things before any production starts** (do not skip, do not assume):
+   1. **Which font** should the capture's texts (captions, statement cards) use — offer the
+      vetted families in [references/production-types.md](references/production-types.md)
+      but accept any loadable family.
+   2. **Which contrast — light or dark** — which themes the caption box: **light** → light
+      beige surface with a soft dark pastel orange-brown text (Claude-like palette, gentle
+      by design); **dark** → dark warm surface with warm off-white text. Tokens live in
+      `CAPTION_THEMES` (`assets/template/src/demo/Caption.tsx`).
+   Also confirm here if they want the default blurred-self backdrop or no backdrop
+   (= fullscreen, frameless capture).
 1. **Roteiro first, always.** Do not open code until the script exists. Use
    [references/roteiro-and-pacing.md](references/roteiro-and-pacing.md) to lay out beats,
    order them, assign each a duration, and write caption copy. The script is a table the
@@ -146,7 +192,10 @@ Demo video progress:
 
    Lower-fidelity fallbacks, when real capture is impossible:
    - **React-rebuilt screens** (crispest — vector at any zoom; rebuild the key UI states as
-     components). Best for hero shots you punch deep into.
+     components). Best for hero shots you punch deep into. **Fidelity is non-negotiable:**
+     capture a reference screenshot of the real system first, rebuild against it, then render
+     a still of the rebuild and compare the two side by side at the same viewport until fonts,
+     spacing, colors, radii, icons and shadows match. Iterate before animating anything.
    - **Real screen recording** via `<OffthreadVideo>` (most authentic; some softness at high
      zoom — keep punches ≤1.8× or record at 2× resolution).
    - **Static screenshots** as `<Img>` (simplest; combine with camera moves to add life).
@@ -179,14 +228,16 @@ From [references/remotion-toolkit.md](references/remotion-toolkit.md) — drop-i
 
 | Component / hook | Role |
 |---|---|
-| `<DemoStage events source mode device>` | Top-level: composes background → frame → camera → pointer → captions from one `events` array. `mode="desktop" \| "mobile"` |
+| `<DemoStage events source mode device backdrop contrast fontFamily grain>` | Top-level: composes backdrop → frame → camera → pointer → captions → grain from one `events` array. `mode="desktop" \| "mobile"`; `backdrop="blur"` (default) \| `"none"` (fullscreen frameless) \| custom node |
+| `<BlurBackdrop>` | Default backdrop: the capture itself, over-scaled and heavily blurred, plus scrim |
+| `<FilmGrain>` | Subtle animated luminance grain over the whole frame (top layer, on by default) |
 | `<Screen>` | Desktop frame: background, padding, radius, shadow |
 | `<DeviceFrame device>` | Mobile frame: phone bezel, radius, notch/island, shadow |
 | `<Camera focus scale>` | Zoom/pan transform that keeps a focus point centered |
-| `<Cursor>` | Desktop arrow pointer with settle, arc, motion blur |
+| `<Cursor>` | Desktop arrow pointer (modern, minimalist) with settle, arc, motion blur, click press dip |
 | `<TouchPointer down>` | Mobile touch blob; presses on contact, stays down through drags |
-| `<ClickRipple>` | Expanding ring + optional frame press on click/tap events |
-| `<Caption>` | Timed label, spring-in / clean-out |
+| `<ClickRipple>` | Expanding ring at click/tap points (pairs with `useCursorPress`, which dips the pointer only) |
+| `<Caption>` | Timed label: squared shadowed box that expands its width while the text types in (no caret) |
 | `useCursorPosition(events)` | Current pointer x/y (spring between waypoints + arc) |
 | `useCamera(events)` | Current `{scale, focus}` (spring between zoom keyframes) |
 | `normalizeEvents(events)` | Expands `swipe`/`scroll`/`longPress` into waypoints + contact intervals |
@@ -207,22 +258,29 @@ Remotion `spring()` configs (all with `fps` from `useVideoConfig`):
 
 ## Caption identity and reading time
 
-Captions use a **light surface with soft-dark text and a vertical accent bar on the left edge**
-— a deliberate, recognizable object rather than a generic dark pill. Defaults live in
-`CAPTION_THEME` (`assets/template/src/demo/Caption.tsx`); change `accent` to the product's
+The caption box is a deliberate, recognizable object: **squared corners (no border radius),
+no border, a soft shadow, and a vertical accent bar on the left edge** in the subject
+project's brand color. It **enters by expanding its width left-to-right while the text is
+revealed character by character, as if being typed — with no caret** (reveal speed:
+`CAPTION_REVEAL_CPS`, 28 cps). Width and letters share one progress, so the box edge and the
+last visible letter arrive together.
+
+The colors come from the **contrast the user chose in Step 0b**; themes live in
+`CAPTION_THEMES` (`assets/template/src/demo/Caption.tsx`); swap `accent` to the product's
 brand color and leave the rest alone.
 
-| Token | Value | Note |
-|---|---|---|
-| `surface` | `#FAF9F6` | Warm off-white |
-| `text` | `#2E2E38` | Soft dark, not pure black |
-| `accent` | `#5B4BE8` | The left bar — swap per brand |
-| `accentWidth` | `7px` | Flush to the left edge, full height |
-| `radius` | `12px` | Box clips the bar's corners |
+| Token | `light` | `dark` | Note |
+|---|---|---|---|
+| `surface` | `#F0EEE6` | `#262624` | Light beige / dark warm surface |
+| `text` | `#8F5B3C` | `#F0EEE6` | Soft dark pastel orange-brown / warm off-white |
+| `accent` | `#C96442` | `#C96442` | The left bar — swap for the project's brand color |
+| `accentWidth` | `7px` | `7px` | Flush to the left edge, full height |
+| radius | none | none | Squared corners are the identity — never round them |
 
-Contrast lands around 11:1 — well past WCAG AA's 4.5:1 while still reading as gentle rather
-than stark. **Do not soften it further:** video compression eats fine text contrast, so
-on-screen text needs *more* margin than a web page, not less.
+The light theme's text contrast is deliberately gentle (Claude-like register). Because video
+compression erodes fine text, **always confirm legibility on a rendered frame at the delivery
+bitrate** — if a caption stops being readable at the target size, darken the text a step
+rather than shrinking the font.
 
 **Hold duration is computed, never guessed** (`captionHoldSeconds`, `readingTime.ts`):
 
@@ -238,6 +296,10 @@ UI it describes, which pure silent-reading figures (~238 wpm, Brysbaert 2019) ne
 for. The **3.0s floor** dominates short captions — below it, text reads as a flash no matter
 how few words it has. Captions auto-expire on this timer, so `caption: null` is only needed to
 clear one early; `captionHold` overrides it when you really must.
+
+The typewriter reveal needs no extra term in the formula: it runs at 28 cps while reading runs
+at 12 cps, so the reveal always finishes well inside the computed hold and the viewer reads
+along as it types.
 
 Use `captionBudgetSeconds([...])` while writing the roteiro to confirm the caption load fits
 the target runtime **before** building the timeline. Standard beat pacing and the full timing
@@ -256,8 +318,19 @@ model are in the roteiro reference.
 - **Breathe:** confirm ≥0.6s hold after each payoff; confirm idle wandering is trimmed.
 - **Blur on fast moves:** scrub a fast pointer move at 0.1× and confirm motion blur/trail is
   present; static holds have none.
-- **Edges:** the recording never reaches the canvas edge; padding/bezel, radius, and shadow are
-  intact at every zoom level.
+- **Edges:** a framed recording never reaches the canvas edge; padding/bezel, radius, and
+  shadow are intact at every zoom level. (Fullscreen mode — user opted out of the backdrop —
+  is the deliberate exception: edge-to-edge, no frame.)
+- **Backdrop:** the default blurred-self backdrop is present and diffuse enough that no UI
+  detail is recognizable in it; it never distracts from the framed capture.
+- **Typewriter captions:** the box has squared corners and a shadow; width expansion and
+  letter reveal stay in sync (scrub the entrance at 0.1×); no caret is visible.
+- **Palette:** every added element (caption accent, statement cards, rings, custom backdrop)
+  uses the subject project's palette — nothing ships with this skill's placeholder colors.
+- **Replication fidelity:** for any rebuilt screen, the side-by-side against the real system's
+  screenshot has been done and the differences resolved.
+- **Film grain:** visible on a flat area at 100% zoom, invisible as "noise" at a glance —
+  opacity ~0.04–0.06; it animates (not a frozen pattern) and covers captions too.
 - **Mobile-specific:** no arrow cursor anywhere; the touch blob stays *down* for the whole
   swipe/scroll; zoom never crops the bezel away; captions sit outside the phone; no personal
   data visible in a real device's status bar.
@@ -271,7 +344,7 @@ model are in the roteiro reference.
 | File | Read when |
 |---|---|
 | **`assets/template/`** | **The runnable engine — copy it, don't retype it.** Validated end to end: typecheck clean, renders, `scripts/capture.mjs` (real interaction) and `scripts/verify.mjs` (fast checkpoints) both proven. You edit only `src/Root.tsx` |
-| [references/production-types.md](references/production-types.md) | **Step 0a:** walkthrough vs pitch, the statement-card structure, and the four vetted fonts (default: Inter) |
+| [references/production-types.md](references/production-types.md) | **Step 0a:** walkthrough vs pitch vs UI story (element choreography), the statement-card structure, and the four vetted fonts (default: Inter) |
 | [references/interaction-fidelity.md](references/interaction-fidelity.md) | **Capture:** why interaction must be real, the capture-script format, viewport pinning, wiring a capture timeline into the film |
 | [references/transitions.md](references/transitions.md) | Composition-to-composition transitions: `softCut` (default), `containerZoom`, `circleReveal`, `slidePush` — and when each applies |
 | [references/component-replication.md](references/component-replication.md) | **Presenting a component in isolation:** extract a real component into independently-animatable parts, then stagger / morph / ripple them |

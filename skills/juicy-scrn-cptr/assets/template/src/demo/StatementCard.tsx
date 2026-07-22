@@ -47,13 +47,19 @@ export type StatementTheme = {
   radius: number;
 };
 
+/**
+ * Squared corners (radius 0) are the standing text-box identity of this skill — same as the
+ * caption box. `accent` must be swapped for the SUBJECT PROJECT's brand color, and surface/
+ * text should follow the contrast the user chose in Step 0b (light shown; for dark, invert
+ * to a dark warm surface like #262624 with warm off-white text).
+ */
 export const STATEMENT_THEME: StatementTheme = {
   background: '#0C0C11',
-  surface: '#FAF9F6',
-  text: '#23232B',
-  accent: '#5B4BE8',
+  surface: '#F0EEE6',
+  text: '#3D3929',
+  accent: '#C96442',
   accentWidth: 8,
-  radius: 14,
+  radius: 0,
 };
 
 export const StatementCard: React.FC<{

@@ -47,6 +47,27 @@ dims slightly, which is how iOS conveys depth rather than a flat swap.
 
 For wizards, stepped flows, and paged navigation — anywhere the UI itself has a spatial order.
 
+## In-canvas continuity (scroll) — for UI-story productions
+
+Not a composition-to-composition transition but the **absence of one**: in a UI story
+([production-types.md](production-types.md) §C) the next beat arrives by the content
+**scrolling vertically inside the same frame** — the old beat exits top, the new one enters
+bottom, exactly as a live session would scroll. Motion-blur the fast portion (the
+`<CameraMotionBlur>` wrapper already covers content that moves inside it) and ease with a
+weighty spring, never linear.
+
+Use it when both beats live in the *same* reconstructed UI (a chat stream advancing, a feed
+appending). The moment the story changes surface — different screen, different app state that
+scrolling can't reach — fall back to `softCut`. A scroll that teleports to unrelated content
+reads as broken, not smooth.
+
+Anatomy of one continuity move (~0.6–0.9s total):
+
+1. Hold the finished beat 0.8–1.5s (let the payoff breathe).
+2. Scroll the content column up with a spring (damping ~30, stiffness ~90); fast middle,
+   soft settle. New elements may begin their staggered entrances during the settle.
+3. Never scroll while a caption is being read or mid-typing — finish the moment first.
+
 ## Choosing
 
 | Situation | Use |
@@ -56,6 +77,7 @@ For wizards, stepped flows, and paged navigation — anywhere the UI itself has 
 | Tap → new screen, especially mobile | `circleReveal` |
 | Steps, wizards, paged navigation | `slidePush` |
 | Statement card → demo (pitch productions) | `softCut` |
+| Same UI advancing (UI story: chat stream, feed) | In-canvas scroll continuity |
 
 ## Usage
 

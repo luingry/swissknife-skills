@@ -5,7 +5,35 @@ import type { DemoEvent, Vec } from './types';
 import { useCursorPosition } from './useCursorPosition';
 import { useCamera } from './useCamera';
 import { useContactState } from './normalizeEvents';
-import { Caption } from './Caption';
+import { Caption, type CaptionContrast, type CaptionTheme } from './Caption';
+
+/* --------------------------------------------------------------- BlurBackdrop */
+
+/**
+ * DEFAULT backdrop: a frame of the capture ITSELF, scaled past the edges and heavily,
+ * diffusely blurred, with a light scrim for separation. This ties the backdrop to the
+ * product's own palette for free and is the standing default — a solid/gradient/wallpaper
+ * backdrop is used only when the user asks for one, and NO backdrop means the capture goes
+ * fullscreen, frameless (see DemoStage `backdrop="none"`).
+ */
+export const BlurBackdrop: React.FC<{
+  children: React.ReactNode;
+  /** Big and diffuse on purpose; below ~60px the backdrop reads as a broken duplicate. */
+  blur?: number;
+  /** Over-scale so the blur never samples past the edges into transparency. */
+  zoom?: number;
+  /** 0-1 dark scrim strength; keeps the framed capture visually separated. */
+  dim?: number;
+}> = ({ children, blur = 90, zoom = 1.5, dim = 0.14 }) => (
+  <AbsoluteFill style={{ overflow: 'hidden' }}>
+    <AbsoluteFill
+      style={{ transform: `scale(${zoom})`, filter: `blur(${blur}px) saturate(1.12)` }}
+    >
+      {children}
+    </AbsoluteFill>
+    <AbsoluteFill style={{ background: `rgba(10,10,12,${dim})` }} />
+  </AbsoluteFill>
+);
 
 /* ------------------------------------------------------------------ Screen (desktop) */
 
@@ -133,13 +161,24 @@ export const Camera: React.FC<{ scale: number; focus: Vec; children: React.React
 /* ------------------------------------------------------------------- Pointers */
 
 const Pointer: React.FC<{ scale?: number }> = ({ scale = 1 }) => (
-  <svg width={28} height={28} viewBox="0 0 28 28" style={{ transform: `scale(${scale})`, transformOrigin: '0 0' }}>
+  // Modern, minimalist arrow: slim geometry, rounded joins, a hairline outline and a soft
+  // drop shadow so it reads as floating just above the UI. The hotspot (the tip) sits at the
+  // SVG origin, so the pointer coordinate still maps exactly to the tip.
+  <svg
+    width={24}
+    height={24}
+    viewBox="0 0 24 24"
+    fill="none"
+    style={{ transform: `scale(${scale})`, transformOrigin: '0 0', overflow: 'visible' }}
+  >
     <path
-      d="M2 2 L2 22 L7.5 16.5 L11 24 L14.5 22.5 L11 15 L18 15 Z"
+      d="M1.6 1.6 L1.6 17.2 L6.1 13.1 L9.0 19.5 L11.5 18.4 L8.7 12.1 L14.5 12.1 Z"
       fill="#fff"
-      stroke="rgba(0,0,0,0.5)"
-      strokeWidth={1.2}
+      stroke="rgba(12,12,18,0.30)"
+      strokeWidth={1}
       strokeLinejoin="round"
+      strokeLinecap="round"
+      style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.45))' }}
     />
   </svg>
 );
@@ -223,7 +262,13 @@ export const ClickRipple: React.FC<{ events: DemoEvent[] }> = ({ events }) => {
   );
 };
 
-export function usePressScale(events: DemoEvent[]): number {
+/**
+ * Cursor press on click. Returns a scale that dips the POINTER briefly on each click and
+ * settles back. Only the cursor reacts to a click — the framed screen is deliberately never
+ * scaled, because a whole-frame dip reads as the whole page bouncing rather than as a tap.
+ * See cursor-and-clicks.md §3.
+ */
+export function useCursorPress(events: DemoEvent[]): number {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const clicks = events.filter((e) => e.click).map((e) => Math.round(e.at * fps));
@@ -231,7 +276,7 @@ export function usePressScale(events: DemoEvent[]): number {
   let s = 1;
   for (const cf of clicks) {
     const local = frame - cf;
-    if (local >= 0 && local <= dur) s = Math.min(s, 1 - Math.sin((local / dur) * Math.PI) * 0.02);
+    if (local >= 0 && local <= dur) s = Math.min(s, 1 - Math.sin((local / dur) * Math.PI) * 0.16);
   }
   return s;
 }
@@ -271,41 +316,121 @@ export const SourceSwap: React.FC<{ shots: Shot[]; crossfadeFrames?: number }> =
   );
 };
 
+/* ------------------------------------------------------------------- FilmGrain */
+
+/**
+ * Subtle animated film grain over the WHOLE frame — the top layer, above captions, which is
+ * what makes it read as film rather than as a dirty screenshot. Natural and restrained:
+ * noticeable on flat areas at 100% zoom, never gritty. The turbulence seed advances with the
+ * frame so the grain crawls like real film; a static seed reads as a dirty lens.
+ *
+ * Deliberately NO mix-blend-mode: verified (2026-07) that `overlay`/blend modes on this
+ * layer are silently dropped by the still/render compositor when siblings include
+ * CameraMotionBlur's blended layers — the grain painted nothing. Plain source-over gray
+ * noise at low opacity renders reliably and looks equivalent at these strengths.
+ */
+export const FilmGrain: React.FC<{ opacity?: number; baseFrequency?: number }> = ({
+  opacity = 0.05,
+  baseFrequency = 0.75,
+}) => {
+  const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  // useId emits colons, which break url(#...) references — strip to a safe id.
+  const id = `grain-${React.useId().replace(/[^a-zA-Z0-9_-]/g, '')}`;
+  return (
+    <AbsoluteFill style={{ pointerEvents: 'none', opacity }}>
+      <svg width={width} height={height}>
+        <filter id={id} x="0" y="0" width="100%" height="100%">
+          <feTurbulence
+            type="fractalNoise"
+            baseFrequency={baseFrequency}
+            numOctaves={2}
+            seed={frame % 1000}
+            stitchTiles="stitch"
+          />
+          {/* Luminance-only noise — chroma noise reads as compression artifacts. */}
+          <feColorMatrix type="saturate" values="0" />
+        </filter>
+        <rect width="100%" height="100%" filter={`url(#${id})`} />
+      </svg>
+    </AbsoluteFill>
+  );
+};
+
 /* ------------------------------------------------------------------- DemoStage */
 
 export const DemoStage: React.FC<{
   events: DemoEvent[];
   source: React.ReactNode;
+  /**
+   * 'blur' (DEFAULT): backdrop is the capture itself, heavily blurred (BlurBackdrop).
+   * 'none': the user opted out of a backdrop → the capture renders FULLSCREEN, frameless
+   *         (no padding, no radius, no bezel, no shadow).
+   * A ReactNode: custom backdrop (solid/gradient/wallpaper) when the user asked for one.
+   */
+  backdrop?: 'blur' | 'none' | React.ReactNode;
+  /** @deprecated Legacy alias for a custom backdrop node — prefer `backdrop`. */
   background?: React.ReactNode;
   mode?: 'desktop' | 'mobile';
   device?: DeviceSpec;
+  /** Contrast the user chose in Step 0b — themes the caption box. */
+  contrast?: CaptionContrast;
+  /** Font the user chose in Step 0b (family string, loaded before render). */
+  fontFamily?: string;
   captionFontSize?: number;
+  captionTheme?: Partial<CaptionTheme>;
+  /** Film grain over the whole frame. On by default; `false` only if the user opts out. */
+  grain?: boolean;
+  grainOpacity?: number;
   /** Debug overlay: coordinate grid for authoring. Never leave on for a final render. */
   grid?: boolean;
-}> = ({ events, source, background, mode = 'desktop', device, captionFontSize, grid }) => {
+}> = ({
+  events,
+  source,
+  backdrop = 'blur',
+  background,
+  mode = 'desktop',
+  device,
+  contrast,
+  fontFamily,
+  captionFontSize,
+  captionTheme,
+  grain = true,
+  grainOpacity,
+  grid,
+}) => {
   const cursor = useCursorPosition(events);
   const cam = useCamera(events);
-  const press = usePressScale(events);
+  const cursorPress = useCursorPress(events);
   const contact = useContactState(events);
 
-  const framed =
-    mode === 'mobile' ? (
-      <DeviceFrame device={device}>{source}</DeviceFrame>
-    ) : (
-      <Screen background={background}>{source}</Screen>
-    );
+  const fullscreen = backdrop === 'none';
+  const backdropNode: React.ReactNode = fullscreen
+    ? null
+    : backdrop === 'blur'
+      ? (background ?? <BlurBackdrop>{source}</BlurBackdrop>)
+      : (backdrop ?? background);
+
+  const framed = fullscreen ? (
+    <AbsoluteFill>{source}</AbsoluteFill>
+  ) : mode === 'mobile' ? (
+    <DeviceFrame device={device}>{source}</DeviceFrame>
+  ) : (
+    <Screen background={backdropNode}>{source}</Screen>
+  );
 
   return (
     <AbsoluteFill>
-      {mode === 'mobile' && <AbsoluteFill>{background}</AbsoluteFill>}
+      {mode === 'mobile' && !fullscreen && <AbsoluteFill>{backdropNode}</AbsoluteFill>}
 
       <CameraMotionBlur shutterAngle={180} samples={8}>
-        <Camera scale={cam.scale * press} focus={cam.focus}>
+        {/* The camera is NEVER scaled by the click press — only the pointer dips (below). */}
+        <Camera scale={cam.scale} focus={cam.focus}>
           {framed}
           {mode === 'mobile' ? (
             <TouchPointer x={cursor.x} y={cursor.y} down={contact.down} />
           ) : (
-            <Cursor x={cursor.x} y={cursor.y} pressScale={press < 1 ? 0.9 : 1} />
+            <Cursor x={cursor.x} y={cursor.y} pressScale={cursorPress} />
           )}
           {/* Ripples use CONTENT coordinates, so they must live inside <Camera>. */}
           <ClickRipple events={events} />
@@ -314,7 +439,17 @@ export const DemoStage: React.FC<{
       </CameraMotionBlur>
 
       {/* Screen-space: captions must not scale, so they project through the camera. */}
-      <Caption events={events} cam={cam} fontSize={captionFontSize} />
+      <Caption
+        events={events}
+        cam={cam}
+        contrast={contrast}
+        theme={captionTheme}
+        fontSize={captionFontSize}
+        fontFamily={fontFamily}
+      />
+
+      {/* Top layer, above everything including captions — that is what reads as film. */}
+      {grain && <FilmGrain opacity={grainOpacity} />}
     </AbsoluteFill>
   );
 };

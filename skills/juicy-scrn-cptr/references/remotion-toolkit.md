@@ -7,8 +7,10 @@
 >
 > This file explains the **design and the invariants** so you can author timelines correctly
 > and debug the engine when something looks wrong. Where a listing here differs from the
-> template, **the template wins** — notably `Caption`, which the template renders as a light
-> surface with a left accent bar and an auto-computed hold (see `readingTime.ts`).
+> template, **the template wins** — notably `Caption`, which the template renders as a
+> squared, shadowed box with a left accent bar that expands its width while the text types
+> itself in (no caret), themed by the user's light/dark choice, with an auto-computed hold
+> (see `readingTime.ts`).
 
 A small, cohesive set of components + hooks that produce the Screen Studio look from **one
 declarative `DemoEvent[]` timeline**. Everything is driven by a shared clock, so pointer,
@@ -22,8 +24,8 @@ camera, clicks, and captions stay in sync by construction.
 | `src/demo/useCursorPosition.ts` | Pointer motion (distance-derived travel, arc, hold) |
 | `src/demo/useCamera.ts` | Zoom/pan springs, focus clamp |
 | `src/demo/normalizeEvents.ts` | Gesture expansion + contact state |
-| `src/demo/Stage.tsx` | `DemoStage`, `Screen`, `DeviceFrame`, `Camera`, `Cursor`, `TouchPointer`, `ClickRipple`, `SourceSwap`, `CoordinateGrid` |
-| `src/demo/Caption.tsx` | Caption box + `CAPTION_THEME` |
+| `src/demo/Stage.tsx` | `DemoStage`, `BlurBackdrop`, `FilmGrain`, `Screen`, `DeviceFrame`, `Camera`, `Cursor`, `TouchPointer`, `ClickRipple`, `SourceSwap`, `CoordinateGrid` |
+| `src/demo/Caption.tsx` | Caption box + `CAPTION_THEMES` (light/dark) |
 | `src/demo/readingTime.ts` | `captionHoldSeconds`, `captionBudgetSeconds` |
 | `src/Root.tsx` | **The film — the only file you edit** |
 | `scripts/verify.mjs` | Bundle-once checkpoint renderer |
@@ -263,6 +265,9 @@ export function useCamera(events: DemoEvent[]): { scale: number; focus: Vec } {
 ## 4. Framed screen — `<Screen>`
 
 The premium container: background, padding, radius, shadow. Put the recording/screens inside.
+In practice `DemoStage` fills the `background` slot with `<BlurBackdrop>` (the capture
+itself, over-scaled + heavily blurred) — the fallback gradient below only shows when a
+custom backdrop chain passes nothing.
 
 ```tsx
 // src/demo/Screen.tsx
@@ -352,10 +357,16 @@ import React from 'react';
 import { AbsoluteFill } from 'remotion';
 
 const Pointer: React.FC<{ scale?: number }> = ({ scale = 1 }) => (
-  // Classic arrow; hotspot at (0,0) = the tip.
-  <svg width={28} height={28} viewBox="0 0 28 28" style={{ transform: `scale(${scale})`, transformOrigin: '0 0' }}>
-    <path d="M2 2 L2 22 L7.5 16.5 L11 24 L14.5 22.5 L11 15 L18 15 Z"
-      fill="#fff" stroke="rgba(0,0,0,0.5)" strokeWidth={1.2} strokeLinejoin="round" />
+  // Modern, minimalist arrow: slim geometry, rounded joins, a hairline outline and a soft
+  // drop shadow so it reads as floating just above the UI. Hotspot (the tip) at the SVG
+  // origin, so the pointer coordinate still maps exactly to the tip. `scale` is the click
+  // press dip — it must scale ONLY the pointer, never the framed screen (see §7).
+  <svg width={24} height={24} viewBox="0 0 24 24" fill="none"
+    style={{ transform: `scale(${scale})`, transformOrigin: '0 0', overflow: 'visible' }}>
+    <path d="M1.6 1.6 L1.6 17.2 L6.1 13.1 L9.0 19.5 L11.5 18.4 L8.7 12.1 L14.5 12.1 Z"
+      fill="#fff" stroke="rgba(12,12,18,0.30)" strokeWidth={1}
+      strokeLinejoin="round" strokeLinecap="round"
+      style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,0.45))' }} />
   </svg>
 );
 
@@ -401,10 +412,17 @@ export const CursorTrail: React.FC<{ events: DemoEvent[]; x: number; y: number; 
 
 ---
 
-## 7. Click ripple + frame press — `<ClickRipple>`
+## 7. Click ripple + cursor press — `<ClickRipple>`
 
-An expanding ring at each `click`. Returns the ring layer; the "press" (a tiny whole-frame
-scale dip) is handled by `usePressScale` so you can apply it to the camera or cursor.
+An expanding ring at each `click`. Returns the ring layer; the "press" (a brief scale dip) is
+handled by `useCursorPress` and applied **only to the pointer** — never to the framed screen.
+
+**Why the frame must not press:** dipping the whole screen on every click reads as the page
+*bouncing*, not as a tap — it is motion the real product never makes, and at any zoom it wobbles
+the entire composition. The tap should live where the tap happens: the pointer dips toward its
+tip, the ripple expands from the click point, the UI under it responds. That trio already reads
+unmistakably as a click. So `<Camera>` gets `cam.scale` straight, and the dip goes to
+`<Cursor pressScale={cursorPress}>`.
 
 ```tsx
 // src/demo/ClickRipple.tsx
@@ -444,8 +462,9 @@ export const ClickRipple: React.FC<{ events: DemoEvent[] }> = ({ events }) => {
   );
 };
 
-// Whole-frame "press": returns a scale that dips to ~0.985 right at each click.
-export function usePressScale(events: DemoEvent[]): number {
+// Cursor "press": a scale that dips the POINTER to ~0.84 right at each click, then settles.
+// Apply it to <Cursor pressScale={...}> only — NOT to the camera/frame.
+export function useCursorPress(events: DemoEvent[]): number {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const clicks = events.filter((e) => e.click).map((e) => Math.round(e.at * fps));
@@ -455,7 +474,7 @@ export function usePressScale(events: DemoEvent[]): number {
     const local = frame - cf;
     if (local >= 0 && local <= dur) {
       const p = local / dur; // 0→1: down then back up
-      s = Math.min(s, 1 - Math.sin(p * Math.PI) * 0.02);
+      s = Math.min(s, 1 - Math.sin(p * Math.PI) * 0.16);
     }
   }
   return s;
@@ -466,68 +485,26 @@ export function usePressScale(events: DemoEvent[]): number {
 
 ## 8. Caption — `<Caption>`
 
-Shows whichever caption is currently "active" (last `caption` event at or before now, until
-a `null` clears it). Enters with spring + fade, exits with a quick fade.
+Shows whichever caption is currently "active" (last `caption` event at or before now, until a
+`null` clears it or the auto-computed hold expires — see `readingTime.ts`). The full
+implementation lives in the template (`src/demo/Caption.tsx`); the invariants:
 
-```tsx
-// src/demo/Caption.tsx
-import React, { useMemo } from 'react';
-import { AbsoluteFill, useCurrentFrame, useVideoConfig, spring, interpolate } from 'remotion';
-import type { DemoEvent, Vec } from './types';
-
-export const Caption: React.FC<{
-  events: DemoEvent[];
-  /** Live camera state, so a content-space `captionAt` can be projected to screen space. */
-  cam: { scale: number; focus: Vec };
-}> = ({ events, cam }) => {
-  const frame = useCurrentFrame();
-  const { fps, width, height } = useVideoConfig();
-
-  const segments = useMemo(() => {
-    const cap = events.filter((e) => e.caption !== undefined);
-    return cap.map((e, i) => ({
-      start: Math.round(e.at * fps),
-      end: i + 1 < cap.length ? Math.round(cap[i + 1].at * fps) : Infinity,
-      text: e.caption,
-      at: e.captionAt as Vec | undefined,
-    }));
-  }, [events, fps]);
-
-  const active = segments.find((s) => frame >= s.start && frame < s.end && s.text);
-  if (!active) return null;
-
-  const local = frame - active.start;
-  const enter = spring({ frame: local, fps, config: { damping: 22, stiffness: 140, mass: 0.8 } });
-  const fadeOut = active.end === Infinity ? 1 : interpolate(frame, [active.end - 8, active.end], [1, 0], { extrapolateLeft: 'clamp' });
-  const y = interpolate(enter, [0, 1], [18, 0]);
-
-  // Project the content-space anchor through the camera (the caption itself never scales).
-  const screenAt: Vec | undefined = active.at
-    ? [
-        width / 2 + (active.at[0] - cam.focus[0]) * cam.scale,
-        height / 2 + (active.at[1] - cam.focus[1]) * cam.scale,
-      ]
-    : undefined;
-
-  const pos: React.CSSProperties = screenAt
-    ? { left: screenAt[0], top: screenAt[1], transform: `translate(-50%, calc(-100% - 16px)) translateY(${y}px)` }
-    : { left: '50%', bottom: height * 0.09, transform: `translate(-50%, ${y}px)` };
-
-  return (
-    <AbsoluteFill style={{ pointerEvents: 'none' }}>
-      <div style={{
-        position: 'absolute', ...pos, opacity: Math.min(enter, fadeOut),
-        padding: '14px 22px', borderRadius: 14, background: 'rgba(15,15,20,0.72)',
-        backdropFilter: 'blur(8px)', color: '#fff', fontSize: 34, fontWeight: 600,
-        fontFamily: 'Inter, system-ui, sans-serif', letterSpacing: -0.2, whiteSpace: 'nowrap',
-        boxShadow: '0 12px 40px rgba(0,0,0,0.4)',
-      }}>
-        {active.text}
-      </div>
-    </AbsoluteFill>
-  );
-};
-```
+- **Identity:** squared corners (no radius), no border, soft shadow, vertical accent bar on
+  the left in the subject project's brand color. Themed by the user's Step 0b contrast choice
+  via `CAPTION_THEMES` (`light` → beige surface / soft dark orange-brown text; `dark` → dark
+  warm surface / warm off-white text).
+- **Entrance:** the box **expands its width left-to-right while characters are revealed as if
+  typed, with no caret**. Width and letters share one linear progress
+  (`CAPTION_REVEAL_CPS = 28`), so the box edge and the last visible letter arrive together.
+  Exit is a quick 8-frame fade.
+- **Measurement:** the full text width is measured with a hidden span (layout effects run
+  before the frame is screenshotted), so the width animates smoothly in px rather than
+  stepping per character. If the chosen font loads late, the measure follows it — always
+  check a rendered still with the real font loaded.
+- **Screen-space:** a content-space `captionAt` anchor is projected through the camera; the
+  caption itself never scales with zoom.
+- Props: `contrast`, `fontFamily` (both from Step 0b), `fontSize`, `theme` (per-production
+  accent override).
 
 ---
 
@@ -548,7 +525,7 @@ import { Cursor } from './Cursor';
 import { TouchPointer } from './TouchPointer';
 import { DeviceFrame, type DeviceSpec } from './DeviceFrame';
 import { Caption } from './Caption';
-import { ClickRipple, usePressScale } from './ClickRipple';
+import { ClickRipple, useCursorPress } from './ClickRipple';
 import { useCursorPosition } from './useCursorPosition';
 import { useCamera } from './useCamera';
 import { useContactState } from './normalizeEvents';
@@ -557,36 +534,47 @@ import type { DemoEvent } from './types';
 export const DemoStage: React.FC<{
   events: DemoEvent[];
   source: React.ReactNode;
-  background?: React.ReactNode;
+  /** 'blur' (default) → the capture itself, heavily blurred, as the backdrop.
+   *  'none' → fullscreen frameless capture. A node → custom backdrop. */
+  backdrop?: 'blur' | 'none' | React.ReactNode;
   /** 'desktop' → arrow cursor + wide frame. 'mobile' → touch blob + phone bezel. */
   mode?: 'desktop' | 'mobile';
   /** Mobile only: phone frame geometry. See devices-and-formats.md */
   device?: DeviceSpec;
-}> = ({ events, source, background, mode = 'desktop', device }) => {
+  /** Step 0b answers: caption theme contrast + font family. */
+  contrast?: 'light' | 'dark';
+  fontFamily?: string;
+  /** Film grain over the whole frame; on by default. */
+  grain?: boolean;
+}> = ({ events, source, backdrop = 'blur', mode = 'desktop', device, ... }) => {
   const cursor = useCursorPosition(events);
   const cam = useCamera(events);
-  const press = usePressScale(events);
+  const cursorPress = useCursorPress(events);
   const contact = useContactState(events); // down/up state for taps, swipes, long-press
 
+  // 'blur' resolves to <BlurBackdrop>{source}</BlurBackdrop>; 'none' skips the frame
+  // entirely and renders the source edge-to-edge (fullscreen). See the template for the
+  // exact wiring — this listing is illustrative.
   const framed =
     mode === 'mobile' ? (
       <DeviceFrame device={device}>{source}</DeviceFrame>
     ) : (
-      <Screen background={background}>{source}</Screen>
+      <Screen background={backdropNode}>{source}</Screen>
     );
 
   return (
     <AbsoluteFill>
-      {mode === 'mobile' && <AbsoluteFill>{background}</AbsoluteFill>}
+      {mode === 'mobile' && <AbsoluteFill>{backdropNode}</AbsoluteFill>}
 
       {/* Blur the moving scene (camera + pointer) directionally. Remove if you prefer CursorTrail. */}
       <CameraMotionBlur shutterAngle={180} samples={8}>
-        <Camera scale={cam.scale * press} focus={cam.focus}>
+        {/* Camera takes cam.scale straight — the click press must NOT scale the frame (see §7). */}
+        <Camera scale={cam.scale} focus={cam.focus}>
           {framed}
           {mode === 'mobile' ? (
             <TouchPointer x={cursor.x} y={cursor.y} down={contact.down} />
           ) : (
-            <Cursor x={cursor.x} y={cursor.y} pressScale={press < 1 ? 0.9 : 1} />
+            <Cursor x={cursor.x} y={cursor.y} pressScale={cursorPress} />
           )}
           {/* Ripples are authored in CONTENT coordinates, so they must live inside
               <Camera> or they detach from the pointer whenever scale !== 1. */}
@@ -596,7 +584,10 @@ export const DemoStage: React.FC<{
 
       {/* Screen-space overlay. Captions must NOT scale (legibility), so <Caption>
           projects its content-space anchor through the live camera itself. */}
-      <Caption events={events} cam={cam} />
+      <Caption events={events} cam={cam} contrast={contrast} fontFamily={fontFamily} />
+
+      {/* Top layer, above captions — subtle animated grain (see SKILL.md anatomy §7). */}
+      {grain && <FilmGrain />}
     </AbsoluteFill>
   );
 };
@@ -609,9 +600,10 @@ content) or explicitly project to screen space (captions: they must stay a fixed
 size). Putting `<ClickRipple>` outside the camera is the classic bug — the ripple renders at
 the un-zoomed position and visibly detaches from the click.
 
-For `mode="mobile"` the background is rendered **behind the phone** (the device floats on
+For `mode="mobile"` the backdrop is rendered **behind the phone** (the device floats on
 it), whereas on desktop `<Screen>` owns its own background. That's the only structural
-difference between the two modes.
+difference between the two modes. In both, the default backdrop is `<BlurBackdrop>` around
+the same `source` — the capture itself, over-scaled and diffusely blurred.
 
 > If `@remotion/motion-blur`'s `CameraMotionBlur` isn't available in your pinned version,
 > drop that wrapper and swap `<Cursor>` for `<CursorTrail events={events} .../>`. The demo
@@ -654,7 +646,8 @@ export const RemotionRoot: React.FC = () => (
     component={() => (
       <DemoStage
         events={events}
-        background={<AbsoluteFill style={{ background: 'radial-gradient(120% 120% at 30% 20%, #241a4a 0%, #0a1130 60%, #050b1f 100%)' }} />}
+        backdrop="blur" // default: the capture itself, heavily blurred
+        contrast="light" // Step 0b answer
         source={<OffthreadVideo src={staticFile('recording.mp4')} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
       />
     )}
@@ -942,7 +935,7 @@ export const MobileRoot: React.FC = () => (
         mode="mobile"
         device={PHONE}
         events={raw}
-        background={<AbsoluteFill style={{ background: 'radial-gradient(120% 100% at 50% 0%, #2a1c52 0%, #0b1030 60%, #05081c 100%)' }} />}
+        backdrop="blur" // default: the capture itself, blurred, behind the phone
         source={<OffthreadVideo src={staticFile('phone-capture.mp4')} muted style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
       />
     )}

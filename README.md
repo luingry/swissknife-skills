@@ -8,12 +8,12 @@ without improvising.
 
 | Skill | What it does |
 |---|---|
-| [`screen-demo-video`](skills/screen-demo-video) | Produces polished, Screen Studio-style product demo videos programmatically with Remotion — real browser interaction driven by Playwright, animated cursor/touch, auto-zoom that follows the action, transitions, captions, and a director-grade script. Desktop and mobile, landscape through portrait. |
+| [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Produces polished, Screen Studio-style product demo videos and device-framed screenshots programmatically with Remotion — real browser interaction driven by Playwright, animated cursor/touch, auto-zoom that follows the action, blurred-self backdrops, typewriter caption boxes, element-level UI choreography, subtle film grain, transitions, and a director-grade script. Desktop and mobile, landscape through portrait. |
 
-### `screen-demo-video`
+### `juicy-scrn-cptr`
 
-Builds product demo videos as **code**, so they re-render when the product changes instead of
-being re-edited by hand.
+Builds product demo videos (and framed still screenshots) as **code**, so they re-render when
+the product changes instead of being re-edited by hand. Formerly `screen-demo-video`.
 
 - **Real interaction, not faked.** A Playwright script drives an actual browser and records it:
   clicking an input really focuses it, typing really appears character by character, scrolling
@@ -21,9 +21,15 @@ being re-edited by hand.
   by the emitted capture timeline, so it lands exactly where the real pointer went.
 - **Cinematography.** Camera auto-zooms toward the action and holds still while results land;
   the pointer moves in human arcs with a dwell before clicking; motion blur on fast moves.
-- **Two production types.** *Walkthrough* (teach how it works) and *pitch* (alternating
-  statement card → demo proving it).
-- **Transitions.** `softCut` (default), `containerZoom`, `circleReveal`, `slidePush`.
+- **Three production types.** *Walkthrough* (teach how it works), *pitch* (alternating
+  statement card → demo proving it), and *UI story* (reconstructed UI whose elements perform
+  the story themselves — staggered reveals, in-UI typing, highlight rings, scroll
+  continuity — no cursor).
+- **The premium finish.** Backdrop is the capture itself, heavily blurred; caption boxes are
+  squared and shadowed and type themselves in (no caret) with light/dark themes; subtle
+  animated film grain over the whole frame; everything follows the subject project's palette.
+- **Transitions.** `softCut` (default), `containerZoom`, `circleReveal`, `slidePush`, plus
+  in-canvas scroll continuity for UI stories.
 - **Component replication.** Extracts a real component from a live page into independently
   animatable parts — every text run, icon and row measured separately — so a component can be
   presented in isolation with staggered reveals, part-level morphs and ripples, instead of a
@@ -56,10 +62,10 @@ Symlink or copy a skill into your Claude Code skills directory:
 
 ```bash
 # Windows (directory junction, no admin needed)
-mklink /J "%USERPROFILE%\.claude\skills\screen-demo-video" "D:\Dev\luingry-swissknife-skills\skills\screen-demo-video"
+mklink /J "%USERPROFILE%\.claude\skills\juicy-scrn-cptr" "D:\Dev\luingry-swissknife-skills\skills\juicy-scrn-cptr"
 
 # macOS / Linux
-ln -s "$PWD/skills/screen-demo-video" ~/.claude/skills/screen-demo-video
+ln -s "$PWD/skills/juicy-scrn-cptr" ~/.claude/skills/juicy-scrn-cptr
 ```
 
 Skills in `~/.claude/skills/` are available globally; a `.claude/skills/` directory inside a

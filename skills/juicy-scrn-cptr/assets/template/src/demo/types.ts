@@ -12,7 +12,7 @@ export type DemoEvent = {
   /** Move the pointer toward this point. Desktop = arrow cursor; mobile = touch blob. */
   cursor?: Vec;
 
-  /** Register a tap/click here -> ripple + frame press. */
+  /** Register a tap/click here -> ripple + a brief press dip on the pointer (never the frame). */
   click?: Vec;
 
   /** Mobile gestures. */

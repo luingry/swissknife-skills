@@ -72,8 +72,10 @@ Render time scales with pixel count, so a 0.35 draft is roughly **8× faster**. 
 and choreography are all judgeable at that scale. Only zoom sharpness needs full resolution —
 check that once, at the end.
 
-Also: **author at 30fps** unless the video needs 60. Halving the frame rate halves render time
-and is invisible for screen-recording content.
+Frame rate: **finals render at 60fps** — that fluidity is part of the premium register this
+skill targets and is non-negotiable for delivery. While iterating, drop the draft composition
+to 30fps to halve render time; timing and choreography are still judgeable there. Just never
+ship the 30fps cut.
 
 ## 5. Chunk long videos into scenes
 

@@ -23,6 +23,12 @@ composition.
 **Framing.** Use `<Screen>` (background + padding + radius + shadow). Padding 6–10% of the
 canvas. Rounded corners 16–28px. Big soft shadow.
 
+**Backdrop.** The default is the capture itself, over-scaled and heavily blurred
+(`<BlurBackdrop>`, wired automatically by `DemoStage backdrop="blur"`). It keeps the backdrop
+inside the product's palette with zero effort. A solid/gradient/wallpaper is opt-in; **no
+backdrop at all** (`backdrop="none"`) means the capture goes fullscreen and frameless — no
+padding, radius, or shadow.
+
 **Optional browser chrome.** For web products, a fake browser bar sells "this is a real site"
 and hides that the capture was cropped. Keep it minimal and neutral — never fake a competitor's
 branding or a URL the product doesn't own.
@@ -53,7 +59,10 @@ export const BrowserChrome: React.FC<{ url: string; children: React.ReactNode }>
 
 **Framing.** Use `<DeviceFrame>` with a `DeviceSpec`. The phone should occupy ~70–85% of the
 canvas height in portrait, leaving room above/below for captions. On a landscape canvas, the
-phone occupies ~80% height and sits slightly off-center, with copy in the empty side.
+phone occupies ~80% height and sits slightly off-center, with copy in the empty side. The
+blurred-self backdrop renders behind the phone by default, same as desktop; a mobile
+production follows **every** desktop polish directive (grain, typewriter captions, palette,
+fidelity) — mobile is a target, not a discount.
 
 **Pointer.** Never an arrow — use `<TouchPointer>` (translucent contact blob). Real fingers
 don't have hotspots; the blob centers on the touch point.
@@ -128,7 +137,25 @@ On mobile, place captions in the **top or bottom sixth** of the canvas, outside 
 never over the app content, where they compete with the UI you're demonstrating. On desktop,
 lower-third or anchored beside the target both work.
 
-## 6. Safe areas
+## 6. Still screenshots — the same stack, one frame
+
+The skill also delivers **static screenshots**: the capture inside the device/browser frame,
+floating on the blurred-self backdrop, with grain — everything the video has except motion.
+A mobile screenshot is **always wrapped in the phone frame** so it visually reads as a
+device; desktop stills use `<Screen>` (or fullscreen if the user opted out of the backdrop).
+
+Author a normal `DemoStage` composition with an empty timeline (or the video's timeline
+paused at its best beat) and render one frame:
+
+```bash
+npx remotion still src/index.ts Demo out/screenshot.png --frame=120
+```
+
+Pick the frame deliberately — a still is a poster, so choose the beat where the UI shows its
+payoff state. Grain applies to stills too (single seed is fine); captions may be included if
+frozen at full reveal, never mid-typing.
+
+## 7. Safe areas
 
 - **Reels/Shorts/TikTok:** keep captions out of the top ~12% and bottom ~20% (platform UI
   covers them).

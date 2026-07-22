@@ -26,6 +26,14 @@ export const CAPTION_CPS = 12;
 export const CAPTION_EXIT_S = 0.3;
 export const CAPTION_MIN_HOLD_S = 3.0;
 
+/**
+ * Typewriter reveal speed for the caption box (chars/second). The box expands its width
+ * while characters appear at this rate. 28 cps is a fast, confident typing feel — and
+ * because 28 > CAPTION_CPS (reading speed), the reveal always finishes well before the
+ * reading-time hold expires, so the hold formula needs no reveal term.
+ */
+export const CAPTION_REVEAL_CPS = 28;
+
 export function captionHoldSeconds(text: string): number {
   const chars = text.trim().length;
   const computed = CAPTION_ACQUIRE_S + chars / CAPTION_CPS + CAPTION_EXIT_S;

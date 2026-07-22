@@ -52,18 +52,34 @@ shorter (100ms) on obvious follow-ups.
 
 ## 3. Click / tap feedback
 
-Three layers, all cheap, all in the toolkit:
+Two layers, both cheap, both in the toolkit:
 
 1. **Ripple ring** — expands 12→92px over ~0.5s, opacity 0.55→0, `Easing.out(Easing.ease)`.
    On mobile scale it to ~1.4× the touch blob, not larger — big ripples look like a tutorial
    overlay, not a product video.
-2. **Pointer press** — the arrow scales to ~0.9 (desktop) or the touch blob to ~0.82 (mobile)
-   for ~160ms.
-3. **Frame press** — the whole frame dips to ~0.985 scale and back over ~160ms
-   (`usePressScale`). Subtle to the point of subliminal; removing it is noticeable, seeing it
-   is not. That's the correct calibration.
+2. **Pointer press** — the arrow dips to ~0.84 scale (desktop) or the touch blob to ~0.82
+   (mobile) for ~160ms, then settles (`useCursorPress`). Because the pointer's hotspot is its
+   tip, scale it about the tip (`transformOrigin: 0 0`) so the tip stays put while the body
+   dips — the press reads as a tap *at that point*, not as the cursor sliding.
+
+**Never press the frame.** A click must scale **only the pointer** — never the framed screen.
+Dipping the whole screen on each click (an old "frame press" trick) reads as the page
+*bouncing*: it is motion the real product never makes, and at any zoom it wobbles the entire
+composition. So `<Camera>` always gets `cam.scale` straight, and the dip goes to the cursor
+alone. The ripple + the pointer dip + the UI responding under the tap already read
+unmistakably as a click; the frame does not need to move at all.
 
 Do **not** add a click sound louder than −18 dB, a colored flash, or a persistent marker.
+
+## 3a. Pointer design (desktop)
+
+The arrow is a **modern, minimalist** pointer, not a chunky OS cursor: slim geometry, rounded
+joins, a hairline outline, and a **soft drop shadow** so it reads as floating just above the UI
+— the single detail that makes an overlay cursor look designed rather than pasted on. Keep it
+**white** (it must survive both dark and light UI; the outline + shadow carry it on white
+backgrounds). Keep the **hotspot at the tip** (the SVG origin) so every `cursor`/`click`
+coordinate still lands exactly under the tip. The drop-in implementation is in the toolkit
+(`<Pointer>`, [remotion-toolkit.md](remotion-toolkit.md) §6).
 
 ## 4. Mobile gestures
 

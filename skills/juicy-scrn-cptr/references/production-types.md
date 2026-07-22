@@ -1,17 +1,17 @@
 # Production Types — decide this first
 
-Two productions, two different films. **Establish which one before writing the roteiro** — ask
-the user if it is not stated, because the structure, pacing and even the fonts differ.
+Three productions, three different films. **Establish which one before writing the roteiro** —
+ask the user if it is not stated, because the structure, pacing and even the fonts differ.
 
-| | **A. Walkthrough** | **B. Pitch** |
-|---|---|---|
-| Goal | Teach how it works | Sell why it matters |
-| Question answered | "How do I use this?" | "Why should I care?" |
-| Structure | Continuous flow through the product | Alternating: statement card → demo of it |
-| Audience | Already interested; evaluating or onboarding | Not yet interested; scrolling past |
-| Captions | Label actions as they happen | Statement cards carry the message |
-| Runtime | 30–120s | 15–45s |
-| Typical use | Docs, onboarding, feature announcement, tutorial | Landing hero, social, ads, app-store |
+| | **A. Walkthrough** | **B. Pitch** | **C. UI story** |
+|---|---|---|---|
+| Goal | Teach how it works | Sell why it matters | Dramatize the product doing its thing |
+| Question answered | "How do I use this?" | "Why should I care?" | "What does using it feel like?" |
+| Structure | Continuous flow through the product | Alternating: statement card → demo of it | One reconstructed UI whose elements animate in sequence |
+| Pointer | Cursor / touch blob | Cursor / touch blob | **None** — the UI itself is the actor |
+| Captions | Label actions as they happen | Statement cards carry the message | Usually none; the UI text carries it |
+| Runtime | 30–120s | 15–45s | 10–20s, loopable |
+| Typical use | Docs, onboarding, feature announcement, tutorial | Landing hero, social, ads, app-store | Landing hero loop, social teaser, agent/chat products |
 
 ## A. Walkthrough
 
@@ -61,9 +61,45 @@ single vertical accent element on the left in the project's color. Implemented b
 The card sets up the payoff — it is **not** the payoff. Resist decorating it. No icons, no
 gradients on the text, no second line of supporting copy.
 
+## C. UI story — element choreography, no pointer
+
+The register of the best product-launch films (Replit's agent demo is the canonical
+reference): a **rebuilt UI floats on the blurred-self backdrop and its elements perform the
+story themselves** — no cursor, no camera acrobatics. The screen is reconstructed
+([component-replication.md](component-replication.md)), which is what makes every part
+independently animatable, and the rebuild must pass the side-by-side fidelity check against
+the real product before any choreography starts.
+
+The vocabulary, all at 60fps:
+
+- **Staggered entrances.** Each element (a chat bubble, a list row, a card) springs in with a
+  small rise (12–24px) + fade, one after another at 100–250ms gaps — the UI "happens" in the
+  order a user would experience it.
+- **In-UI typing.** Text a *user* would type appears character by character inside the real
+  input, with the input's own caret (this is the product's UI, so the caret belongs — unlike
+  caption boxes, which never show one).
+- **Skeleton → content.** Loading states are shown honestly as shimmering skeleton bars that
+  resolve into content; they compress waiting time without faking instant results.
+- **Highlight ring.** A 2–3px stroke in the product's brand color draws itself around the one
+  control the story wants you to see (an "Approve" button), then fades. Use once per
+  production — it is an exclamation mark, not punctuation.
+- **Scroll continuity instead of cuts.** When the story moves to the next state, the content
+  scrolls vertically inside the frame — old beat exits top, new beat enters bottom — with
+  motion blur on the fast portion. The film reads as one continuous session, not a slideshow
+  (see [transitions.md](transitions.md) §In-canvas continuity).
+- **Results breathe.** After a payoff lands (the plan appears, the checkpoint card shows),
+  hold 0.8–1.5s of stillness before the next motion.
+
+Signals that point to **UI story**: "like the Replit / Linear / Vercel demo", a hero loop for
+an agent or chat product, "no cursor", "make the UI animate itself", a runtime under ~20s
+where individual UI moments *are* the message.
+
 ## Fonts
 
-Four vetted families, all **SIL Open Font License**, so they are safe to ship commercially.
+**The font is the user's call — ask before production starts (Step 0b in SKILL.md).** Offer
+the four vetted families below as the menu, but accept any family the user names, as long as
+it can be loaded for the render. The four are all **SIL Open Font License**, so they are safe
+to ship commercially.
 
 ### Sans
 
@@ -101,5 +137,8 @@ Signals that point to **pitch**: the words landing page, hero, social, Reels, ad
 
 Signals that point to **walkthrough**: tutorial, docs, onboarding, "how it works", "show the
 feature", "explain", a runtime over ~45s, or a request covering several features in sequence.
+
+Signals that point to **UI story**: "the UI animates itself", "no cursor", agent/chat
+products, a named premium reference demo, a loopable hero under ~20s (full list in §C).
 
 If genuinely ambiguous, ask — it is a one-line question that changes the entire structure.

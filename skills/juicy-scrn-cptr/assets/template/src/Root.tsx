@@ -1,5 +1,5 @@
 import React from 'react';
-import { Composition, AbsoluteFill, Img, staticFile } from 'remotion';
+import { Composition, Img, staticFile } from 'remotion';
 import { DemoStage, SourceSwap } from './demo/Stage';
 import { captionBudgetSeconds } from './demo/readingTime';
 import type { DemoEvent } from './demo/types';
@@ -8,7 +8,8 @@ import type { DemoEvent } from './demo/types';
  * EDIT BELOW. Everything above `demo/` is the engine; this file is the film.
  * ==========================================================================*/
 
-const FPS = 30;
+/** 60fps is the fluidity floor for final renders — 30 is only for fast drafts. */
+const FPS = 60;
 const WIDTH = 1920;
 const HEIGHT = 1080;
 
@@ -49,14 +50,12 @@ const Demo: React.FC = () => (
   <DemoStage
     events={events}
     captionFontSize={34}
-    background={
-      <AbsoluteFill
-        style={{
-          background:
-            'radial-gradient(120% 120% at 30% 20%, #241a4a 0%, #0a1130 60%, #050b1f 100%)',
-        }}
-      />
-    }
+    // Step 0b answers (ask the user BEFORE production): font + contrast.
+    contrast="light"
+    fontFamily="Inter, system-ui, sans-serif"
+    // Default backdrop: the capture itself, heavily blurred ('blur'). Pass 'none' only when
+    // the user opted out of a backdrop → fullscreen, frameless capture.
+    backdrop="blur"
     source={<SourceSwap shots={shots} />}
   />
 );
