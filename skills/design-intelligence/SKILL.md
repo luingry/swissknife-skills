@@ -47,6 +47,25 @@ high, keep sources few, and extract principles rather than copying. Image
 generation is optional only for open greenfield or flagship work with high
 expected value.
 
+## Maintain systems proportionately
+
+Before adding a visual primitive, inspect the project's existing tokens,
+components, and patterns. Reuse, compose, or extend them when their semantics
+align. Avoid arbitrary repeated values, duplicate variants, and speculative
+universal abstractions. When changing a shared primitive, cover the relevant
+states, accessibility, and responsive behavior, then inspect representative
+consumers and viewports.
+
+Explicit user approval of a visual direction triggers a lightweight
+systematization check. Treat the approval as project evidence and a candidate
+baseline: preserve the direction in subsequent in-scope work and consolidate
+proven patterns within the current authorization. Approval alone does not
+authorize an unrelated project-wide refactor, a global taste-memory update, or
+a deep system derived from one experimental composition. Deepen the system only
+when recurrence across relevant surfaces or consumers, concrete drift or
+duplication, explicit project-wide adoption, or a full design-system request
+justifies it.
+
 ## Handoffs and persistence
 
 For visual work assigned to another worker, provide: user/job,
@@ -74,5 +93,8 @@ concrete reason.
   external references, concepts, or optional image generation.
 - Read [visual verification](references/visual-verification.md) when rendering,
   capturing, or evaluating significant visual changes.
+- Read [systematization](references/systematization.md) after approval when
+  reuse or system depth is plausible, and whenever creating or maintaining a
+  design system.
 - Read [taste memory](references/taste-memory.md) for durable preference and
   project-identity handling.
