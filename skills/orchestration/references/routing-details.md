@@ -1,0 +1,101 @@
+# Routing details
+
+## Decision heuristic
+
+- Difficult part is deciding what to do: Sol.
+- Difficult part is implementing, testing, or debugging: Terra.
+- Difficult part is finding, reading, collecting, or enumerating: Luna.
+- Solution is already exact and all Mandatory Spark criteria pass: Spark.
+
+Luna and Spark are orthogonal optimizations. Luna reduces expensive context
+work; Spark reduces latency for known edits.
+
+## Luna reconnaissance
+
+Luna reconnaissance is bounded read-only repository evidence collection performed
+by a single Luna. For broad evidence needs, apply narrow, sequential follow-ups
+with that same Luna. Do not distribute reconnaissance across more than one Luna.
+
+A Luna remains bounded and read-only: it locates, reads, collects, and
+returns evidence. It does not implement, choose architecture or engineering,
+substantively test or debug, or replace Sol, Terra, or Spark. Do not send
+duplicated prompts or use voting/consensus. The Owner resolves conflicts against
+raw evidence and may send a focused follow-up for any gap.
+
+## Handoff contract
+
+Provide only the necessary context:
+
+- Goal: observable outcome.
+- Scope: subsystem and files when known.
+- Context: facts needed to execute.
+- Constraints: behavior and data to preserve.
+- Acceptance: definition of done.
+- Validation: exact checks and evidence expected.
+
+The worker returns:
+
+- Completed: change or finding.
+- Files: relevant modified files.
+- Evidence: path:line references or command outcomes.
+- Validation: commands and outcomes.
+- Concerns/scope gaps: unresolved issues only.
+
+## Shallow topology
+
+Allowed examples:
+
+- Sol owner -> Terra implementation -> Sol acceptance.
+- Sol owner -> Luna reconnaissance -> Sol continues.
+- Sol/Terra owner -> Spark surgical edit -> owner acceptance.
+- Terra owner -> Sol consultation -> Terra implementation and acceptance.
+
+Forbidden examples:
+
+- Sol -> Terra -> Luna.
+- Terra -> Sol -> Terra.
+- Terra -> Luna -> Spark.
+- Any worker -> another worker.
+- Terra Medium owner -> Terra Medium implementation worker.
+
+## Parallelism
+
+Use one implementation worker by default. Add a second worker only for a genuinely
+independent, non-overlapping scope that materially reduces elapsed time. Useful
+combinations include one Luna collecting bounded evidence while Terra performs
+independent implementation, or Spark handling a separate known edit while another
+specialist performs longer work. Avoid duplicate solutions, overlapping writes,
+speculative swarms, and unnecessary context transfer.
+
+Avoid distributing reconnaissance across more than one Luna; if evidence breadth
+increases, keep the same Luna and run narrower sequential passes.
+
+## Escalation package
+
+When Terra consults Sol, include goal, relevant evidence, attempts, exact
+decision needed, known options, and Terra's recommendation. Sol returns advice;
+Terra retains ownership and performs the implementation.
+
+## Completion and delivery verification
+
+Finish after proportionate self-verification demonstrates the requested
+behavior, relevant checks pass, no unexplained behavior change remains, and no
+material risk is unresolved. Do not add a confidence pass by default.
+
+When a concrete material uncertainty remains after cheap verification, the
+Owner may run [$delivery-verification](../../delivery-verification/SKILL.md).
+Provide the original goal, changed delta or artifacts, validation evidence, the
+risk signal, and prior findings/fixes when re-verifying. It is an evidence-based
+acceptability check, not a generic audit or mandatory review; it does not edit,
+delegate, or reinvoke orchestration.
+
+## Anti-patterns
+
+- Sol performing prolonged mechanical implementation.
+- Terra escalating routine execution.
+- Luna making engineering decisions or replacing Terra/Spark.
+- Using multiple workers of the same specialist tier for one scope.
+- Spark investigating, architecting, or replacing Terra for complex work.
+- Recursive delegation.
+- Accepting worker claims without observable evidence.
+- Skipping eligible Spark because delegation has overhead.

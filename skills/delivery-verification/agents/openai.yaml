@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delivery Verification"
+  short_description: "Assess delivery only when uncertainty remains"
+  default_prompt: "Use $delivery-verification to decide whether this implemented change is acceptable from the available evidence."

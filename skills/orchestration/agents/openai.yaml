@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Orchestration"
+  short_description: "Route and accept lean, shallow engineering workers"
+  default_prompt: "Use $orchestration to route and independently accept this engineering task, using a lean isolated CLI Luna or Spark worker when native delegation is unavailable."

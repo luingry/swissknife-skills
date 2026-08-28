@@ -1,0 +1,4 @@
+interface:
+  display_name: "Design Intelligence"
+  short_description: "Craft intentional, high-quality product UI"
+  default_prompt: "Use $design-intelligence to design this product UI with a deliberate visual direction."
