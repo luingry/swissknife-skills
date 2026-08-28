@@ -32,10 +32,21 @@ install that trio together.
 
 ## Install for Codex
 
-Copy or link the desired skill directory into `~/.agents/skills/`:
+Install the `design-intelligence`, `orchestration`, and
+`delivery-verification` trio into `~/.agents/skills/`. Copy the default global
+taste memory only when you do not already have one, so personal preferences are
+never overwritten:
 
 ```powershell
-Copy-Item -Recurse .\skills\design-intelligence ~/.agents/skills/design-intelligence
+New-Item -ItemType Directory -Force ~/.agents/skills | Out-Null
+
+foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification') {
+  Copy-Item -Recurse -Force ".\skills\$skill" ~/.agents/skills/
+}
+
+if (-not (Test-Path ~/.agents/design-taste.md)) {
+  Copy-Item .\design-taste.md ~/.agents/design-taste.md
+}
 ```
 
 These directories follow the Agent Skills convention and are compatible with

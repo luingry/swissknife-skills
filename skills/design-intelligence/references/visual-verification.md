@@ -22,6 +22,12 @@ lower tiers stay proportionate. An evaluator may return PASS without requested
 changes. Findings need concrete visual or behavioral evidence; do not invent
 defects to justify a review.
 
+When relevant to the changed surface and practical to exercise, inspect the
+affected interaction or state, keyboard and focus behavior, contrast, touch
+target usability, and media behavior under `prefers-reduced-motion`. This is a
+targeted supplement to the pass above, not a requirement to turn every review
+into a full accessibility audit; keep it within the selected tier.
+
 If runtime observation is impractical, record what prevented it and what source
 or test evidence was available. This is an evidence boundary, not a claim that
 the visual result was verified.
