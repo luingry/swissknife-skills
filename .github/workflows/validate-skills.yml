@@ -1,0 +1,41 @@
+name: Validate skills
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  repository:
+    name: Repository (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+      - run: npm ci
+      - run: npm run validate
+      - run: npm test
+
+  remotion-template:
+    name: Remotion template typecheck
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: skills/juicy-scrn-cptr/assets/template
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: npm
+          cache-dependency-path: skills/juicy-scrn-cptr/assets/template/package-lock.json
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm audit --audit-level=high

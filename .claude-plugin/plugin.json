@@ -1,0 +1,10 @@
+{
+  "name": "luingry-swissknife-skills",
+  "version": "0.1.0",
+  "description": "Reusable Agent Skills for practical product work.",
+  "author": { "name": "luingry" },
+  "homepage": "https://github.com/luingry/luingry-swissknife-skills",
+  "repository": "https://github.com/luingry/luingry-swissknife-skills",
+  "license": "MIT",
+  "skills": "./skills/"
+}

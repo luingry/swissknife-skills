@@ -1,21 +1,17 @@
 ---
 name: juicy-scrn-cptr
 description: >-
-  Create polished, Screen Studio-style product demo videos AND device-framed
-  screenshots programmatically with Remotion, for desktop and mobile targets —
-  animated cursor or touch gestures (tap/swipe/scroll/long-press), click ripples,
-  dynamic auto-zoom/pan that follows the action, motion blur, subtle film grain,
-  phone/browser device frames over a blurred-self backdrop, typewriter caption
-  boxes, element-level UI choreography (staggered reveals, in-UI typing, highlight
-  rings), and a director-grade script (roteiro). Drives motion from a declarative
-  event timeline (or from a real tap/gesture log), so the whole video is code and
-  re-renders headlessly with no manual editing. Handles landscape, square, and
-  portrait (Reels/Shorts/app-store) cuts from one story. Use when asked to "create
-  a product demo video", "screencast", "video de produto", "demo animation showing
-  screens being used", "Screen Studio style", "animated cursor / clicks / zoom on
-  a recording", "app demo video", "animate a component's parts", "present a
-  component in isolation", "turn screenshots into a demo video", "mobile mockup
-  screenshot", or "programmatic marketing video of an app".
+  Create polished Screen Studio-style product demo videos and device-framed
+  screenshots with React and Remotion. Use for desktop or mobile demos with
+  animated cursor or touch gestures, click ripples, action-following zoom/pan,
+  motion blur, film grain, device frames, typewriter captions, UI choreography,
+  and a director-grade roteiro. It drives a declarative event timeline or real
+  interaction log and renders headlessly in landscape, square, or portrait. Use
+  when asked to create a product demo video, screencast, video de produto, demo
+  animation showing screens being used, Screen Studio-style video, animated
+  cursor/clicks/zoom on a recording, app demo video, component animation,
+  isolated component presentation, screenshots-to-demo video, mobile mockup
+  screenshot, or programmatic marketing video of an app.
 ---
 
 # Juicy Scrn Cptr

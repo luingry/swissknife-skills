@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "skills": [
+    {
+      "name": "delivery-verification",
+      "path": "skills/delivery-verification",
+      "summary": "Assesses whether implemented work is acceptable when material uncertainty remains.",
+      "portability": "Most portable; format-level compatible with standard Agent Skills hosts. Runtime needs the evidence and tools available to the host."
+    },
+    {
+      "name": "design-intelligence",
+      "path": "skills/design-intelligence",
+      "summary": "Guides significant UI/UX work with product-specific direction and visual verification.",
+      "portability": "Conditional on host file access and an available design-taste memory file."
+    },
+    {
+      "name": "juicy-scrn-cptr",
+      "path": "skills/juicy-scrn-cptr",
+      "summary": "Creates polished product demo videos and framed screenshots with Remotion.",
+      "portability": "Conditional on Node.js, npm, Remotion, Playwright, Chromium, and optionally adb or simctl."
+    },
+    {
+      "name": "orchestration",
+      "path": "skills/orchestration",
+      "summary": "Routes and accepts engineering work across available agent tiers.",
+      "portability": "Format is standard; execution is Codex-specific because it requires Sol, Terra, Luna, Spark, native subagents, and Codex CLI workflows."
+    }
+  ]
+}

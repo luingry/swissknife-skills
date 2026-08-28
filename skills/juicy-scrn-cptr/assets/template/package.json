@@ -5,6 +5,7 @@
   "scripts": {
     "studio": "remotion studio",
     "capture": "node scripts/capture.mjs",
+    "typecheck": "tsc --noEmit",
     "draft": "remotion render src/index.ts Demo out/draft.mp4 --scale=0.35 --jpeg-quality=70",
     "final": "remotion render src/index.ts Demo out/demo.mp4 --crf=18",
     "verify": "node scripts/verify.mjs"
@@ -14,7 +15,7 @@
     "@remotion/bundler": "4.0.495",
     "@remotion/renderer": "4.0.495",
     "@remotion/motion-blur": "4.0.495",
-    "playwright": "1.49.1",
+    "playwright": "1.55.1",
     "react": "19.0.0",
     "react-dom": "19.0.0",
     "remotion": "4.0.495"

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Juicy Screen Capture"
+  short_description: "Create polished Remotion product demos"
+  default_prompt: "Use $juicy-scrn-cptr to plan and create a polished product demo video or framed screenshot."

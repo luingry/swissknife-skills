@@ -1,0 +1,13 @@
+{
+  "name": "luingry-swissknife-skills",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "validate": "node scripts/validate-repository.mjs",
+    "test": "node --test tests"
+  },
+  "devDependencies": {
+    "yaml": "2.9.0"
+  }
+}

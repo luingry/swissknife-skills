@@ -1,57 +1,146 @@
 # luingry-swissknife-skills
 
-A small collection of reusable Agent Skills for practical product work. Each
-skill keeps its entrypoint concise and puts conditional detail in references.
+A small, MIT-licensed collection of reusable [Agent Skills](https://agentskills.io/specification)
+for practical product work. `skills/` is the single canonical source; host-specific
+plugin manifests are thin packaging/install adapters and contain no copied skill content.
 
-## Skills
+## Scope and compatibility
 
-| Skill | Purpose |
-|---|---|
-| [`design-intelligence`](skills/design-intelligence) | Gives significant UI/UX work a deliberate product-specific direction, adaptive visual verification, and durable taste-memory boundaries. |
-| [`orchestration`](skills/orchestration) | Routes engineering work across available agent tiers, with acceptance ownership and compact visual handoffs. |
-| [`delivery-verification`](skills/delivery-verification) | Decides whether completed work is acceptable when material uncertainty remains. |
-| [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Produces polished product demo videos and device-framed screenshots with Remotion and real browser interaction. |
+This repository documents installation for **Codex**, **Claude Code**, and **Cursor**
+only. A host may support the same `SKILL.md` format without discovering or executing
+every workflow identically. In particular, `orchestration` is a Codex-specific execution
+workflow. Cloning this repository alone does not cause a host to load a plugin
+manifest; install standalone skills at a documented skill path or use that host's
+plugin import/install/development flow. See the evidence, capability matrix, and limitations in
+[docs/compatibility.md](docs/compatibility.md).
 
-## Layout
+## Catalog
+
+| Skill | Purpose | Runtime note |
+| --- | --- | --- |
+| [`design-intelligence`](skills/design-intelligence) | Gives significant UI/UX work deliberate, product-specific direction and visual verification. | Needs file access; its taste memory is optional. |
+| [`orchestration`](skills/orchestration) | Routes engineering work and owns acceptance. | Codex-specific execution: its tiers, subagents, and CLI workflow are Codex concepts. |
+| [`delivery-verification`](skills/delivery-verification) | Decides whether completed work is acceptable when material uncertainty remains. | The most portable skill; it still needs host-available evidence/tools. |
+| [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Produces polished product demos and device-framed screenshots with Remotion. | Needs Node.js, npm, Remotion, Playwright and Chromium; some modes need `adb` or `simctl`. |
+
+The machine-readable catalog is [skills/catalog.json](skills/catalog.json). The core trio is
+`design-intelligence`, `orchestration`, and `delivery-verification`; `juicy-scrn-cptr` is an
+explicit opt-in because it carries a local media toolchain.
+
+## Structure
 
 ```text
-skills/
-  <skill-name>/
-    SKILL.md
-    agents/              # optional UI metadata
-    references/          # optional on-demand guidance
-    scripts/             # optional deterministic helpers
-    assets/              # optional output assets/templates
+skills/                       canonical skill source
+  <skill>/SKILL.md            standard Agent Skills entrypoint
+  <skill>/agents/openai.yaml  optional Codex UI metadata
+  <skill>/references/         conditional guidance
+  <skill>/assets/             reusable output assets/templates
+docs/                         compatibility, authoring, and validation guidance
+scripts/validate-repository.mjs
+tests/                        offline structural checks
+plugin.json                   open Agent Plugin manifest
+.codex-plugin/                optional Codex packaging/install adapter
+.claude-plugin/               optional Claude Code packaging/install adapter
 ```
 
-`SKILL.md` is the entrypoint. Supporting references are read only when their
-specific guidance is useful.
+## Install
 
-`orchestration` references `design-intelligence` and `delivery-verification`;
-install that trio together.
+Clone the repository, then copy the skills you want. These examples copy all four skills. To
+install only the core trio, omit `juicy-scrn-cptr` deliberately.
 
-## Install for Codex
+### Codex
 
-Install the `design-intelligence`, `orchestration`, and
-`delivery-verification` trio into `~/.agents/skills/`. Copy the default global
-taste memory only when you do not already have one, so personal preferences are
-never overwritten:
+Codex discovers user skills in `~/.agents/skills`.
 
 ```powershell
 New-Item -ItemType Directory -Force ~/.agents/skills | Out-Null
-
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification') {
+foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification', 'juicy-scrn-cptr') {
   Copy-Item -Recurse -Force ".\skills\$skill" ~/.agents/skills/
 }
-
 if (-not (Test-Path ~/.agents/design-taste.md)) {
   Copy-Item .\design-taste.md ~/.agents/design-taste.md
 }
 ```
 
-These directories follow the Agent Skills convention and are compatible with
-agents that support `SKILL.md`-based discovery.
+```sh
+mkdir -p ~/.agents/skills
+for skill in design-intelligence orchestration delivery-verification juicy-scrn-cptr; do
+  cp -R "./skills/$skill" ~/.agents/skills/
+done
+[ -e ~/.agents/design-taste.md ] || cp ./design-taste.md ~/.agents/design-taste.md
+```
+
+### Claude Code
+
+Claude Code discovers user skills in `~/.claude/skills`.
+
+```powershell
+New-Item -ItemType Directory -Force ~/.claude/skills | Out-Null
+foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification', 'juicy-scrn-cptr') {
+  Copy-Item -Recurse -Force ".\skills\$skill" ~/.claude/skills/
+}
+```
+
+```sh
+mkdir -p ~/.claude/skills
+for skill in design-intelligence orchestration delivery-verification juicy-scrn-cptr; do
+  cp -R "./skills/$skill" ~/.claude/skills/
+done
+```
+
+`design-intelligence` can use `~/.agents/design-taste.md` when it is available;
+it is optional. To reuse this repository's starter taste memory without overwriting
+an existing one:
+
+```powershell
+New-Item -ItemType Directory -Force ~/.agents | Out-Null
+if (-not (Test-Path ~/.agents/design-taste.md)) {
+  Copy-Item .\design-taste.md ~/.agents/design-taste.md
+}
+```
+
+### Cursor
+
+Cursor supports Agent Skills through `~/.agents/skills`; use the Codex copy commands above for
+a user-wide install. For a repository-local installation, copy selected folders into
+`.cursor/skills/`:
+
+```powershell
+New-Item -ItemType Directory -Force .cursor/skills | Out-Null
+foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification', 'juicy-scrn-cptr') {
+  Copy-Item -Recurse -Force ".\skills\$skill" .cursor/skills/
+}
+```
+
+```sh
+mkdir -p .cursor/skills
+for skill in design-intelligence orchestration delivery-verification juicy-scrn-cptr; do
+  cp -R "./skills/$skill" .cursor/skills/
+done
+```
+
+Read [docs/compatibility.md](docs/compatibility.md) before relying on a skill's runtime behavior
+outside Codex.
+
+## Development
+
+Use Node.js LTS. All repository checks are offline after dependencies are installed:
+
+```sh
+npm ci
+npm run validate
+npm test
+```
+
+Authoring and test policy live in [docs/authoring.md](docs/authoring.md) and
+[docs/testing.md](docs/testing.md). `ERRORS.md` is the maintained incident log for non-trivial
+repository maintenance issues, not end-user installation guidance.
+
+## Contributing and security
+
+Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a change. Report security issues through
+[SECURITY.md](SECURITY.md). Release notes begin in [CHANGELOG.md](CHANGELOG.md).
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+[MIT](LICENSE).

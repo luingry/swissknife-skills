@@ -1,0 +1,21 @@
+{
+  "name": "luingry-swissknife-skills",
+  "version": "0.1.0",
+  "description": "Reusable Agent Skills for practical product work.",
+  "author": { "name": "luingry", "url": "https://github.com/luingry" },
+  "homepage": "https://github.com/luingry/luingry-swissknife-skills",
+  "repository": "https://github.com/luingry/luingry-swissknife-skills",
+  "license": "MIT",
+  "keywords": ["agent-skills", "codex", "claude-code", "cursor"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Luingry Swissknife Skills",
+    "shortDescription": "Practical product-work skills",
+    "longDescription": "A small, standards-based skill collection for product, engineering, verification, and demo-video work.",
+    "developerName": "luingry",
+    "category": "Productivity",
+    "capabilities": ["Skills"],
+    "websiteURL": "https://github.com/luingry/luingry-swissknife-skills",
+    "defaultPrompt": ["Use the relevant Luingry Swissknife skill for this task."]
+  }
+}
