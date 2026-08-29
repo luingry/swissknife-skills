@@ -1,14 +1,14 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
-  "name": "luingry-swissknife-skills",
+  "name": "swissknife-skills",
   "version": "0.1.0",
   "description": "Reusable Agent Skills for practical product work.",
   "author": {
     "name": "luingry",
     "url": "https://github.com/luingry"
   },
-  "homepage": "https://github.com/luingry/luingry-swissknife-skills",
-  "repository": "https://github.com/luingry/luingry-swissknife-skills",
+  "homepage": "https://github.com/luingry/swissknife-skills",
+  "repository": "https://github.com/luingry/swissknife-skills",
   "license": "MIT",
   "keywords": ["agent-skills", "codex", "claude-code", "cursor"]
 }

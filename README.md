@@ -1,4 +1,6 @@
-# luingry-swissknife-skills
+# swissknife-skills
+
+[![skills.sh](https://skills.sh/b/luingry/swissknife-skills)](https://skills.sh/luingry/swissknife-skills)
 
 A small, MIT-licensed collection of reusable [Agent Skills](https://agentskills.io/specification)
 for practical product work. `skills/` is the single canonical source; host-specific
