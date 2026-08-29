@@ -1,5 +1,18 @@
 # ERRORS.md — erros não-triviais e soluções
 
+## GitHub Actions falhava ao descobrir testes no Node 24
+
+- **Sintoma:** o job em `lts/*` falhava no Node 24.19.0, em Ubuntu e Windows,
+  com `MODULE_NOT_FOUND` ao executar `node --test tests`.
+- **Causa raiz:** o Node 24 passou a tratar o argumento `tests` como módulo;
+  o workflow havia acompanhado o LTS até essa versão e o script deixava de usar
+  a descoberta padrão de arquivos de teste.
+- **Solução:** trocar o script para `node --test`, que descobre os atuais
+  `tests/*.test.mjs` tanto no Node 20 quanto no Node 24.
+- **Prevenção:** quando o CI acompanha `lts/*`, validar explicitamente os
+  comandos de teste na nova linha LTS e preferir a descoberta padrão quando a
+  convenção de nomes já é suficiente.
+
 ## Claude Agent Teams could change ordinary subagent semantics before publication
 
 - **Sintoma/risco:** a adaptação multiplataforma permitia subagentes Claude Code
