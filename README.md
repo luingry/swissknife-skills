@@ -3,8 +3,9 @@
 [![skills.sh](https://skills.sh/b/luingry/swissknife-skills)](https://skills.sh/luingry/swissknife-skills)
 
 A small, MIT-licensed collection of reusable [Agent Skills](https://agentskills.io/specification)
-for practical product work. `skills/` is the single canonical source; host-specific
-plugin manifests are thin packaging/install adapters and contain no copied skill content.
+for product design, engineering orchestration, delivery verification, and polished product
+demos. `skills/` is the single canonical source; host-specific plugin manifests are thin
+packaging/install adapters and contain no copied skill content.
 
 ## Scope and compatibility
 
@@ -22,12 +23,12 @@ flow. See the evidence, capability matrix, and limitations in
 
 | Skill | Purpose | Runtime note |
 | --- | --- | --- |
-| [`design-intelligence`](skills/design-intelligence) | Gives significant UI/UX work deliberate, product-specific direction and visual verification. | Needs file access; its taste memory is optional. |
-| [`orchestration`](skills/orchestration) | Routes engineering work and owns acceptance. | Conditional runtime: selects one Codex, Claude Code, or Cursor adapter; Codex tiers and CLI remain Codex-only. |
-| [`delivery-verification`](skills/delivery-verification) | Decides whether completed work is acceptable when material uncertainty remains. | The most portable skill; it still needs host-available evidence/tools. |
-| [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Produces polished product demos and device-framed screenshots with Remotion. | Needs Node.js, npm, Remotion, Playwright and Chromium; some modes need `adb` or `simctl`. |
+| [`design-intelligence`](skills/design-intelligence) | Guides significant UI/UX work with product-specific direction and practical visual verification. | Needs file access; its taste memory is optional. |
+| [`orchestration`](skills/orchestration) | Routes repository work through the active host while the Task Owner integrates evidence and accepts the result. | Selects one Codex, Claude Code, or Cursor adapter; Codex tiers and CLI remain Codex-only. |
+| [`delivery-verification`](skills/delivery-verification) | Returns an evidence-based PASS/FAIL when material uncertainty remains after implementation. | Most portable; needs host-available evidence/tools and never edits artifacts. |
+| [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Builds Screen Studio-style desktop/mobile demos and framed screenshots from real captures or declarative timelines using React and Remotion. | Needs Node.js, npm, and Remotion; capture modes may need Playwright, Chromium, `adb`, or `simctl`. |
 
-The machine-readable catalog is [skills/catalog.json](skills/catalog.json). The core trio is
+The machine-readable catalog is [skills/catalog.json](skills/catalog.json). The recommended default set is
 `design-intelligence`, `orchestration`, and `delivery-verification`; `juicy-scrn-cptr` is an
 explicit opt-in because it carries a local media toolchain.
 
@@ -49,79 +50,20 @@ plugin.json                   open Agent Plugin manifest
 
 ## Install
 
-Clone the repository, then copy the skills you want. These examples copy all four skills. To
-install only the core trio, omit `juicy-scrn-cptr` deliberately.
+### Quick install
 
-### Codex
-
-Codex discovers user skills in `~/.agents/skills`.
-
-```powershell
-New-Item -ItemType Directory -Force ~/.agents/skills | Out-Null
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification', 'juicy-scrn-cptr') {
-  Copy-Item -Recurse -Force ".\skills\$skill" ~/.agents/skills/
-}
-if (-not (Test-Path ~/.agents/design-taste.md)) {
-  Copy-Item .\design-taste.md ~/.agents/design-taste.md
-}
-```
+Install this repository through skills.sh:
 
 ```sh
-mkdir -p ~/.agents/skills
-for skill in design-intelligence orchestration delivery-verification juicy-scrn-cptr; do
-  cp -R "./skills/$skill" ~/.agents/skills/
-done
-[ -e ~/.agents/design-taste.md ] || cp ./design-taste.md ~/.agents/design-taste.md
+npx skills add luingry/swissknife-skills
 ```
 
-### Claude Code
+### Manual installation
 
-Claude Code discovers user skills in `~/.claude/skills`.
-
-```powershell
-New-Item -ItemType Directory -Force ~/.claude/skills | Out-Null
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification', 'juicy-scrn-cptr') {
-  Copy-Item -Recurse -Force ".\skills\$skill" ~/.claude/skills/
-}
-```
-
-```sh
-mkdir -p ~/.claude/skills
-for skill in design-intelligence orchestration delivery-verification juicy-scrn-cptr; do
-  cp -R "./skills/$skill" ~/.claude/skills/
-done
-```
-
-`design-intelligence` can use `~/.agents/design-taste.md` when it is available;
-it is optional. To reuse this repository's starter taste memory without overwriting
-an existing one:
-
-```powershell
-New-Item -ItemType Directory -Force ~/.agents | Out-Null
-if (-not (Test-Path ~/.agents/design-taste.md)) {
-  Copy-Item .\design-taste.md ~/.agents/design-taste.md
-}
-```
-
-### Cursor
-
-Cursor supports Agent Skills through `~/.agents/skills`; use the Codex copy commands above for
-a user-wide install. For a repository-local installation, copy selected folders into
-`.cursor/skills/`:
-
-```powershell
-New-Item -ItemType Directory -Force .cursor/skills | Out-Null
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-verification', 'juicy-scrn-cptr') {
-  Copy-Item -Recurse -Force ".\skills\$skill" .cursor/skills/
-}
-```
-
-```sh
-mkdir -p .cursor/skills
-for skill in design-intelligence orchestration delivery-verification juicy-scrn-cptr; do
-  cp -R "./skills/$skill" .cursor/skills/
-done
-```
+Clone the repository and copy the skills you want. The documented PowerShell and Unix commands
+for Codex, Claude Code, and Cursor, including the optional `design-taste.md` starter memory,
+are in [docs/installation.md](docs/installation.md). To install only the recommended default
+set, omit `juicy-scrn-cptr` deliberately.
 
 Read [docs/compatibility.md](docs/compatibility.md) before relying on a skill's runtime behavior
 outside Codex.

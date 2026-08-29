@@ -4,26 +4,26 @@
     {
       "name": "delivery-verification",
       "path": "skills/delivery-verification",
-      "summary": "Assesses whether implemented work is acceptable when material uncertainty remains.",
-      "portability": "Most portable; format-level compatible with standard Agent Skills hosts. Runtime needs the evidence and tools available to the host."
+      "summary": "Returns an evidence-based PASS/FAIL when material uncertainty remains after implementation.",
+      "portability": "Most portable; format-level compatible with standard Agent Skills hosts. Runtime needs host-available evidence and tools, and the skill never edits artifacts."
     },
     {
       "name": "design-intelligence",
       "path": "skills/design-intelligence",
-      "summary": "Guides significant UI/UX work with product-specific direction and visual verification.",
-      "portability": "Conditional on host file access and an available design-taste memory file."
+      "summary": "Guides significant UI/UX work with product-specific direction and practical visual verification.",
+      "portability": "Conditional on host file access; the design-taste memory is optional."
     },
     {
       "name": "juicy-scrn-cptr",
       "path": "skills/juicy-scrn-cptr",
-      "summary": "Creates polished product demo videos and framed screenshots with Remotion.",
-      "portability": "Conditional on Node.js, npm, Remotion, Playwright, Chromium, and optionally adb or simctl."
+      "summary": "Builds Screen Studio-style desktop/mobile demos and framed screenshots from real captures or declarative timelines using React and Remotion.",
+      "portability": "Conditional on Node.js, npm, and Remotion; capture modes may need Playwright, Chromium, adb, or simctl."
     },
     {
       "name": "orchestration",
       "path": "skills/orchestration",
-      "summary": "Routes and accepts engineering work across available agent tiers.",
-      "portability": "Conditional operational adapters select Codex, Claude Code, or Cursor without mixing host APIs; unavailable capabilities fall back to sequential owner execution. Sol, Terra, Luna, Spark, the guarded Codex CLI worktree launcher, Codex model catalog, and JSONL evidence remain Codex-only."
+      "summary": "Routes repository work through the active host while the Task Owner integrates evidence and accepts the result.",
+      "portability": "Conditional operational adapters select one Codex, Claude Code, or Cursor route without mixing host APIs; unavailable capabilities fall back to sequential Task Owner execution. Sol, Terra, Luna, Spark, the guarded Codex CLI worktree launcher, Codex model catalog, and JSONL evidence remain Codex-only."
     }
   ]
 }

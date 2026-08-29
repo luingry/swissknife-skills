@@ -7,3 +7,4 @@ public/*.timeline.json
 *.log
 .DS_Store
 Thumbs.db
+/output/pdf/skills-sh-install-proof.pdf
