@@ -2,6 +2,12 @@
   "schemaVersion": 1,
   "skills": [
     {
+      "name": "delivery-closer",
+      "path": "skills/delivery-closer",
+      "summary": "Completes and proves an explicitly authorized terminal delivery action after implementation.",
+      "portability": "Format-level compatible with standard Agent Skills hosts; requires current host-visible state, explicitly authorized mutations, and proportional evidence. It does not edit implementation artifacts or delegate."
+    },
+    {
       "name": "delivery-verification",
       "path": "skills/delivery-verification",
       "summary": "Returns an evidence-based PASS/FAIL when material uncertainty remains after implementation.",

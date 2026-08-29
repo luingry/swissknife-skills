@@ -76,18 +76,30 @@ When Terra consults Sol, include goal, relevant evidence, attempts, exact
 decision needed, known options, and Terra's recommendation. Sol returns advice;
 Terra retains ownership and performs the implementation.
 
-## Completion and delivery verification
+## Completion and optional closing capabilities
 
 Finish after proportionate self-verification demonstrates the requested
 behavior, relevant checks pass, no unexplained behavior change remains, and no
 material risk is unresolved. Do not add a confidence pass by default.
 
 When a concrete material uncertainty remains after cheap verification, the
-Owner may run [$delivery-verification](../../delivery-verification/SKILL.md).
-Provide the original goal, changed delta or artifacts, validation evidence, the
-risk signal, and prior findings/fixes when re-verifying. It is an evidence-based
+Owner may use the available `delivery-verification` capability. Provide the
+original goal, changed delta or artifacts, validation evidence, the risk signal,
+and prior findings/fixes when re-verifying. It is an evidence-based
 acceptability check, not a generic audit or mandatory review; it does not edit,
 delegate, or reinvoke orchestration.
+
+When an explicitly authorized terminal action remains after implementation, the
+Owner may use the available `delivery-closer` capability. Provide the terminal
+outcome, authority from the full user request and Owner handoff, current state,
+valid existing evidence, and changes that must be preserved. When the host
+offers a suitable temporary specialist, dispatch it in fresh context. Otherwise
+the Owner performs the same closing protocol sequentially. The specialist is
+not persistent and does not delegate. It closes only that action; it does not
+correct code, reinvoke orchestration, or automatically invoke verification. If a
+capability is absent, the Owner performs the same proportional contract without
+skipping it. The verifier and closer have distinct triggers, may be selected
+separately, and neither is required for the fast path or depends on the other.
 
 ## Anti-patterns
 

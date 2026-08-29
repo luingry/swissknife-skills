@@ -34,11 +34,11 @@ Read the applicable first-level reference before delegating:
 ## Visual significance routing
 
 For a new page or screen, landing, dashboard, redesign, significant component
-or layout, UI/UX improvement, or screenshot/reference-driven work, apply
-[$design-intelligence](../../design-intelligence/SKILL.md) alongside the chosen
-engineering route. Do not add a parallel pipeline or invoke specialized design
-skills automatically. For a trivial exact visual adjustment or pure backend
-work, do not route it through design intelligence.
+or layout, UI/UX improvement, or screenshot/reference-driven work, use the
+available `design-intelligence` capability alongside the chosen engineering
+route. Do not add a parallel pipeline or invoke specialized design skills
+automatically. For a trivial exact visual adjustment or pure backend work, do
+not route it through design intelligence.
 
 When delegating significant visual work, include a compact handoff: user/job;
 whether to preserve or replace; direction/thesis; must-preserve details;
@@ -90,8 +90,9 @@ review, and acceptance under this skill.
   is no unexplained behavior change, and no unresolved material risk remains.
   Do not begin another review merely to seek more confidence or findings.
 - Risk signals prompt assessment, not automatic worker calls. Start with cheap,
-  reliable self-verification; invoke [$delivery-verification](../../delivery-verification/SKILL.md)
-  only when independent or specialized verification has enough expected value.
+  reliable self-verification; invoke the available `delivery-verification`
+  capability only when independent or specialized verification has enough
+  expected value.
   Signals include changed test expectations; meaningful existing, public, or
   shared behavior changes; unexpectedly broad changes; persistence, schema,
   migration, auth, concurrency, or shared-state effects; multiple substantial

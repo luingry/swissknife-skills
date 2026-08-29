@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delivery Closer"
+  short_description: "Finish and prove an authorized terminal action"
+  default_prompt: "Use $delivery-closer to complete and prove the explicitly authorized terminal delivery action after implementation."

@@ -1,6 +1,6 @@
 # Compatibility
 
-Last reviewed: **2026-08-28**.
+Last reviewed: **2026-08-29**.
 
 ## What this matrix means
 
@@ -44,6 +44,7 @@ identical activation, model behavior, or tool availability.
 
 | Skill | Format | Discovery | Runtime |
 | --- | --- | --- | --- |
+| `delivery-closer` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Conditional: it needs current host-visible state and authority from the full request and Task Owner handoff for any terminal mutation. It does not edit implementation artifacts, delegate, or replace acceptance. |
 | `delivery-verification` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Most portable: it needs task evidence and whatever inspection tools the host provides. |
 | `design-intelligence` | Standard format. | Expected through the documented paths. | Conditional on filesystem access. Its `design-taste.md` location is Codex-oriented; absence must be handled as missing optional taste memory. |
 | `orchestration` | Standard format. | Expected through the documented paths. | **Conditional operational adapters.** It selects exactly one documented Codex, Claude Code, or Cursor route and falls back to a sequential Task Owner when required capabilities are absent. Sol/Terra/Luna/Spark, Codex CLI catalog, JSONL, and CLI worker workflow remain Codex-only. Claude Code and Cursor behavior is documentation-derived, not behaviorally tested here. |
@@ -107,3 +108,10 @@ semantics, logs, or cloud facilities between hosts. The maintained evidence is
 No benchmark or practical Claude Code/Cursor execution has been performed.
 Each adapter must fall back to sequential execution if tools, permissions,
 model settings, isolation, background mode, or cloud access are unavailable.
+During significant visual work, `design-intelligence` is an independent optional
+capability. Near conclusion, `delivery-verification` and `delivery-closer` are
+independent optional capabilities. The active host must make each one available;
+its absence preserves the same proportional owner contract rather than skipping
+visual acceptance, delivery acceptance, or an authorized terminal close. No
+offline check proves that a host will activate a capability or that its runtime
+evidence is complete.

@@ -43,9 +43,9 @@ routing, model, isolation, background, and fallback detail.
 
 For bug, performance, runtime, browser, integration, or worker acceptance work,
 also read [acceptance workflows](references/acceptance-workflows.md). When a
-significant UI surface is in scope, apply
-[$design-intelligence](../design-intelligence/SKILL.md) alongside the selected
-adapter; do not add a second orchestration pipeline.
+significant UI surface is in scope, use the optional `design-intelligence`
+capability alongside the selected adapter; do not add a second orchestration
+pipeline.
 
 ## Capability fallback
 
@@ -57,3 +57,23 @@ capability in the final report when it materially changed the route.
 
 The evidence basis and unvalidated boundaries are documented in
 [host capability evidence](references/host-capability-evidence.md).
+
+## Optional companion capabilities
+
+Discover each capability from the active host's available skill catalog or
+equivalent availability surface when it reaches its decision point. During
+significant visual work, discover `design-intelligence`. Near conclusion,
+discover `delivery-verification` and `delivery-closer`. A catalog entry alone
+does not grant authority or make a capability mandatory.
+
+- Use `design-intelligence` only for significant visual work.
+- Use `delivery-verification` only for material residual uncertainty after
+  proportionate self-verification.
+- Use `delivery-closer` only for an explicitly authorized terminal action that
+  remains pending after implementation.
+
+If one is absent or unavailable, the Task Owner performs the same applicable
+contract proportionately. Its absence never skips visual acceptance, delivery
+acceptance, or an authorized terminal close. These capabilities are independent:
+do not require one to invoke another, and preserve the fast path when none
+applies.

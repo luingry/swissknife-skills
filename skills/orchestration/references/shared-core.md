@@ -58,12 +58,23 @@ a concrete risk signal.
 ## Visual work and specialized verification
 
 For a new screen/page, significant component/layout, dashboard, redesign,
-meaningful UI/UX improvement, or screenshot/reference-driven work, use
-[$design-intelligence](../../design-intelligence/SKILL.md). Handoff the user
-goal, preserve/replace decision, design direction, must-preserve details,
-references, viewports, and visual acceptance.
+meaningful UI/UX improvement, or screenshot/reference-driven work, use the
+available `design-intelligence` capability. Handoff the user goal,
+preserve/replace decision, design direction, must-preserve details, references,
+viewports, and visual acceptance.
 
 For material residual uncertainty after cheap verification, the owner may use
-[$delivery-verification](../../delivery-verification/SKILL.md). It is an
-evidence-based acceptance check, not a required generic audit and does not
-replace the selected host adapter.
+the available `delivery-verification` capability. It is an evidence-based
+acceptance check, not a required generic audit and does not replace the selected
+host adapter. Separately, for an authorized terminal delivery action still
+pending after implementation, the owner may use the available `delivery-closer`
+capability. It does not replace acceptance and is independent of delivery
+verification. The owner may select both only when their distinct triggers each
+exist; neither calls the other automatically.
+
+When delivery closure applies, its skill is available, and the host offers a
+suitable temporary specialist, the owner dispatches that specialist in fresh
+context with the requested outcome, full-request authority, handoff, current
+state, valid evidence, preserved boundaries, and return contract. It is not a
+persistent agent and must not delegate. If the specialist or capability is
+unavailable, the owner performs the same closing protocol sequentially.

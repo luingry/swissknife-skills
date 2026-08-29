@@ -6,6 +6,11 @@ All notable changes to this repository are documented here.
 
 ### Changed
 
+- `orchestration` now discovers `design-intelligence`, `delivery-verification`,
+  and `delivery-closer` as independent optional companion capabilities at their
+  distinct decision points. Missing capabilities preserve the proportional Task
+  Owner contract and fast path.
+
 - `orchestration` now has a progressive host-neutral entrypoint with conditional
   Codex, Claude Code, and Cursor adapters, structured handoffs, and sequential
   fallback. The Codex Luna/Spark/Sol/Terra, CLI catalog, guarded Codex CLI
@@ -15,6 +20,9 @@ All notable changes to this repository are documented here.
 - The Remotion template now exposes a TypeScript typecheck command and lockfile.
 
 ### Added
+
+- `delivery-closer`, a focused terminal-delivery skill that completes and proves
+  only explicitly authorized actions without editing implementation artifacts.
 
 - Agent Plugins 1.0, Codex, and Claude Code packaging manifests.
 - Machine-readable skill catalog, offline structural validator, unit tests, and CI.
