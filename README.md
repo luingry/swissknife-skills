@@ -8,10 +8,12 @@ plugin manifests are thin packaging/install adapters and contain no copied skill
 
 This repository documents installation for **Codex**, **Claude Code**, and **Cursor**
 only. A host may support the same `SKILL.md` format without discovering or executing
-every workflow identically. In particular, `orchestration` is a Codex-specific execution
-workflow. Cloning this repository alone does not cause a host to load a plugin
-manifest; install standalone skills at a documented skill path or use that host's
-plugin import/install/development flow. See the evidence, capability matrix, and limitations in
+every workflow identically. `orchestration` has a portable entrypoint and conditional
+Codex, Claude Code, and Cursor adapters; it degrades to a sequential owner
+workflow when a required host capability is unavailable. Cloning this repository
+alone does not cause a host to load a plugin manifest; install standalone skills
+at a documented skill path or use that host's plugin import/install/development
+flow. See the evidence, capability matrix, and limitations in
 [docs/compatibility.md](docs/compatibility.md).
 
 ## Catalog
@@ -19,7 +21,7 @@ plugin import/install/development flow. See the evidence, capability matrix, and
 | Skill | Purpose | Runtime note |
 | --- | --- | --- |
 | [`design-intelligence`](skills/design-intelligence) | Gives significant UI/UX work deliberate, product-specific direction and visual verification. | Needs file access; its taste memory is optional. |
-| [`orchestration`](skills/orchestration) | Routes engineering work and owns acceptance. | Codex-specific execution: its tiers, subagents, and CLI workflow are Codex concepts. |
+| [`orchestration`](skills/orchestration) | Routes engineering work and owns acceptance. | Conditional runtime: selects one Codex, Claude Code, or Cursor adapter; Codex tiers and CLI remain Codex-only. |
 | [`delivery-verification`](skills/delivery-verification) | Decides whether completed work is acceptable when material uncertainty remains. | The most portable skill; it still needs host-available evidence/tools. |
 | [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Produces polished product demos and device-framed screenshots with Remotion. | Needs Node.js, npm, Remotion, Playwright and Chromium; some modes need `adb` or `simctl`. |
 

@@ -1,5 +1,30 @@
 # ERRORS.md — erros não-triviais e soluções
 
+## Claude Agent Teams could change ordinary subagent semantics before publication
+
+- **Sintoma/risco:** a adaptação multiplataforma permitia subagentes Claude Code
+  quando Agent Teams já estavam habilitados, sem uma autorização explícita para
+  teams. Nessa condição, uma nomeação automática de subagente pode iniciá-lo
+  como teammate, alterando comunicação, armazenamento de tarefas e o retorno ao
+  owner.
+- **Causa raiz:** a regra original cobria não habilitar Agent Teams
+  automaticamente, mas omitia a semântica de `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`:
+  a documentação oficial informa que um subagente nomeado passa a ser teammate,
+  inclusive sem pedido de team. A alegação inicial de que Claude não suportava
+  nesting também veio de confiar em resumo/index/cache em vez do Markdown oficial
+  atual, que documenta nesting até três camadas abaixo da conversa principal.
+- **Solução:** antes de qualquer chamada Agent/subagent, confirmar o estado
+  efetivo da flag por configuração ou ambiente exposto, sem modificá-lo. Sem
+  confirmação de desabilitada, o adaptador permanece owner-sequential; com Teams
+  confirmados e autorizados, exige evidência/mensagem explícita do teammate e
+  aceitação pelo owner, pois a notificação idle não é o resultado. A skill mantém
+  topologia rasa como política própria, não como limitação do host.
+- **Prevenção:** antes de aplicar uma API de subagente em host experimental,
+  verificar flags que alteram a semântica do mesmo call e conferir o `.md`
+  canônico atual, não somente índice, resumo ou cache. Fontes:
+  https://code.claude.com/docs/en/agent-teams e
+  https://code.claude.com/docs/en/sub-agents.md
+
 ## Validador de repositório dependia de `yaml` vulnerável a YAML profundamente aninhado
 
 - **Sintoma:** o `npm audit` do novo validador estrutural apontava vulnerabilidade moderada

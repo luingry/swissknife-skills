@@ -36,9 +36,9 @@ identical activation, model behavior, or tool availability.
 
 | Host | Standard format | Documented discovery route used here | Runtime confidence |
 | --- | --- | --- | --- |
-| Codex | Yes | Standalone: `~/.agents/skills`. Package: `.codex-plugin/plugin.json` after the Codex plugin install/import/development flow. | Highest: the collection was authored for this environment, but individual tools still need to exist. |
-| Claude Code | Yes | Standalone: `~/.claude/skills`. Package: `.claude-plugin/plugin.json` after the Claude plugin install/import/development flow. | Conditional: host-specific Codex concepts do not transfer. |
-| Cursor | Yes | Standalone: `~/.agents/skills` or `.cursor/skills`. Package: root `plugin.json` after the Cursor Agent Plugin install/import/development flow. | Conditional: only standard-format and host-available runtime requirements are assumed. |
+| Codex | Yes | Standalone: `~/.agents/skills`. Package: `.codex-plugin/plugin.json` after the Codex plugin install/import/development flow. | Conditional operational adapter: preserves Sol/Terra/Luna/Spark plus guarded Codex CLI fallback when available. |
+| Claude Code | Yes | Standalone: `~/.claude/skills`. Package: `.claude-plugin/plugin.json` after the Claude plugin install/import/development flow. | Conditional operational adapter: owner plus available Explore/already-defined subagents; sequential fallback when capabilities are absent. |
+| Cursor | Yes | Standalone: `~/.agents/skills` or `.cursor/skills`. Package: root `plugin.json` after the Cursor Agent Plugin install/import/development flow. | Conditional operational adapter: parent owner plus available Explore/Task/already-defined subagents; sequential fallback when capabilities are absent. |
 
 ## Skill matrix
 
@@ -46,7 +46,7 @@ identical activation, model behavior, or tool availability.
 | --- | --- | --- | --- |
 | `delivery-verification` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Most portable: it needs task evidence and whatever inspection tools the host provides. |
 | `design-intelligence` | Standard format. | Expected through the documented paths. | Conditional on filesystem access. Its `design-taste.md` location is Codex-oriented; absence must be handled as missing optional taste memory. |
-| `orchestration` | Standard format. | Expected through the documented paths. | **Codex-specific execution**. It depends on Sol/Terra/Luna/Spark, native subagents, and Codex CLI/worktree workflows. Other hosts may parse it but must not be represented as executing its routing contract. |
+| `orchestration` | Standard format. | Expected through the documented paths. | **Conditional operational adapters.** It selects exactly one documented Codex, Claude Code, or Cursor route and falls back to a sequential Task Owner when required capabilities are absent. Sol/Terra/Luna/Spark, Codex CLI catalog, JSONL, and CLI worker workflow remain Codex-only. Claude Code and Cursor behavior is documentation-derived, not behaviorally tested here. |
 | `juicy-scrn-cptr` | Standard format. | Expected through the documented paths. | Conditional on Node.js, npm, Remotion, Playwright, and Chromium. Android/iOS capture modes additionally require `adb` or `simctl`. |
 
 ## Plugin adapters
@@ -82,3 +82,28 @@ reports can illustrate operational variation only: for example, this
 [Cursor community thread](https://forum.cursor.com/t/how-to-use-agent-skills-in-cursor-ide/149860)
 is anecdotal evidence that manual and automatic handling can vary, not evidence
 of compatibility or quality. Official host documentation remains the primary basis here.
+
+## Orchestration runtime boundary
+
+The `orchestration` entrypoint is deliberately host-neutral: it identifies the
+active surface, selects one adapter only, and shares a portable owner/handoff/
+acceptance contract. It does not mix APIs, model names, config files, worktree
+semantics, logs, or cloud facilities between hosts. The maintained evidence is
+[the host-capability evidence](../skills/orchestration/references/host-capability-evidence.md).
+
+- **Codex:** preserves the existing mandatory Luna reconnaissance, six-criterion
+  Spark gate, Sol/Terra routing, live CLI model catalog, guarded worktree
+  launcher, JSONL evidence, and shallow topology.
+- **Claude Code:** uses the owner session plus available Explore/custom
+  subagents; concurrent writers require available `isolation: worktree`.
+  Agent Teams are never enabled automatically; before Agent/subagent use, the
+  adapter checks the effective experimental-flag state. If it cannot confirm
+  Teams disabled, it remains owner-sequential unless Teams are confirmed enabled
+  and explicitly authorized.
+- **Cursor:** uses the parent Agent plus available Explore/custom Task
+  subagents; parallel writers require a confirmed worktree/copy/isolated branch.
+  Cloud handoff is used only when already available and authorized.
+
+No benchmark or practical Claude Code/Cursor execution has been performed.
+Each adapter must fall back to sequential execution if tools, permissions,
+model settings, isolation, background mode, or cloud access are unavailable.

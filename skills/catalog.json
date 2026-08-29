@@ -23,7 +23,7 @@
       "name": "orchestration",
       "path": "skills/orchestration",
       "summary": "Routes and accepts engineering work across available agent tiers.",
-      "portability": "Format is standard; execution is Codex-specific because it requires Sol, Terra, Luna, Spark, native subagents, and Codex CLI workflows."
+      "portability": "Conditional operational adapters select Codex, Claude Code, or Cursor without mixing host APIs; unavailable capabilities fall back to sequential owner execution. Sol, Terra, Luna, Spark, the guarded Codex CLI worktree launcher, Codex model catalog, and JSONL evidence remain Codex-only."
     }
   ]
 }
