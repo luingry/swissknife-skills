@@ -36,7 +36,7 @@ identical activation, model behavior, or tool availability.
 
 | Host | Standard format | Documented discovery route used here | Runtime confidence |
 | --- | --- | --- | --- |
-| Codex | Yes | Standalone: `~/.agents/skills`. Package: `.codex-plugin/plugin.json` after the Codex plugin install/import/development flow. | Conditional operational adapter: preserves Sol/Terra/Luna/Spark plus guarded Codex CLI fallback when available. |
+| Codex | Yes | Standalone: `~/.agents/skills`. Package: `.codex-plugin/plugin.json` after the Codex plugin install/import/development flow. | Conditional operational adapter: preserves equivalent Astra/Sol planning and review, Terra/Luna/Spark, plus guarded Codex CLI fallback when available. |
 | Claude Code | Yes | Standalone: `~/.claude/skills`. Package: `.claude-plugin/plugin.json` after the Claude plugin install/import/development flow. | Conditional operational adapter: owner plus available Explore/already-defined subagents; sequential fallback when capabilities are absent. |
 | Cursor | Yes | Standalone: `~/.agents/skills` or `.cursor/skills`. Package: root `plugin.json` after the Cursor Agent Plugin install/import/development flow. | Conditional operational adapter: parent owner plus available Explore/Task/already-defined subagents; sequential fallback when capabilities are absent. |
 
@@ -47,7 +47,7 @@ identical activation, model behavior, or tool availability.
 | `delivery-closer` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Conditional: it needs current host-visible state and authority from the full request and Task Owner handoff for any terminal mutation. It does not edit implementation artifacts, delegate, or replace acceptance. |
 | `delivery-verification` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Most portable: it needs task evidence and whatever inspection tools the host provides. |
 | `design-intelligence` | Standard format. | Expected through the documented paths. | Conditional on filesystem access. Its `design-taste.md` location is Codex-oriented; absence must be handled as missing optional taste memory. |
-| `orchestration` | Standard format. | Expected through the documented paths. | **Conditional operational adapters.** It selects exactly one documented Codex, Claude Code, or Cursor route and falls back to a sequential Task Owner when required capabilities are absent. Sol/Terra/Luna/Spark, Codex CLI catalog, JSONL, and CLI worker workflow remain Codex-only. Claude Code and Cursor behavior is documentation-derived, not behaviorally tested here. |
+| `orchestration` | Standard format. | Expected through the documented paths. | **Conditional operational adapters.** It selects exactly one documented Codex, Claude Code, or Cursor route and falls back to a sequential Task Owner when required capabilities are absent. Equivalent Astra/Sol planning and review, Terra/Luna/Spark, Codex CLI catalog, JSONL, and CLI worker workflow remain Codex-only. Claude Code and Cursor behavior is documentation-derived, not behaviorally tested here. |
 | `juicy-scrn-cptr` | Standard format. | Expected through the documented paths. | Conditional on Node.js, npm, Remotion, Playwright, and Chromium. Android/iOS capture modes additionally require `adb` or `simctl`. |
 
 ## Plugin adapters
@@ -93,8 +93,10 @@ semantics, logs, or cloud facilities between hosts. The maintained evidence is
 [the host-capability evidence](../skills/orchestration/references/host-capability-evidence.md).
 
 - **Codex:** preserves the existing mandatory Luna reconnaissance, six-criterion
-  Spark gate, Sol/Terra routing, live CLI model catalog, guarded worktree
-  launcher, JSONL evidence, and shallow topology.
+  Spark gate, equivalent Astra/Sol planning and review tier, Terra routing, live
+  CLI model catalog, guarded worktree launcher, JSONL evidence, and shallow
+  topology. This user-directed policy does not assert a benchmark or a
+  cost/performance hierarchy.
 - **Claude Code:** uses the owner session plus available Explore/custom
   subagents; concurrent writers require available `isolation: worktree`.
   Agent Teams are never enabled automatically; before Agent/subagent use, the

@@ -41,13 +41,23 @@ test('orchestration entrypoint requires routing and selects three host adapters'
   }
 });
 
-test('Codex adapter preserves Luna, six-point Spark gate, and CLI fallback', () => {
+test('Codex adapter preserves Luna, the equivalent Astra/Sol decision tier, six-point Spark gate, and CLI fallback', () => {
   const codex = read('references/codex.md');
-  const gate = codex.slice(codex.indexOf('## Mandatory Spark gate'), codex.indexOf('## Sol Task Owner'));
+  const decisionTier = codex.slice(codex.indexOf('### Astra and Sol'), codex.indexOf('### Terra'));
+  const gate = codex.slice(codex.indexOf('## Mandatory Spark gate'), codex.indexOf('## Astra or Sol Task Owner'));
+  assert.match(decisionTier, /Astra \(`gpt-6-astra`\) or Sol \(`gpt-5\.6-sol`\)/);
+  assert.match(decisionTier, /for planning when the difficult\s+part is deciding what to do/i);
+  assert.match(decisionTier, /They are equivalent for these functions/i);
+  assert.match(decisionTier, /select one available, authorized model/i);
+  assert.match(decisionTier, /Do not automatically\s+escalate Sol work to Astra, require dual review/i);
+  assert.match(decisionTier, /Default effort is medium.*live host supports high for the selected\s+exact model/is);
   assert.equal((gate.match(/^\d+\. /gm) ?? []).length, 6, 'Spark gate must have exactly six numbered criteria');
   assert.match(codex, /when\s+Luna\s+is\s+available,\s+the\s+Task Owner MUST delegate to Luna/i);
   assert.match(codex, /\[CLI workers\]\(cli-workers\.md\)/);
   assert.match(codex, /If all six pass and Spark is available, delegation to Spark is mandatory/i);
+  assert.match(codex, /both Astra\/Sol and Terra Task Owners/i);
+  assert.match(codex, /verify that the exact intended model slug\s+and effort are exposed and supported/i);
+  assert.match(codex, /semantic role such\s+as `reviewer` does not prove a fixed model or effort/i);
   assert.match(codex, /If Spark is absent from both native delegation and the live CLI catalog/i);
 });
 
@@ -61,7 +71,7 @@ test('Claude and Cursor adapters have host-local sequential fallback without Cod
   assert.match(claude, /this skill deliberately\s+keeps a shallow topology/i);
   assert.match(cursor, /work sequentially/i);
   for (const adapter of [claude, cursor]) {
-    assert.doesNotMatch(adapter, /spawn_agent|wait_agent|Start-CodexCliWorker|gpt-5\.|\bSol\b|\bTerra\b|\bLuna\b|\bSpark\b/);
+    assert.doesNotMatch(adapter, /spawn_agent|wait_agent|Start-CodexCliWorker|gpt-(?:5\.|6-astra)|\bAstra\b|\bSol\b|\bTerra\b|\bLuna\b|\bSpark\b/);
   }
 });
 

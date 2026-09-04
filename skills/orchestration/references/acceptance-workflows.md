@@ -12,17 +12,19 @@
 
 ## Bug fixes
 
-Establish reproduction/evidence, identify likely root cause, use Sol only when
-reasoning difficulty warrants it, implement with Terra or Spark according to the
-gate, add regression coverage when useful, reproduce the original scenario, and
-validate adjacent behavior. Compilation alone does not prove resolution.
+Establish reproduction/evidence, identify likely root cause, use one available,
+authorized Astra or Sol only when reasoning difficulty warrants it, implement
+with Terra or Spark according to the gate, add regression coverage when useful,
+reproduce the original scenario, and validate adjacent behavior. Compilation
+alone does not prove resolution.
 
 ## Performance and stability
 
-Establish a baseline, measure the bottleneck, form a hypothesis, use Sol for
-difficult causal/architectural analysis, use Terra for substantive changes or
-Spark for exact gate-eligible optimizations, rerun the same measurement, compare
-before/after, and reject complexity without measured benefit.
+Establish a baseline, measure the bottleneck, form a hypothesis, use one
+available, authorized Astra or Sol for difficult causal/architectural analysis,
+use Terra for substantive changes or Spark for exact gate-eligible optimizations,
+rerun the same measurement, compare before/after, and reject complexity without
+measured benefit.
 
 ## Browser, runtime, and integration
 

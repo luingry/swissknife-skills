@@ -1,7 +1,7 @@
 # Codex adapter: preserved operational contract
 
 Use only when Codex is the active orchestration surface. This reference preserves
-the complete pre-portability routing contract. Do not reinterpret Sol, Terra,
+the complete pre-portability routing contract. Do not reinterpret Astra, Sol, Terra,
 Luna, Spark, the CLI catalog, worktrees, or JSONL for Claude Code or Cursor.
 
 Optimize quality, throughput, reliability, model cost, and elapsed time. The
@@ -101,13 +101,25 @@ review, and acceptance under this skill.
 
 ## Roles
 
-### Sol
+Before each native worker dispatch, verify that the exact intended model slug
+and effort are exposed and supported by the current host. A semantic role such
+as `reviewer` does not prove a fixed model or effort. For CLI workers, retain
+the live-catalog verification in [CLI workers](cli-workers.md).
 
-Use Sol when the difficult part is deciding what to do: architecture, ambiguity,
-difficult causal analysis, consequential tradeoffs, security, data integrity,
-concurrency/distributed behavior, high-risk production changes, critical
-review, or materially low confidence. Default Sol effort: medium; use high only
-when deeper reasoning materially changes the outcome.
+### Astra and Sol
+
+Use Astra (`gpt-6-astra`) or Sol (`gpt-5.6-sol`) for planning when the difficult
+part is deciding what to do: architecture, ambiguity, difficult causal analysis,
+consequential tradeoffs, security, data integrity, concurrency/distributed
+behavior, high-risk production changes, critical review, acceptance, or
+materially low confidence. They are equivalent for these functions.
+
+Keep a user-selected or already-suitable Task Owner when available; otherwise
+select one available, authorized model for the decision. Do not automatically
+escalate Sol work to Astra, require dual review, or imply a cost, speed, or
+quality hierarchy. Default effort is medium. Use high only when deeper reasoning
+materially changes the outcome and the live host supports high for the selected
+exact model.
 
 ### Terra
 
@@ -155,13 +167,14 @@ fully localized edits.
    validation, or iterative debug/fix loop is required.
 
 If all six pass and Spark is available, delegation to Spark is mandatory for
-both Sol and Terra Task Owners. Overhead or convenience is not unavailability.
+both Astra/Sol and Terra Task Owners. Overhead or convenience is not
+unavailability.
 If Spark is absent from both native delegation and the live CLI catalog, or has
 a real outage/rate/capacity failure, apply the owner-specific fallback below.
 When apparently eligible work does not use Spark, the final report MUST identify
 the failed numbered criterion or concrete unavailability.
 
-## Sol Task Owner
+## Astra or Sol Task Owner
 
 Apply the Spark gate before editing application code. If it does not require
 Spark, delegate implementation to Terra Medium when any substantial indicator
@@ -176,28 +189,30 @@ holds:
 - uncertainty that every direct-implementation condition below passes.
 
 The applicability of this skill or an `AGENTS.md` delegation rule is explicit
-authorization to route the worker. Sol may implement directly only when the
+authorization to route the worker. Astra or Sol may implement directly only when the
 Spark gate does not require delegation, the exact tiny modification and location
 are known, no meaningful exploration is needed, and no substantial validation
 or debugging is expected. Otherwise route to Terra. Record the direct exception
 and failed Spark criterion in the final report.
 
-Sol owns strategy, difficult judgment, critical review, and acceptance. It
-should not become the default implementation worker.
+Astra or Sol owns strategy, difficult judgment, critical review, and
+acceptance. Neither should become the default implementation worker.
 
 ## Terra Medium Task Owner
 
 Apply the Spark gate first. Terra Medium MUST NOT delegate implementation to
 another Terra Medium. If the gate requires available Spark, delegate to Spark;
 otherwise Terra implements substantive work itself. Terra may use Luna only for
-genuinely bounded reconnaissance and may consult Sol for difficult decisions.
-Sol consultation is advice: Terra applies it and completes the implementation.
+genuinely bounded reconnaissance and may consult Astra or Sol for difficult
+decisions. That consultation is advice: Terra applies it and completes the
+implementation.
 
-Consult Sol only when architecture, material ambiguity, unresolved difficult
-root cause, repeated failed approaches, security/data-integrity/concurrency
-risk, unexpected system-wide consequences, production-critical decisions, or
-materially low confidence warrants stronger reasoning. Do not escalate routine
-implementation, exploration, or debugging merely because it is time-consuming.
+Consult one available, authorized Astra or Sol only when architecture, material
+ambiguity, unresolved difficult root cause, repeated failed approaches,
+security/data-integrity/concurrency risk, unexpected system-wide consequences,
+production-critical decisions, or materially low confidence warrants stronger
+reasoning. Do not escalate routine implementation, exploration, or debugging
+merely because it is time-consuming.
 
 If Spark is genuinely unavailable, Terra performs the bounded change directly;
 other Task Owner tiers fall back from Spark to Terra.

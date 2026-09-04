@@ -2,7 +2,7 @@
 
 ## Decision heuristic
 
-- Difficult part is deciding what to do: Sol.
+- Difficult part is deciding what to do: one available, authorized Astra or Sol.
 - Difficult part is implementing, testing, or debugging: Terra.
 - Difficult part is finding, reading, collecting, or enumerating: Luna.
 - Solution is already exact and all Mandatory Spark criteria pass: Spark.
@@ -18,7 +18,7 @@ with that same Luna. Do not distribute reconnaissance across more than one Luna.
 
 A Luna remains bounded and read-only: it locates, reads, collects, and
 returns evidence. It does not implement, choose architecture or engineering,
-substantively test or debug, or replace Sol, Terra, or Spark. Do not send
+substantively test or debug, or replace Astra, Sol, Terra, or Spark. Do not send
 duplicated prompts or use voting/consensus. The Owner resolves conflicts against
 raw evidence and may send a focused follow-up for any gap.
 
@@ -43,20 +43,24 @@ The worker returns:
 
 ## Shallow topology
 
+Allowed arrows describe a handoff or consultation that returns to the same
+Task Owner; they do not authorize a worker to create another worker.
+
 Allowed examples:
 
-- Sol owner -> Terra implementation -> Sol acceptance.
-- Sol owner -> Luna reconnaissance -> Sol continues.
-- Sol/Terra owner -> Spark surgical edit -> owner acceptance.
-- Terra owner -> Sol consultation -> Terra implementation and acceptance.
+- Astra/Sol owner -> Terra implementation -> Astra/Sol acceptance.
+- Astra/Sol owner -> Luna reconnaissance -> Astra/Sol continues.
+- Astra/Sol/Terra owner -> Spark surgical edit -> owner acceptance.
+- Terra owner -> Astra or Sol consultation -> same Terra owner implements and
+  accepts.
 
-Forbidden examples:
+Forbidden nested-worker creation examples:
 
-- Sol -> Terra -> Luna.
-- Terra -> Sol -> Terra.
-- Terra -> Luna -> Spark.
-- Any worker -> another worker.
-- Terra Medium owner -> Terra Medium implementation worker.
+- Astra/Sol owner -> Terra worker -> Terra worker creates Luna.
+- Terra owner -> Astra/Sol worker -> that worker creates another Terra.
+- Terra owner -> Luna worker -> Luna worker creates Spark.
+- Any worker creating another worker.
+- Terra Medium owner creating a Terra Medium implementation worker.
 
 ## Parallelism
 
@@ -72,9 +76,10 @@ increases, keep the same Luna and run narrower sequential passes.
 
 ## Escalation package
 
-When Terra consults Sol, include goal, relevant evidence, attempts, exact
-decision needed, known options, and Terra's recommendation. Sol returns advice;
-Terra retains ownership and performs the implementation.
+When Terra consults Astra or Sol, include goal, relevant evidence, attempts,
+exact decision needed, known options, and Terra's recommendation. Select one
+available, authorized model; it returns advice, and Terra retains ownership and
+performs the implementation.
 
 ## Completion and optional closing capabilities
 
@@ -103,7 +108,7 @@ separately, and neither is required for the fast path or depends on the other.
 
 ## Anti-patterns
 
-- Sol performing prolonged mechanical implementation.
+- Astra or Sol performing prolonged mechanical implementation.
 - Terra escalating routine execution.
 - Luna making engineering decisions or replacing Terra/Spark.
 - Using multiple workers of the same specialist tier for one scope.

@@ -6,6 +6,11 @@ All notable changes to this repository are documented here.
 
 ### Changed
 
+- `orchestration` now treats Astra (`gpt-6-astra`) and Sol (`gpt-5.6-sol`) as
+  an equivalent Codex planning, architecture, critical-review, acceptance, and
+  consultation tier. It selects one available, authorized model without
+  automatic escalation, dual review, or a cost/performance hierarchy.
+
 - `orchestration` now discovers `design-intelligence`, `delivery-verification`,
   and `delivery-closer` as independent optional companion capabilities at their
   distinct decision points. Missing capabilities preserve the proportional Task

@@ -19,7 +19,7 @@ parallel work. A cross-host skill can therefore direct an `owner` to decompose
 work, isolate concurrent writes, request validation evidence, and consolidate
 results. [1][2][3]
 
-The portable contract must not, however, make Codex's Sol/Terra/Luna/Spark
+The portable contract must not, however, make Codex's Astra/Sol/Terra/Luna/Spark
 taxonomy, `spawn_agent`/`wait_agent`, session JSONL, or PowerShell launcher a
 universal requirement. Those are Codex-adapter details. Claude Code exposes
 Markdown/frontmatter subagents, Claude model selection, background mode, and
@@ -58,10 +58,18 @@ read-heavy work and warns that concurrent writing raises conflict and
 coordination risk. Children inherit the parent sandbox policy. [10][11]
 
 **Design inference.** Keep the established Luna reconnaissance, Spark gate,
-Sol/Terra routing, guarded CLI worktree launcher, live model catalog, JSONL
+Astra/Sol/Terra routing, guarded CLI worktree launcher, live model catalog, JSONL
 evidence, and shallow topology inside the Codex adapter. They remain conditional
 on available Codex tools/configuration and must not be interpreted by other
 hosts.
+
+**User-directed policy (2026-09-04).** Within the Codex adapter, Astra
+(`gpt-6-astra`) and Sol (`gpt-5.6-sol`) are equivalent for planning,
+architecture, critical review, acceptance, and consultation. Select one
+available, authorized model and use medium effort by default; high requires a
+beneficial deeper-reasoning need and support for that exact model in the live
+host. This is a routing policy, not a claim drawn from the 2026-08-28 sources:
+no benchmark, cost, speed, quality, or automatic escalation inference follows.
 
 ## Claude Code
 
