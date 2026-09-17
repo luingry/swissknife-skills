@@ -18,7 +18,7 @@ All notable changes to this repository are documented here.
 
 - `orchestration` now has a progressive host-neutral entrypoint with conditional
   Codex, Claude Code, and Cursor adapters, structured handoffs, and sequential
-  fallback. The Codex Luna/Spark/Sol/Terra, CLI catalog, guarded Codex CLI
+  fallback. The Codex Luna/Sol/Terra routing, CLI catalog, guarded Codex CLI
   worktree launcher, and JSONL workflow remain intact and Codex-only.
 
 - README now documents Codex, Claude Code, and Cursor install routes and runtime limits.

@@ -19,7 +19,7 @@ parallel work. A cross-host skill can therefore direct an `owner` to decompose
 work, isolate concurrent writes, request validation evidence, and consolidate
 results. [1][2][3]
 
-The portable contract must not, however, make Codex's Astra/Sol/Terra/Luna/Spark
+The portable contract must not, however, make Codex's Astra/Sol/Terra/Luna
 taxonomy, `spawn_agent`/`wait_agent`, session JSONL, or PowerShell launcher a
 universal requirement. Those are Codex-adapter details. Claude Code exposes
 Markdown/frontmatter subagents, Claude model selection, background mode, and
@@ -57,11 +57,21 @@ documentation recommends specialized parallel agents for independent,
 read-heavy work and warns that concurrent writing raises conflict and
 coordination risk. Children inherit the parent sandbox policy. [10][11]
 
-**Design inference.** Keep the established Luna reconnaissance, Spark gate,
-Astra/Sol/Terra routing, guarded CLI worktree launcher, live model catalog, JSONL
-evidence, and shallow topology inside the Codex adapter. They remain conditional
-on available Codex tools/configuration and must not be interpreted by other
-hosts.
+**Design inference.** Keep Luna Low reconnaissance and its six-criterion
+surgical gate, Astra/Sol planning and review, Luna Max default implementation,
+Terra High speed routing, the guarded CLI worktree launcher, live model catalog,
+JSONL evidence, and shallow topology inside the Codex adapter. They remain
+conditional on available Codex tools/configuration and must not be interpreted
+by other hosts.
+
+**User-directed policy (2026-09-17).** Route exact six-criterion surgical Codex
+edits to Luna Low (`gpt-5.6-luna`, effort `low`) when available, using a
+write-enabled repository worktree. Keep DirectPath Luna Low strictly
+read-only. Route substantive Codex implementation to Luna Max
+(`gpt-5.6-luna`, effort `max`) by default. Route to Terra High
+(`gpt-5.6-terra`, effort `high`) when the user explicitly prioritizes speed or
+Luna Max is unavailable. This operational policy does not claim universal model
+quality, latency, or cost behavior.
 
 **User-directed policy (2026-09-04).** Within the Codex adapter, Astra
 (`gpt-6-astra`) and Sol (`gpt-5.6-sol`) are equivalent for planning,

@@ -7,7 +7,7 @@ param(
     [string]$DirectPath,
 
     [Parameter(Mandatory)]
-    [ValidateSet('gpt-5.6-luna', 'gpt-5.3-codex-spark')]
+    [ValidateSet('gpt-5.6-luna')]
     [string]$Model,
 
     [Parameter(Mandatory)]
@@ -18,7 +18,7 @@ param(
     [string]$AccessMode = 'read-only',
 
     [ValidateSet('low', 'medium', 'high', 'xhigh', 'max', 'ultra')]
-    [string]$ReasoningEffort = 'low',
+    [string]$ReasoningEffort,
 
     [switch]$IncludeUserConfig,
 
@@ -107,7 +107,7 @@ function ConvertTo-NativeArgument {
 $hasRepositoryPath = -not [string]::IsNullOrWhiteSpace($RepositoryPath)
 $hasDirectPath = -not [string]::IsNullOrWhiteSpace($DirectPath)
 if ($hasRepositoryPath -eq $hasDirectPath) {
-    throw 'Specify exactly one of -RepositoryPath (isolated git worktree) or -DirectPath (Luna read-only, no worktree).'
+    throw 'Specify exactly one of -RepositoryPath (isolated git worktree) or -DirectPath (Luna Low read-only, no worktree).'
 }
 
 $directMode = $hasDirectPath
@@ -151,6 +151,18 @@ if ($directMode) {
     if ($LASTEXITCODE -ne 0) {
         throw "Base ref does not resolve to a commit: $BaseRef"
     }
+}
+
+if ([string]::IsNullOrWhiteSpace($ReasoningEffort)) {
+    if ($directMode) {
+        $ReasoningEffort = 'low'
+    } else {
+        $ReasoningEffort = 'max'
+    }
+}
+
+if ($directMode -and $ReasoningEffort -ne 'low') {
+    throw 'DirectPath mode is restricted to Luna Low (reasoning effort low).'
 }
 
 $cli = Resolve-CodexCli $CliPath

@@ -13,18 +13,26 @@
 ## Bug fixes
 
 Establish reproduction/evidence, identify likely root cause, use one available,
-authorized Astra or Sol only when reasoning difficulty warrants it, implement
-with Terra or Spark according to the gate, add regression coverage when useful,
-reproduce the original scenario, and validate adjacent behavior. Compilation
-alone does not prove resolution.
+authorized Astra or Sol only when reasoning difficulty warrants it, use Luna Low
+only for an exact six-criterion surgical edit, implement substantive work with
+Luna Max by default, or Terra High when speed is explicitly prioritized or Luna
+Max is unavailable, add regression coverage when useful, reproduce the original
+scenario, and validate adjacent behavior. Compilation alone does not prove
+resolution.
 
 ## Performance and stability
 
 Establish a baseline, measure the bottleneck, form a hypothesis, use one
 available, authorized Astra or Sol for difficult causal/architectural analysis,
-use Terra for substantive changes or Spark for exact gate-eligible optimizations,
+use Luna Low for an exact six-criterion surgical optimization, otherwise use
+Luna Max by default for substantive changes, or Terra High when speed is
+explicitly prioritized or Luna Max is unavailable,
 rerun the same measurement, compare before/after, and reject complexity without
 measured benefit.
+
+The fact that the product goal is performance or runtime latency does not itself
+mean the user prioritized agent delivery speed; retain Luna Max by default
+unless the user explicitly requests a shorter agent/orchestration completion time.
 
 ## Browser, runtime, and integration
 

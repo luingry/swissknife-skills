@@ -29,7 +29,7 @@
       "name": "orchestration",
       "path": "skills/orchestration",
       "summary": "Routes repository work through the active host while the Task Owner integrates evidence and accepts the result.",
-      "portability": "Conditional operational adapters select one Codex, Claude Code, or Cursor route without mixing host APIs; unavailable capabilities fall back to sequential Task Owner execution. Sol, Terra, Luna, Spark, the guarded Codex CLI worktree launcher, Codex model catalog, and JSONL evidence remain Codex-only."
+      "portability": "Conditional operational adapters select one Codex, Claude Code, or Cursor route without mixing host APIs; unavailable capabilities fall back to sequential Task Owner execution. Codex-only routing uses Astra/Sol for planning and acceptance, Luna Low for read-only reconnaissance and six-criterion surgical edits, Luna Max as the default substantive executor, Terra High when agent/orchestration delivery speed is explicitly prioritized or Luna Max is unavailable, and the guarded CLI worktree launcher, model catalog, and JSONL evidence remain Codex-only."
     }
   ]
 }

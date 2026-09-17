@@ -1,21 +1,30 @@
 # Codex CLI workers
 
-Use this fallback only when the routing decision requires Luna or Spark and the
+Use this fallback only when the routing decision requires Luna Low or Luna Max and the
 native subagent tool does not expose that worker. A CLI worker is still a
 supporting agent and MUST NOT delegate again.
 
 ## Exact routing
 
-- Use `gpt-5.6-luna` for repository reconnaissance and evidence collection:
+- Use Luna Low (`gpt-5.6-luna`, effort `low`) for repository reconnaissance and evidence collection:
   locate definitions and callers, inventory tests or failures, summarize logs,
-  and return a concise context package. Prefer `read-only`. Permit
-  `workspace-write` only exceptionally for a deterministic, tightly bounded,
-  mechanical transformation with automatic verification.
-- Use `gpt-5.3-codex-spark` only for surgical execution when all six Mandatory
-  Spark gate criteria in `SKILL.md` pass. Give exact targets, final state, and
-  the single focused deterministic validation.
-- Do not use Luna as a fallback for Terra or Spark. Do not use Spark for
-  investigation, architecture, ambiguous requirements, or iterative debugging.
+  and return a concise context package. It is read-only.
+- Use Luna Low (`gpt-5.6-luna`, effort `low`) for an already-understood surgical
+  repository edit only when all six Mandatory Luna Low surgical criteria pass.
+  Use an isolated worktree with `workspace-write`, provide exact targets and
+  final state, and run the one named deterministic validation. Do not use this
+  route for investigation, architecture, ambiguity, or iterative debugging.
+- Use Luna Max (`gpt-5.6-luna`, effort `max`) as the default substantive
+  implementation worker when the surgical Luna Low gate does not apply.
+  For repository implementation, use an isolated worktree and
+  `workspace-write`. Route to Terra High when the user explicitly prioritizes
+  the agent's wall-clock delivery time, or when Luna Max is genuinely
+  unavailable. Do not infer that priority solely from a product performance or
+  runtime-latency task. Honor a supported model or effort explicitly selected
+  by the user. Repository Luna defaults to effort `max`; set effort `low`
+  explicitly for the surgical Luna Low route.
+- Do not use Luna Low surgical execution for investigation, architecture,
+  ambiguous requirements, or iterative debugging.
 
 ## Discover the real CLI and live models
 
@@ -42,8 +51,9 @@ is unavailable in the current CLI/account environment.
    on `HEAD` does **not** contain uncommitted or untracked changes from the main
    checkout; commit/stash/materialize required context deliberately.
 2. Launch in the default lean mode: `codex exec --ignore-user-config`, explicit
-   `agents.enabled=false`, reasoning effort `low`, the minimum sandbox
-   (`read-only` for Luna reconnaissance; `workspace-write` only when edits are
+   `agents.enabled=false`, the model-appropriate reasoning effort (`low` for
+   Luna Low; `max` for Luna Max), and the minimum sandbox
+   (`read-only` for Luna Low reconnaissance; `workspace-write` when edits are
    authorized), and `--ask-for-approval never`. Ignoring user config preserves
    CLI authentication and repository `AGENTS.md` instructions while avoiding
    unrelated user skills/plugins/config context. Use `-IncludeUserConfig` only
@@ -67,11 +77,11 @@ same lines or assumptions. Assign non-overlapping scopes and review integration.
 
 ## Launcher
 
-For bounded Luna reconnaissance outside a Git repository (including a
+For bounded Luna Low reconnaissance outside a Git repository (including a
 projectless/global configuration directory), use direct mode. It validates the
-target path, accepts **only** `gpt-5.6-luna` with `read-only`, creates no
+target path, accepts **only** `gpt-5.6-luna` with effort `low` and `read-only`, creates no
 worktree, disables recursive agents, and still records JSONL plus stderr. Do
-not use it for Spark or any writing task:
+not use it for surgical edits or any writing task:
 
 ```powershell
 & scripts/Start-CodexCliWorker.ps1 `
@@ -80,17 +90,29 @@ not use it for Spark or any writing task:
   -Prompt 'Inventory the configuration files and report only evidence.'
 ```
 
-For repository work, use the existing isolated-worktree form:
+For Luna Low surgical repository implementation, use an isolated worktree only
+after all six criteria pass, with explicit low effort and write access:
+
+```powershell
+& scripts/Start-CodexCliWorker.ps1 `
+  -RepositoryPath D:\Dev\project `
+  -Model gpt-5.6-luna `
+  -Prompt 'Apply the exact bounded change and run the named focused check.' `
+  -AccessMode workspace-write `
+  -ReasoningEffort low
+```
+
+For Luna Max repository implementation, use the isolated-worktree form:
 
 Create a new isolated worker:
 
 ```powershell
 & scripts/Start-CodexCliWorker.ps1 `
   -RepositoryPath D:\Dev\project `
-  -Model gpt-5.3-codex-spark `
-  -Prompt 'Apply the exact bounded change and run the named check.' `
+  -Model gpt-5.6-luna `
+  -Prompt 'Implement the assigned substantive change and run the named checks.' `
   -AccessMode workspace-write `
-  -ReasoningEffort low
+  -ReasoningEffort max
 ```
 
 Resume a known worker in its preserved worktree:
@@ -99,10 +121,11 @@ Resume a known worker in its preserved worktree:
 & scripts/Start-CodexCliWorker.ps1 `
   -RepositoryPath D:\Dev\project `
   -WorktreePath C:\temp\codex-worker-existing `
-  -Model gpt-5.3-codex-spark `
+  -Model gpt-5.6-luna `
   -ResumeThreadId '<thread_id>' `
   -Prompt 'Fix the two review findings and rerun the focused check.' `
-  -AccessMode workspace-write
+  -AccessMode workspace-write `
+  -ReasoningEffort max
 ```
 
 The launcher prints a result object containing the CLI, model, worktree, JSONL,
@@ -110,6 +133,8 @@ stderr, exit code, whether it created the worktree, and any discovered thread
 ID. By default logs live outside the worktree so they do not contaminate its
 diff. Preserve those paths until review and integration are complete.
 
-`ReasoningEffort` defaults to `low` for both models and may be overridden only
-with an effort listed for that exact model by the live catalog. The launcher
+`ReasoningEffort` defaults to `low` in direct Luna Low mode and to `max` for
+repository Luna workers. It may be overridden only with an effort listed for
+that exact model by the live catalog; a repository `low` value must be explicit
+for the surgical route. The launcher
 rejects unsupported values before creating or running the worker.

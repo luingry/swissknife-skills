@@ -2,7 +2,7 @@
 
 Use only when Codex is the active orchestration surface. This reference preserves
 the complete pre-portability routing contract. Do not reinterpret Astra, Sol, Terra,
-Luna, Spark, the CLI catalog, worktrees, or JSONL for Claude Code or Cursor.
+Luna, the CLI catalog, worktrees, or JSONL for Claude Code or Cursor.
 
 Optimize quality, throughput, reliability, model cost, and elapsed time. The
 model receiving the user request is the **Task Owner** and remains responsible
@@ -15,7 +15,7 @@ the Task Owner MUST classify the task under this skill. Read-only work is
 included.
 
 For bounded read-only repository reconnaissance or evidence collection, when
-Luna is available, the Task Owner MUST delegate to Luna before doing that work
+Luna Low is available, the Task Owner MUST delegate to Luna Low before doing that work
 and MUST NOT perform it itself. If native Luna is unavailable, use the guarded
 CLI fallback. Only concrete unavailability permits direct owner work and the
 final report MUST state it. This restriction covers the task's reconnaissance
@@ -26,7 +26,7 @@ Read the applicable first-level reference before delegating:
 
 - [Routing details](routing-details.md): roles, handoffs, escalation,
   parallelism, and workflow selection.
-- [CLI workers](cli-workers.md): required whenever Luna or Spark is not exposed
+- [CLI workers](cli-workers.md): required whenever Luna Low or Luna Max is not exposed
   by the native subagent tool.
 - [Acceptance workflows](acceptance-workflows.md): required for bug,
   performance, runtime, browser, integration, or worker acceptance work.
@@ -121,32 +121,62 @@ quality hierarchy. Default effort is medium. Use high only when deeper reasoning
 materially changes the outcome and the live host supports high for the selected
 exact model.
 
-### Terra
+### Luna Low
 
-Use Terra Medium for normal software-engineering execution: features,
+Use Luna Low (`gpt-5.6-luna`, effort `low`) in one of two tightly bounded modes:
+
+- **Reconnaissance:** strictly read-only repository evidence collection such as
+  locating files, definitions, callers, routes, configs, tests, patterns, logs,
+  failures, and concise context packages. For broad reconnaissance, use
+  sequential narrow follow-ups with the same Luna Low worker.
+- **Surgical implementation:** an already-understood, low-risk edit when all
+  six criteria in the Mandatory Luna Low surgical gate pass. Use an authorized
+  write-enabled repository or workspace, keep the scope exclusive, and
+  serialize writes. Use an isolated worktree when the native host provides it or
+  when concurrent work requires isolation; a shared native checkout is valid
+  when its writes remain serialized. Explicitly set effort `low`, and give exact
+  targets, final state, constraints, and one focused deterministic validation.
+  If judgment, exploration, or iterative debugging becomes necessary, stop the
+  surgical route and return findings to the Task Owner.
+
+Luna Low must not choose architecture or engineering, substantively test or
+debug, or replace Astra, Sol, Luna Max, or Terra. DirectPath remains strictly
+read-only reconnaissance; surgical Luna Low work uses an authorized
+write-enabled repository/workspace and never DirectPath. Repository Luna
+defaults to effort `max`; effort `low` must be explicit for the surgical route.
+
+### Luna Max
+
+An explicit priority of speed or shortest delivery time means lower wall-clock
+latency for the agent/orchestration work to complete. Do not infer that priority
+solely because the requested product work is a performance, runtime-latency, or
+throughput optimization: such work still uses Luna Max by default unless the
+user also asks for faster agent delivery.
+
+Use Luna Max (`gpt-5.6-luna`, effort `max`) as the default substantive
+implementation tier when the surgical Luna Low gate does not apply. It
+handles features, multi-file or multi-subsystem changes, substantive bugs,
+refactoring, new tests, API/database/application logic, performance
+implementation, routine debugging, and iterative code/test/fix work in an
+authorized write-enabled workspace.
+
+Use Terra High instead when the user explicitly prioritizes speed or the
+shortest delivery time. Use Terra High as the implementation fallback only when
+Luna Max is genuinely unavailable. A user-selected supported model or effort
+overrides the default route. Luna Max does not replace Astra or Sol for planning,
+architecture, difficult causal analysis, critical review, or acceptance.
+
+### Terra High
+
+Use Terra High (`gpt-5.6-terra`, effort `high`) for normal software-engineering execution when the
+user explicitly prioritizes speed or the shortest delivery time, or when Luna
+Max is genuinely unavailable. It handles features,
 multi-file or multi-subsystem changes, substantive bugs, refactoring, new tests,
 API/database/application logic, performance implementation, routine debugging,
-and iterative code/test/fix work. Terra is the default implementation tier.
+and iterative code/test/fix work. Terra High is an alternate executor, not the
+default when no speed priority was requested.
 
-### Luna
-
-Use Luna Low for bounded repository reconnaissance and evidence collection:
-locating files, definitions, callers, routes, configs, tests, patterns, logs,
-failures, and concise context packages. Prefer read-only. Allow writing only for
-an exceptional deterministic, tightly bounded, mechanical, low-risk
-transformation with automatic verification. Luna is not a fallback for Terra or
-Spark and MUST NOT make engineering or architectural decisions. For broad
-reconnaissance, use sequential narrow follow-ups with the same Luna.
-
-### Spark
-
-Use Spark Low only to execute an already-understood surgical change when all six
-Mandatory Spark criteria below pass. Spark is latency-specialized, not a cheap
-reasoning or investigation tier. Give exact targets, final state, constraints,
-and the single focused validation. If judgment or investigation becomes
-necessary, Spark stops and returns findings.
-
-## Mandatory Spark gate
+## Mandatory Luna Low surgical gate
 
 Before any Task Owner implements or delegates implementation, evaluate every
 criterion. This applies to every implementation request, including trivial,
@@ -162,22 +192,26 @@ fully localized edits.
 4. No architectural, security, data-integrity, concurrency, migration, or
    consequential product judgment is required.
 5. Failure is low-risk, reversible, and detectable by one focused deterministic
-   existing validation that Spark is expected to run.
+   existing validation that Luna Low is expected to run.
 6. No new/regression test, broad build/runtime/browser/benchmark/integration
    validation, or iterative debug/fix loop is required.
 
-If all six pass and Spark is available, delegation to Spark is mandatory for
-both Astra/Sol and Terra Task Owners. Overhead or convenience is not
-unavailability.
-If Spark is absent from both native delegation and the live CLI catalog, or has
-a real outage/rate/capacity failure, apply the owner-specific fallback below.
-When apparently eligible work does not use Spark, the final report MUST identify
+If all six pass and Luna Low is available, delegation to Luna Low is mandatory
+for Astra/Sol, Luna Max, and Terra Task Owners. This surgical route is the only
+write-enabled exception to the normal Luna Max/Terra ownership rule; overhead or
+convenience is not unavailability.
+
+If Luna Low is absent from native delegation and the live CLI catalog, or has a
+real outage/rate/capacity failure, apply the owner-specific fallback below. When
+apparently eligible work does not use Luna Low, the final report MUST identify
 the failed numbered criterion or concrete unavailability.
 
 ## Astra or Sol Task Owner
 
-Apply the Spark gate before editing application code. If it does not require
-Spark, delegate implementation to Terra Medium when any substantial indicator
+Apply the Mandatory Luna Low surgical gate before editing application code. If
+all six criteria pass and Luna Low is available, delegate the surgical change to
+Luna Low. If the gate does not require surgical Luna Low, delegate substantive
+implementation to Luna Max when any substantial indicator
 holds:
 
 - more than one application file or subsystem;
@@ -189,23 +223,32 @@ holds:
 - uncertainty that every direct-implementation condition below passes.
 
 The applicability of this skill or an `AGENTS.md` delegation rule is explicit
-authorization to route the worker. Astra or Sol may implement directly only when the
-Spark gate does not require delegation, the exact tiny modification and location
-are known, no meaningful exploration is needed, and no substantial validation
-or debugging is expected. Otherwise route to Terra. Record the direct exception
-and failed Spark criterion in the final report.
+authorization to route the worker. If all six criteria pass but Luna Low is
+unavailable, route to Luna Max by default, or Terra High when the user explicitly
+prioritizes speed or Luna Max is genuinely unavailable. Astra or Sol may
+implement directly only when the surgical gate does not require delegation, the
+exact tiny modification and location are known, no meaningful exploration is
+needed, and no substantial validation or debugging is expected. Record the
+direct exception, failed Luna Low criterion, or concrete Luna Low unavailability
+in the final report.
 
 Astra or Sol owns strategy, difficult judgment, critical review, and
-acceptance. Neither should become the default implementation worker.
+acceptance. Neither should become the default implementation worker. Route to
+Terra High instead only when the user explicitly prioritizes speed or Luna Max
+is genuinely unavailable. Honor any supported model or effort explicitly
+selected by the user.
 
-## Terra Medium Task Owner
+## Luna Max or Terra Task Owner
 
-Apply the Spark gate first. Terra Medium MUST NOT delegate implementation to
-another Terra Medium. If the gate requires available Spark, delegate to Spark;
-otherwise Terra implements substantive work itself. Terra may use Luna only for
-genuinely bounded reconnaissance and may consult Astra or Sol for difficult
-decisions. That consultation is advice: Terra applies it and completes the
-implementation.
+Apply the Mandatory Luna Low surgical gate first. If all six criteria pass and
+Luna Low is available, delegation to Luna Low is mandatory even for a Luna Max
+or Terra Task Owner. Otherwise the existing Luna Max or Terra Task Owner
+implements substantive work directly; this includes the concrete fallback when
+Luna Low is genuinely unavailable. Outside that mandatory surgical route, a
+Luna Max or Terra Task Owner MUST NOT delegate implementation to another
+executor for the same scope. It may consult Astra or Sol for difficult
+decisions. That consultation is advice: the existing executor applies it and
+completes the implementation.
 
 Consult one available, authorized Astra or Sol only when architecture, material
 ambiguity, unresolved difficult root cause, repeated failed approaches,
@@ -214,16 +257,18 @@ production-critical decisions, or materially low confidence warrants stronger
 reasoning. Do not escalate routine implementation, exploration, or debugging
 merely because it is time-consuming.
 
-If Spark is genuinely unavailable, Terra performs the bounded change directly;
-other Task Owner tiers fall back from Spark to Terra.
+If Luna Low is genuinely unavailable, a Luna Max or Terra Task Owner performs
+the bounded change directly; Astra or Sol routes substantive implementation to
+Luna Max by default, or Terra High when speed is explicitly prioritized or Luna
+Max is genuinely unavailable.
 
 ## Availability and external workers
 
-Native delegation is preferred. When routing requires Luna or Spark but the
+Native delegation is preferred. When routing requires Luna Low or Luna Max but the
 native subagent tool does not expose it, the Task Owner MUST read
 [CLI workers](cli-workers.md), verify the exact model in the live
 Codex CLI catalog, and use the guarded worktree launcher for repository work.
-For Luna-only read-only reconnaissance of a non-Git/projectless path, use the
+For Luna Low-only read-only reconnaissance of a non-Git/projectless path, use the
 launcher's guarded direct mode; it never creates a worktree and never permits
 writes.
 
