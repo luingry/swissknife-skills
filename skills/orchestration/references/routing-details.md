@@ -23,6 +23,37 @@ solely because the requested product work is a performance, runtime-latency, or
 throughput optimization: such work still uses Luna Max by default unless the
 user also asks for faster agent delivery.
 
+## Codex project preference and adaptive consultation
+
+For Codex, read the most specific applicable project `AGENTS.md` before this
+routing assessment. If it contains `- Delivery priority: speed` or
+`- Delivery priority: cost-efficiency`, briefly remind the user before work. If
+the field is absent, ask exactly `Você prioriza velocidade das entregas ou
+eficiência de custo?` and pause exploration, delegation, edits, and tests until
+the answer; then record the value once in the most specific project-root
+`AGENTS.md`. A current-request priority overrides the stored value for that
+task only unless the user explicitly asks to persist the update.
+
+When an Astra or Sol Task Owner is at medium effort, any temporary consultation
+must use the same exact model slug at `high` or `xhigh`: Astra consults only
+`gpt-6-astra`, and Sol consults only `gpt-5.6-sol`. Never swap Astra and Sol,
+and never use `low`, `max`, or `ultra` for this consultation. The owner remains
+at medium. Use `high` only for a concrete unresolved architecture/causality,
+interpretation, conflicting-evidence, consequential-trade-off, or beyond-
+subsystem decision; use `xhigh` for material security, data integrity, complex
+distributed concurrency/ownership, critical hard-to-reverse production work, two failed
+substantive approaches, persistent focal conflict, or an unresolved High
+consultation. No consultation occurs without the exact question
+`Preciso decidir X entre A e B porque as evidências Y e Z entram em conflito.`
+Availability must be checked before dispatching one generic temporary,
+consultative/read-only subagent with an explicit slug and effort; use
+`fork_turns: "none"` by default, no full history, and at most one focal
+follow-up. The owner supplies the decision package and remains responsible for
+implementation and acceptance; an unavailable consultant never causes an
+automatic model switch. Preserve the existing Luna Max/Terra -> Astra/Sol
+consultation route semantically; this same-model restriction applies only to an
+Astra or Sol owner.
+
 ## Luna Low reconnaissance
 
 Luna Low reconnaissance is bounded read-only repository evidence collection
@@ -71,20 +102,29 @@ model or effort overrides these defaults.
 
 ## Handoff contract
 
-Provide only the necessary context:
+Read [shared core](shared-core.md) and close its smallest complete execution
+contract before delegation. Send that contract—not a partial context handoff or
+irrelevant history—to Luna Max and every substantive implementer. Keep this
+schema compact; the shared core owns the behavior-state and ambiguity procedure:
 
-- Goal: observable outcome.
-- Scope: subsystem and files when known.
-- Context: facts needed to execute.
-- Constraints: behavior and data to preserve.
-- Acceptance: definition of done.
-- Validation: exact checks and evidence expected.
+- Goal: observable outcome; scope: authorized subsystem/files.
+- Context: relevant existing behavior/invariants, dependencies, and affected
+  user flows.
+- Constraints: behavior/data and other boundaries to preserve.
+- Acceptance: explicit, logically/product-derived, and preserved behavior, with
+  material assumptions/ambiguities.
+- Validation/evidence: exact checks and observable proof; return format:
+  `Completed`, `Files`, `Evidence`, `Validation`, and `Concerns/scope gaps`.
+
+The worker maps every acceptance item to evidence and applies the shared core's
+rule for newly discovered contract gaps.
 
 The worker returns:
 
 - Completed: change or finding.
 - Files: relevant modified files.
-- Evidence: path:line references or command outcomes.
+- Evidence: path:line references or command outcomes, including the
+  contract-to-evidence mapping.
 - Validation: commands and outcomes.
 - Concerns/scope gaps: unresolved issues only.
 
@@ -99,6 +139,8 @@ Allowed examples:
 - Astra/Sol owner -> Terra High implementation when speed is explicitly prioritized -> Astra/Sol acceptance.
 - Astra/Sol owner -> Luna Low reconnaissance -> Astra/Sol continues.
 - Astra/Sol/Luna Max/Terra owner -> Luna Low surgical edit -> owner acceptance.
+- Astra owner -> Astra higher-effort consultation -> same Astra owner continues.
+- Sol owner -> Sol higher-effort consultation -> same Sol owner continues.
 - Terra or Luna Max owner -> Astra or Sol consultation -> same owner implements and
   accepts.
 
@@ -130,6 +172,10 @@ When Luna Max or Terra consults Astra or Sol, include goal, relevant evidence, a
 exact decision needed, known options, and the executor's recommendation. Select
 one available, authorized model; it returns advice, and the existing executor
 retains ownership and performs the implementation.
+
+For the Codex same-model consultation, use the package and return fields in
+[codex.md](codex.md). Record an escalation block only when a consultation
+actually occurs; do not record a hypothetical escalation or invent telemetry.
 
 ## Completion and optional closing capabilities
 

@@ -8,6 +8,26 @@ Optimize quality, throughput, reliability, model cost, and elapsed time. The
 model receiving the user request is the **Task Owner** and remains responsible
 for the original goal, integration, independent validation, and final report.
 
+## Project preference gate (Codex only)
+
+At the start of every use of this Codex adapter, first read the applicable
+project rules, including the most specific `AGENTS.md` governing the project.
+Recognize these canonical values only:
+
+- `- Delivery priority: speed`
+- `- Delivery priority: cost-efficiency`
+
+When the canonical field is present, give the user one short reminder of the
+stored preference before doing any work. If the field is absent, ask exactly:
+`Você prioriza velocidade das entregas ou eficiência de custo?`
+Then **PAUSE** all work—exploration, delegation, edits, and tests—until the user
+answers. After the answer, record `speed` or `cost-efficiency` in the most
+specific applicable `AGENTS.md` at the project root; if none exists, create a
+minimal one. Reuse one `## Orchestration preference` section and one canonical
+field; never duplicate either. An explicit priority in the current request has
+precedence for that task and does not change the persistent preference unless
+the user explicitly asks to update it.
+
 ## Mandatory routing assessment
 
 Before exploration, repository/engineering tool calls, edits, or delegation,
@@ -51,12 +71,17 @@ review, and acceptance under this skill.
   another worker. It returns out-of-scope needs to the Task Owner.
 - Use one implementation worker by default. Parallelize only independent,
   non-overlapping scopes that materially reduce elapsed time.
-- Give every worker goal, scope, necessary context, constraints, observable
-  acceptance criteria, and expected validation.
+- Before routing Luna Max or any substantive implementer, read [shared core](shared-core.md)
+  and close its smallest complete execution contract. Do not delegate with a
+  partial handoff or irrelevant history; apply the shared core's worker gap rule.
 - A worker returns completed work, files, validation evidence, and genuine
-  concerns—not a diary.
-- The Task Owner MUST inspect the relevant diff/evidence and independently run
-  proportionate acceptance checks. A worker saying `done` is not evidence.
+  concerns—not a diary. Acceptance follows [acceptance workflows](acceptance-workflows.md):
+  require contract-to-evidence mapping for every criterion, independently
+  re-derive it from the request
+  and existing behavior, and apply the full affected-flow rule for action UI.
+- A worker saying `done`, or a component merely mounting/rendering or compiling,
+  is not functional proof; use the shared core and acceptance workflow's
+  complementary-state and proportional evidence rules.
 - When review finds a defect, return specific feedback to the same worker and
   repeat worker -> review -> correction while it remains the appropriate tier;
   default next-pass review is targeted to re-verify the finding(s), adjacent
@@ -175,6 +200,80 @@ multi-file or multi-subsystem changes, substantive bugs, refactoring, new tests,
 API/database/application logic, performance implementation, routine debugging,
 and iterative code/test/fix work. Terra High is an alternate executor, not the
 default when no speed priority was requested.
+
+## Adaptive same-model consultation (Codex only)
+
+This consultation route is exclusive to the Codex adapter. It is a temporary,
+read-only consultation by the same model as the medium-effort owner, never a
+model switch or a second owner:
+
+- A medium Astra owner (`gpt-6-astra`) may consult only `gpt-6-astra` at
+  effort `high` or `xhigh`.
+- A medium Sol owner (`gpt-5.6-sol`) may consult only `gpt-5.6-sol` at effort
+  `high` or `xhigh`.
+- Never switch Astra and Sol automatically. The owner remains at medium while
+  the temporary consultation runs. Do not use `low`, `max`, or `ultra` for this
+  policy.
+
+Use `high` only for an exact unresolved decision about non-local architecture,
+difficult causal analysis, materially different interpretations, conflicting
+evidence after focal verification, a consequential trade-off, or impact beyond
+the current subsystem. Use `xhigh` for material security/authorization/
+credential risk, data integrity/loss/migration, complex distributed
+concurrency/consistency/ownership, critical or difficult-to-reverse production
+work, two substantive approaches that failed, persistent conflict after focal
+investigation, or when `high` did not resolve the decision. A medium owner may
+move directly to `xhigh` when one of those conditions applies.
+
+Do not consult merely because the task is large, slow, has many files, has a
+long build, encountered a first failure or first correction, needs mechanical
+review, is collecting logs, or carries generic uncertainty. Before a call,
+form one concrete question in exactly this shape:
+`Preciso decidir X entre A e B porque as evidências Y e Z entram em conflito.`
+If that question cannot be stated, gather evidence, explore, test, or implement
+instead of escalating.
+
+Before dispatch, verify that the exact same model slug and selected `high` or
+`xhigh` effort are available on the current host. Use one generic temporary
+subagent with the explicit slug and effort; `fork_turns: "none"` is the default,
+with only a few turns when indispensable. Start from fresh context and do not
+assume a cache or pass the full conversation history.
+
+The consultation input contains exactly: `Goal`, `Exact decision required`,
+`Relevant evidence`, `Attempts already made`, `Known options`, `Owner
+recommendation`, `Risk if wrong`, and `Acceptance criteria affected`. The
+consultant returns exactly: `Decision`, `Rationale`, `Material risks`, `Missing
+evidence`, and `Required acceptance adjustments`.
+
+Only one consultant may be active for one decision. It is consultative and
+read-only, covers one decision, and allows at most one focal follow-up. It does
+not implement, delegate, accept, broaden scope, or review the whole change. The
+owner applies or rejects the advice and remains responsible for implementation,
+validation, and acceptance.
+
+### Conditional escalation record
+
+Create this escalation block only when the same-model consultation actually
+occurs. Keep consultation metrics separate from product/runtime acceptance
+evidence and never invent unavailable telemetry:
+
+- Owner model/effort.
+- Consultant model/effort.
+- Objective trigger (`high` or `xhigh`) and the concrete decision question.
+- Decision and whether the recommendation changed.
+- Tokens per participant and type, only if telemetry exposes them.
+- Consultation duration, only if observed.
+- Correction avoided or provoked, only when observable.
+- Missing evidence and required acceptance adjustments.
+
+If the exact same-model route is unavailable, do not switch models or pretend a
+consultation occurred. Run cheap targeted checks; continue as owner when the
+evidence resolves the decision. If material risk remains unresolved, do not
+accept the work and record that the consultation route was unavailable. Preserve
+the existing Luna Low, Luna Max, and Terra routes; in particular, preserve the
+existing Luna Max/Terra -> Astra/Sol consultation route semantically. This
+same-model rule applies only when the owner is Astra or Sol; it does not change
+those existing routes.
 
 ## Mandatory Luna Low surgical gate
 

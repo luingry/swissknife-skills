@@ -11,6 +11,14 @@ function read(relativePath) {
   return fs.readFileSync(path.join(skillRoot, relativePath), 'utf8');
 }
 
+function section(content, heading, nextHeading) {
+  const start = content.indexOf(heading);
+  assert.ok(start >= 0, `missing section: ${heading}`);
+  const end = nextHeading ? content.indexOf(nextHeading, start + heading.length) : content.length;
+  assert.ok(end > start, `missing section boundary: ${nextHeading ?? 'EOF'}`);
+  return content.slice(start, end);
+}
+
 const retiredRouteName = String.fromCharCode(83, 112, 97, 114, 107);
 const retiredModelSlug = ['gpt-5.3-codex-', retiredRouteName.toLowerCase()].join('');
 
@@ -85,6 +93,90 @@ test('Codex adapter preserves Luna Low reconnaissance and surgical routing, Luna
   assert.match(codex, /existing Luna Max or Terra\s+Task Owner\s+implements substantive work directly/i);
 });
 
+test('Codex preference gate is persistent, pausable, and request-precedence aware', () => {
+  const codex = read('references/codex.md');
+  const projectRules = fs.readFileSync(path.join(root, 'AGENTS.md'), 'utf8');
+
+  assert.match(projectRules, /^## Orchestration preference$/m);
+  const preferenceFields = projectRules.match(/^- Delivery priority: (speed|cost-efficiency)$/gm) ?? [];
+  assert.equal(preferenceFields.length, 1, 'project must contain exactly one canonical delivery-priority field');
+  assert.match(preferenceFields[0], /^- Delivery priority: (speed|cost-efficiency)$/);
+  assert.match(codex, /At the start of every use.*read the applicable\s+project rules.*most specific `AGENTS\.md`/is);
+  assert.match(codex, /canonical field is present.*one short reminder.*before doing any work/is);
+  assert.match(codex, /If the field is absent, ask exactly:\s*`Você prioriza velocidade das entregas ou eficiência de custo\?`/is);
+  assert.match(codex, /PAUSE.*exploration, delegation, edits, and tests.*until the user\s+answers/is);
+  assert.match(codex, /record `speed` or `cost-efficiency`.*most\s+specific applicable `AGENTS\.md`/is);
+  assert.match(codex, /never duplicate either/is);
+  assert.match(codex, /explicit priority in the current request has\s+precedence.*does not change the persistent preference/is);
+});
+
+test('Codex consultation is same-model, effort-bounded, concrete-question driven, and shallow', () => {
+  const codex = read('references/codex.md');
+  const consultation = section(codex, '## Adaptive same-model consultation (Codex only)', '## Mandatory Luna Low surgical gate').replace(/\s+/g, ' ');
+
+  assert.match(consultation, /medium Astra owner.*`gpt-6-astra`.*`high` or `xhigh`/is);
+  assert.match(consultation, /medium Sol owner.*`gpt-5\.6-sol`.*`high` or `xhigh`/is);
+  assert.match(consultation, /Never switch Astra and Sol automatically/is);
+  assert.match(consultation, /owner remains at medium/is);
+  assert.match(consultation, /Do not use `low`, `max`, or `ultra`/i);
+  assert.match(consultation, /Use `high` only for an exact unresolved decision/is);
+  for (const trigger of ['non-local architecture', 'difficult causal analysis', 'materially different interpretations', 'conflicting evidence', 'consequential trade-off', 'impact beyond']) {
+    assert.match(consultation, new RegExp(trigger.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+  }
+  assert.match(consultation, /Use `xhigh` for material security/is);
+  for (const trigger of ['authorization', 'credential', 'data integrity', 'loss', 'migration', 'distributed concurrency', 'consistency', 'ownership', 'critical', 'difficult-to-reverse', 'two substantive approaches', 'persistent conflict', 'high` did not resolve']) {
+    assert.match(consultation, new RegExp(trigger.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+  }
+  assert.match(consultation, /Do not consult merely because.*large.*slow.*many files.*long build.*first failure.*first correction.*mechanical\s+review.*collecting logs.*generic uncertainty/is);
+  assert.match(consultation, /Preciso decidir X entre A e B porque as evidências Y e Z entram em conflito\./);
+  assert.match(consultation, /verify that the exact same model slug.*selected `high` or `xhigh` effort/is);
+  assert.match(consultation, /generic temporary subagent.*`fork_turns: "none"`.*few turns when indispensable/is);
+  assert.match(consultation, /do not assume a cache or pass the full conversation history/is);
+  for (const field of ['Goal', 'Exact decision required', 'Relevant evidence', 'Attempts already made', 'Known options', 'Owner recommendation', 'Risk if wrong', 'Acceptance criteria affected']) {
+    assert.match(consultation, new RegExp(`\\b${field.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}\\b`));
+  }
+  for (const field of ['Decision', 'Rationale', 'Material risks', 'Missing evidence', 'Required acceptance adjustments']) {
+    assert.match(consultation, new RegExp(`\\b${field.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&')}\\b`));
+  }
+  assert.match(consultation, /Only one consultant.*one decision.*at most one focal follow-up/is);
+  assert.match(consultation, /does not implement, delegate, accept, broaden scope, or review the whole change/is);
+  assert.match(consultation, /Create this escalation block only when the same-model consultation actually occurs/is);
+  for (const field of ['Owner model/effort', 'Consultant model/effort', 'Objective trigger', 'Decision', 'whether the recommendation changed', 'Tokens per participant', 'Consultation duration', 'Correction avoided or provoked']) {
+    assert.match(consultation, new RegExp(field.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'));
+  }
+  assert.match(consultation, /never invent unavailable telemetry/is);
+  assert.match(consultation, /Keep consultation metrics separate from product\/runtime acceptance evidence/is);
+  assert.match(consultation, /If the exact same-model route is unavailable, do not switch models or pretend/is);
+  assert.match(consultation, /existing Luna Max\/Terra -> Astra\/Sol consultation route semantically/is);
+});
+
+test('Codex-only preference and consultation rules do not leak into Claude or Cursor adapters', () => {
+  for (const relativePath of ['references/claude-code.md', 'references/cursor.md']) {
+    const adapter = read(relativePath);
+    assert.doesNotMatch(adapter, /Delivery priority|same-model consultation|fork_turns|Você prioriza/i, `${relativePath} contains Codex-only policy`);
+  }
+});
+
+test('acceptance documents evidence boundaries, resident-process proof, and delta contracts', () => {
+  const acceptance = read('references/acceptance-workflows.md').replace(/\s+/g, ' ');
+
+  assert.match(acceptance, /Higher reasoning effort does not substitute for absent observable evidence/is);
+  assert.match(acceptance, /Exercise the real boundary.*before consulting or\s+accepting/is);
+  assert.match(acceptance, /service, worker, agent, daemon.*runtime evidence is valid only after proving.*loaded the new version/is);
+  assert.match(acceptance, /restart or reload.*PID\/start time.*version or hash.*startup log.*version marker/is);
+  assert.match(acceptance, /new subsystem or system boundary.*reopen only the delta.*preserve criteria already satisfied.*recalculate.*do not retransmit.*history/is);
+  assert.match(acceptance, /Keep the cost, corrections, and evidence.*new slice separate/is);
+  assert.doesNotMatch(acceptance, /Codex consultation record|Owner model\/effort|Consultant model\/effort|Tokens per participant/i);
+});
+
+test('host evidence labels the dated Codex consultation policy without claiming capability or global preference', () => {
+  const evidence = read('references/host-capability-evidence.md');
+  assert.match(evidence, /\*\*User-directed policy \(2026-09-17\)\./);
+  assert.match(evidence, /medium Astra\s+or Sol owner.*same-model temporary consultation.*`high` or\s+`xhigh`/is);
+  assert.match(evidence, /dated\s+user-directed routing policy, not a benchmark, a fact about host\/model\s+capability, or a global personal preference/is);
+  assert.match(evidence, /no quality, speed, cost,\s+or availability claim/is);
+});
+
 test('routing keeps product performance work distinct from agent delivery-speed priority', () => {
   const routing = read('references/routing-details.md');
   assert.match(routing, /means lower wall-clock\s+latency for the agent\/orchestration work to complete/i);
@@ -96,6 +188,8 @@ test('routing keeps product performance work distinct from agent delivery-speed 
   assert.match(routing, /shared native checkout is valid\s+when\s+its writes remain serialized/is);
   assert.match(routing, /CLI\s+fallback remains stricter:\s+its surgical.*isolated\s+worktree/is);
   assert.match(routing, /Luna Low is\s+unavailable.*Luna Max by default.*Terra High/is);
+  assert.match(routing, /Astra owner -> Astra higher-effort consultation -> same Astra owner continues\./);
+  assert.match(routing, /Sol owner -> Sol higher-effort consultation -> same Sol owner continues\./);
 });
 
 test('CLI worker fallback separates Luna Low direct reconnaissance, surgical writes, and Luna Max repository implementation', () => {
@@ -164,8 +258,89 @@ test('orchestration references resolve their essential local links', () => {
   }
 });
 
-// These assertions protect the published written contract; they do not prove
-// universal skill activation or model behavior in a host runtime.
+test('owner handoff closes a complete behavior contract before substantive work', () => {
+  const sharedCore = read('references/shared-core.md');
+  const routing = read('references/routing-details.md');
+  const contract = section(sharedCore, '## Execution contract before delegation', '## Delegation and parallelism');
+  const handoff = section(routing, '## Handoff contract', '## Shallow topology');
+
+  assert.match(contract, /smallest complete execution contract/i);
+  for (const field of [
+    /Goal:.*observable user\/product outcome/is,
+    /Scope:.*authorized files.*dependencies.*affected\s+user flows/is,
+    /Existing behavior\/invariants/is,
+    /Constraints:/,
+    /explicit requested behavior.*logically\/product-derived behavior.*preserved\s+behavior/is,
+    /material assumptions and ambiguities/is,
+    /Validation\/evidence:.*exact checks.*reachable flows.*observable proof/is,
+    /worker return format/is,
+  ]) {
+    assert.match(contract, field);
+  }
+  assert.match(contract, /not a dump of\s+irrelevant history/i);
+  assert.match(handoff, /\[shared core\]\(shared-core\.md\).*smallest complete execution\s+contract/is);
+  assert.match(handoff, /Luna Max\s+and every substantive implementer/i);
+  assert.match(handoff, /Goal:.*Scope:.*Context:.*Constraints:.*Acceptance:.*Validation\/evidence:.*Return format/is);
+  assert.doesNotMatch(handoff, /Provide only the necessary context/i);
+  assert.doesNotMatch(handoff, /when active, reveal\/show\/enable X/i);
+  assert.doesNotMatch(handoff, /compact state\/transition matrix|conditional visibility or enablement/i);
+});
+
+test('shared core closes complementary UI behavior and routes worker-discovered gaps to the owner', () => {
+  const contract = section(read('references/shared-core.md'), '## Execution contract before delegation', '## Delegation and parallelism');
+
+  assert.match(contract, /compact state\/transition matrix.*initial state.*changed\s+transition/is);
+  assert.match(contract, /complementary\/negative state.*conditional visibility or\s+enablement/is);
+  assert.match(contract, /disabled.*loading.*error.*empty.*responsive.*accessibility/is);
+  assert.match(contract, /when active, reveal\/show\/enable X.*inactive\/complementary state.*hidden\/disabled/is);
+  assert.match(contract, /unless existing product evidence or an explicit requirement\s+says it persists/is);
+  assert.match(contract, /neither owner nor worker may silently treat an omitted\s+complementary state as unrestricted/is);
+  assert.match(contract, /product intent\/evidence/i);
+  assert.doesNotMatch(contract, /must (?:enumerate|test) every (?:possible )?state/i);
+});
+
+test('workers report newly discovered behavior-contract gaps without asking users directly', () => {
+  const contract = section(read('references/shared-core.md'), '## Execution contract before delegation', '## Delegation and parallelism');
+
+  assert.match(contract, /Workers do not ask the user\s+directly/i);
+  assert.match(contract, /discovers repository evidence, dependencies,\s+outcome-changing states\/flows, or a material ambiguity missing from the handoff/is);
+  assert.match(contract, /update\/report that contract gap to the owner and pause only the affected\s+decision/is);
+  assert.match(contract, /The owner asks the user only when the ambiguity is material and cannot\s+be resolved safely in scope/is);
+  assert.doesNotMatch(contract, /worker(?:s)? (?:may|should|must) ask the user directly/i);
+});
+
+test('Codex routes substantive work through authoritative contract and acceptance sections', () => {
+  const codex = section(read('references/codex.md'), '## Invariants', '## Completion and verification');
+
+  assert.match(codex, /Before routing Luna Max or any substantive implementer, read \[shared core\]\(shared-core\.md\)/is);
+  assert.match(codex, /smallest complete execution contract/i);
+  assert.match(codex, /partial handoff or irrelevant history/i);
+  assert.match(codex, /apply the shared core's worker gap rule/i);
+  assert.match(codex, /Acceptance follows \[acceptance workflows\]\(acceptance-workflows\.md\)/is);
+  assert.match(codex, /contract-to-evidence mapping for every criterion.*full affected-flow rule/is);
+  assert.match(codex, /mounting\/rendering or compiling.*not functional proof/is);
+  assert.doesNotMatch(codex, /compact matrix.*initial.*changed.*disabled.*loading.*error/is);
+});
+
+test('acceptance workflow owns evidence mapping, full-flow proof, and proportional limits', () => {
+  const acceptance = section(read('references/acceptance-workflows.md'), '## Contract-to-evidence acceptance', '## Bug fixes');
+
+  assert.match(acceptance, /Before delegation, apply \[shared core\]\(shared-core\.md\)'s execution contract for\s+closure, state\/complement inference, and owner\/worker gap handling/is);
+  assert.match(acceptance, /Every new or changed deterministic behavior contract must map to passing\s+evidence/is);
+  assert.match(acceptance, /worker return maps each acceptance item to evidence.*owner\s+re-derives acceptance/is);
+  assert.match(acceptance, /changed UI control or component that affects an action.*full affected\s+flow/is);
+  assert.match(acceptance, /reachable preconditions through interaction\s+to observable outcome/is);
+  assert.match(acceptance, /Mount\/render, snapshots, typecheck, lint, build, HTTP\s+success, or isolated handler calls alone are not functional proof/is);
+  assert.match(acceptance, /If suitable automation\/infrastructure is unavailable or disproportionate/is);
+  assert.match(acceptance, /name\s+the unautomated contract and why.*substitute real-flow evidence/is);
+  assert.match(acceptance, /Required checks may not be failing.*unrelated pre-existing failures/is);
+  assert.match(acceptance, /no mandatory E2E or screenshot.*no exhaustive state matrix.*no automatic user question/is);
+  assert.match(acceptance, /Preserve the existing fast path/i);
+  assert.doesNotMatch(acceptance, /Wording such as “when active, reveal\/show\/enable X”/i);
+});
+
+// These assertions protect the cohesive published written contract; they do not
+// prove universal skill activation, runtime/model behavior, or functional acceptance.
 test('orchestration discovers optional capabilities at their separate decision points', () => {
   const entrypoint = read('SKILL.md');
   assert.match(entrypoint, /During\s*significant visual work, discover `design-intelligence`\. Near conclusion,\s*discover `delivery-verification` and `delivery-closer`/i);

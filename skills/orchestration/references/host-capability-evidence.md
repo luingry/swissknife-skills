@@ -81,6 +81,15 @@ beneficial deeper-reasoning need and support for that exact model in the live
 host. This is a routing policy, not a claim drawn from the 2026-08-28 sources:
 no benchmark, cost, speed, quality, or automatic escalation inference follows.
 
+**User-directed policy (2026-09-17).** Within the Codex adapter, a medium Astra
+or Sol owner may use only a same-model temporary consultation at `high` or
+`xhigh`, selected by the objective decision triggers in [codex.md](codex.md).
+The route must preserve the owner's model, use a generic consultative/read-only
+subagent, and record only observed escalation metrics. This is a dated
+user-directed routing policy, not a benchmark, a fact about host/model
+capability, or a global personal preference; it makes no quality, speed, cost,
+or availability claim.
+
 ## Claude Code
 
 **Documented fact.** Claude Code states that its skills follow Agent Skills and

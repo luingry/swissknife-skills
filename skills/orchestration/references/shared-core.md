@@ -21,12 +21,48 @@ Use semantic roles rather than vendor model names:
 
 Use one implementer by default. Do not create persistent agents automatically.
 
+## Execution contract before delegation
+
+Before delegating, the owner closes the smallest complete execution contract.
+Include only what is needed to execute and accept the work, not a dump of
+irrelevant history:
+
+- Goal: the observable user/product outcome.
+- Scope: the subsystem and authorized files, plus dependencies and affected
+  user flows when relevant.
+- Existing behavior/invariants: what already works and must remain true.
+- Constraints: data, compatibility, accessibility, security, performance, and
+  other boundaries to preserve.
+- Acceptance: label each criterion as explicit requested behavior,
+  logically/product-derived behavior that safely follows from it, or preserved
+  behavior; record material assumptions and ambiguities.
+- Validation/evidence: exact checks, reachable flows, and observable proof
+  expected; include the worker return format.
+
+The owner must close this behavior contract before delegation. For a UI or
+interaction change, enumerate a compact state/transition matrix containing only
+states or transitions that can change the outcome: initial state, changed
+transition, the complementary/negative state of conditional visibility or
+enablement, and applicable disabled, loading, error, empty, responsive, and
+accessibility states. Do not require an exhaustive Cartesian cross-product.
+
+Wording such as “when active, reveal/show/enable X” normally defines a
+relationship: specify and test the inactive/complementary state too (normally
+hidden/disabled), unless existing product evidence or an explicit requirement
+says it persists. Neither owner nor worker may silently treat an omitted
+complementary state as unrestricted. The owner resolves ordinary states from
+product intent/evidence or safe inference in scope. Workers do not ask the user
+directly: if a worker discovers repository evidence, dependencies,
+outcome-changing states/flows, or a material ambiguity missing from the handoff,
+it must update/report that contract gap to the owner and pause only the affected
+decision. The owner asks the user only when the ambiguity is material and cannot
+be resolved safely in scope.
+
 ## Delegation and parallelism
 
-Give every worker a goal, authorized scope/files, necessary context, constraints,
-observable acceptance criteria, expected validation, and return format. Workers
-must return only: completed work/finding; files; validation commands and
-outcomes; evidence; and genuine concerns or scope gaps.
+Give every worker the closed execution contract, authorized scope/files, and
+expected validation. Workers must return only: completed work/finding; files;
+validation commands and outcomes; evidence; and genuine concerns or scope gaps.
 
 Parallelize only independent, non-overlapping work that materially reduces time.
 Research, review, and tests are normally safer parallel candidates than writing.
@@ -44,10 +80,13 @@ next owner decision. Host-specific thread IDs, JSONL paths, or cloud links are
 optional evidence, never the portable contract.
 
 The owner inspects the relevant diff and worker evidence, then independently
-runs proportionate acceptance checks. A worker saying `done`, a green hook, or
-a background completion is not acceptance. Return a concrete defect to the
-appropriate worker and re-verify its correction; broaden review only when new
-evidence expands risk.
+runs proportionate acceptance checks. It re-derives acceptance from the original
+request and applicable existing behavior instead of accepting a worker's reduced
+interpretation. Follow [acceptance workflows](acceptance-workflows.md) for the
+contract-to-evidence mapping, affected-flow proof, and proportional checks. A
+worker saying `done`, a green hook, or a background completion is not acceptance.
+Return a concrete defect to the appropriate worker and re-verify its correction;
+broaden review only when new evidence expands risk.
 
 Preserve behavior unless the task requires a change. Treat existing tests as
 contracts, do not weaken them merely to pass, and finish when requested behavior

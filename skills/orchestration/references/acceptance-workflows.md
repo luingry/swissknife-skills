@@ -7,8 +7,61 @@
 3. Run independent checks proportionate to risk: focused tests, typecheck, lint,
    build, runtime flow, browser flow, benchmark, or log inspection.
 4. Exercise relevant adjacent behavior and edge cases when practical.
-5. Return concrete defects to the same worker; repeat until acceptable.
-6. Integrate only accepted work and report evidence boundaries honestly.
+5. Require the worker report to map every acceptance item to passing evidence;
+   return concrete defects to the same worker and re-verify the correction.
+6. The owner independently re-derives acceptance from the original request and
+   applicable existing behavior, including negative/complementary assertions
+   and the full affected flow when relevant; do not accept a reduced worker
+   interpretation.
+7. Integrate only accepted work and report evidence boundaries honestly.
+
+## Contract-to-evidence acceptance
+
+Before delegation, apply [shared core](shared-core.md)'s execution contract for
+closure, state/complement inference, and owner/worker gap handling. Workers
+report newly discovered contract gaps to the owner as specified there; they do
+not ask the user directly.
+
+Every new or changed deterministic behavior contract must map to passing
+evidence. The worker return maps each acceptance item to evidence, and the owner
+re-derives acceptance from the original request and applicable existing behavior.
+Prefer automated functional/regression coverage at the lowest meaningful layer
+and add a real browser/runtime flow for material UI or integration risk.
+
+Any new or changed UI control or component that affects an action must be tested
+through the full affected flow, from reachable preconditions through interaction
+to observable outcome. Mount/render, snapshots, typecheck, lint, build, HTTP
+success, or isolated handler calls alone are not functional proof; a merely
+compiling/rendering component is not proof of the affected behavior. Require
+negative/complementary assertions where relevant.
+
+If suitable automation/infrastructure is unavailable or disproportionate, name
+the unautomated contract and why, record substitute real-flow evidence, and let
+the owner decide the residual risk. Required checks may not be failing at
+acceptance; separate unrelated pre-existing failures with evidence. Keep this
+proportional: no mandatory E2E or screenshot for every backend/documentation
+edit, no exhaustive state matrix, and no automatic user question for ordinary
+inferable states. Preserve the existing fast path when these risks do not apply.
+
+## Observable evidence boundaries
+
+Higher reasoning effort does not substitute for absent observable evidence.
+Exercise the real boundary that could change the decision before consulting or
+accepting when the available evidence does not reach it; a stronger model may
+help decide what to test, but cannot turn an unexercised boundary into proof.
+
+For any changed service, worker, agent, daemon, or other resident process,
+runtime evidence is valid only after proving that the exercised process loaded
+the new version. Acceptable proof includes a restart or reload followed by the
+exercise, a PID/start time after the change, a version or hash, a startup log,
+or another reliable version marker. A request handled successfully by an old
+process is not acceptance evidence for the change.
+
+If a follow-up request introduces a new subsystem or system boundary, reopen
+only the delta of the execution contract: preserve criteria already satisfied,
+add the new slice, recalculate its risks and validations, and do not retransmit
+the old history. Keep the cost, corrections, and evidence for that new slice
+separate from the completed work.
 
 ## Bug fixes
 
