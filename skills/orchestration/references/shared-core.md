@@ -72,12 +72,21 @@ Keep topology shallow: the owner delegates and integrates; workers return
 out-of-scope needs to the owner. A host that permits nested agents does not make
 them necessary for this skill.
 
+For Codex work with active `cost-efficiency`, use the
+[cost-efficient owner loop](cost-efficiency.md) for compact handoffs,
+fresh-context phase transitions, correction redispatch, event-oriented waiting,
+and the no-subagent ledger fallback. Those controls reduce repeated context;
+they do not reduce the execution contract or acceptance evidence.
+
 ## Handoff, review, and completion
 
 Every handoff records: goal; covered scope; files changed or inspected;
 validations and outcomes; whether isolation was used; unresolved risks; and the
 next owner decision. Host-specific thread IDs, JSONL paths, or cloud links are
 optional evidence, never the portable contract.
+
+The cost-efficient Codex profile uses its stricter eight-field handoff and
+approximately 1,200-token target in place of this generic portable shape.
 
 The owner inspects the relevant diff and worker evidence, then independently
 runs proportionate acceptance checks. It re-derives acceptance from the original

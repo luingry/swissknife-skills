@@ -21,6 +21,7 @@ function section(content, heading, nextHeading) {
 
 const retiredRouteName = String.fromCharCode(83, 112, 97, 114, 107);
 const retiredModelSlug = ['gpt-5.3-codex-', retiredRouteName.toLowerCase()].join('');
+const retiredEditorArtifact = ['cursor', 'editions.md'].join('-');
 
 function assertLocalLinksResolve(relativePath) {
   const content = read(relativePath);
@@ -214,6 +215,7 @@ test('CLI worker fallback separates Luna Low direct reconnaissance, surgical wri
 test('current Codex operational artifacts contain no retired route or model slug', () => {
   const files = [
     'references/codex.md',
+    'references/cost-efficiency.md',
     'references/routing-details.md',
     'references/cli-workers.md',
     'references/acceptance-workflows.md',
@@ -224,11 +226,13 @@ test('current Codex operational artifacts contain no retired route or model slug
     const content = read(relativePath);
     assert.doesNotMatch(content, new RegExp(retiredRouteName, 'i'), `${relativePath} still names the retired route`);
     assert.doesNotMatch(content, new RegExp(retiredModelSlug, 'i'), `${relativePath} still names the retired model`);
+    assert.doesNotMatch(content, new RegExp(retiredEditorArtifact, 'i'), `${relativePath} still names the retired editor artifact`);
   }
   for (const relativePath of ['docs/compatibility.md', 'skills/catalog.json', 'CHANGELOG.md']) {
     const content = fs.readFileSync(path.join(root, relativePath), 'utf8');
     assert.doesNotMatch(content, new RegExp(retiredRouteName, 'i'), `${relativePath} still names the retired route`);
     assert.doesNotMatch(content, new RegExp(retiredModelSlug, 'i'), `${relativePath} still names the retired model`);
+    assert.doesNotMatch(content, new RegExp(retiredEditorArtifact, 'i'), `${relativePath} still names the retired editor artifact`);
   }
 });
 
@@ -250,6 +254,7 @@ test('orchestration references resolve their essential local links', () => {
   for (const relativePath of [
     'SKILL.md',
     'references/codex.md',
+    'references/cost-efficiency.md',
     'references/shared-core.md',
     'references/claude-code.md',
     'references/cursor.md',
@@ -337,6 +342,118 @@ test('acceptance workflow owns evidence mapping, full-flow proof, and proportion
   assert.match(acceptance, /no mandatory E2E or screenshot.*no exhaustive state matrix.*no automatic user question/is);
   assert.match(acceptance, /Preserve the existing fast path/i);
   assert.doesNotMatch(acceptance, /Wording such as “when active, reveal\/show\/enable X”/i);
+});
+
+test('cost-efficient scenarios route execution and correction without moving acceptance from the owner', () => {
+  const cost = read('references/cost-efficiency.md');
+  const routing = read('references/routing-details.md');
+  const ownership = section(cost, '## Non-negotiable ownership', '## Compact contract before implementation').replace(/\s+/g, ' ');
+  const freshContext = section(cost, '## Fresh-context phase transitions', '## Ledger and acceptance').replace(/\s+/g, ' ');
+  const routingBoundaries = section(cost, '## Routing boundaries').replace(/\s+/g, ' ');
+
+  const defaultExecutor = routingBoundaries.match(/keeps (Luna Max) as the default substantive executor/i)?.[1];
+  const correctionExecutor = freshContext.match(/Substantive correction returns to fresh-context (Luna Max)/i)?.[1];
+  const speedExecutor = routing.match(/Route to (Terra High).*instead when the user\s+explicitly prioritizes speed/is)?.[1];
+  assert.ok(defaultExecutor && correctionExecutor && speedExecutor, 'routing roles must be derivable from the written policy');
+
+  const selectExecutor = ({priority, phase}) => {
+    if (phase === 'substantive-correction') return correctionExecutor;
+    if (priority === 'speed') return speedExecutor;
+    return defaultExecutor;
+  };
+  assert.deepEqual([
+    selectExecutor({priority: 'cost-efficiency', phase: 'implementation'}),
+    selectExecutor({priority: 'cost-efficiency', phase: 'substantive-correction'}),
+    selectExecutor({priority: 'speed', phase: 'implementation'}),
+  ], ['Luna Max', 'Luna Max', 'Terra High']);
+
+  const effectivePriority = ({projectPriority, requestPriority}) => requestPriority ?? projectPriority;
+  const profileIsActive = (priorities) => effectivePriority(priorities) === 'cost-efficiency';
+  assert.equal(profileIsActive({projectPriority: 'cost-efficiency'}), true);
+  assert.equal(profileIsActive({projectPriority: 'cost-efficiency', requestPriority: 'speed'}), false);
+  assert.equal(
+    selectExecutor({priority: effectivePriority({projectPriority: 'cost-efficiency', requestPriority: 'speed'}), phase: 'implementation'}),
+    'Terra High',
+  );
+  assert.match(cost, /effective Codex priority is `cost-efficiency`.*current request has taken precedence/is);
+  assert.match(cost, /current-request `speed` priority therefore disables\s+this profile/is);
+
+  for (const responsibility of [
+    'understand the request',
+    'close the contract',
+    'make material decisions',
+    'inspect the candidate diff and evidence',
+    'proportionate independent acceptance',
+    'final acceptance',
+  ]) assert.match(ownership, new RegExp(responsibility, 'i'));
+  assert.match(ownership, /There is no round limit that permits accepting incomplete work/i);
+  assert.match(ownership, /all material findings are resolved.*genuine external\/user blocker/is);
+});
+
+test('cost-efficient handoff and early contract are structured, bounded, and evidence-oriented', () => {
+  const cost = read('references/cost-efficiency.md');
+  const contract = section(cost, '## Compact contract before implementation', '## Compact handoff').replace(/\s+/g, ' ');
+  const handoff = section(cost, '## Compact handoff', '## Fresh-context phase transitions');
+  const items = [...handoff.matchAll(/^\d+\.\s+(.+?);?$/gm)].map((match) => match[1]);
+
+  assert.equal(items.length, 8, 'compact handoff must expose exactly eight evidence fields');
+  const handoffShape = items.join(' ').toLowerCase();
+  for (const concept of ['fixed point', 'material files', 'material decisions', 'tests and results', 'validations', 'not proven', 'open findings', 'next action']) {
+    assert.ok(handoffShape.includes(concept), `compact handoff is missing ${concept}`);
+  }
+  assert.match(handoff, /at most approximately 1,200 tokens/i);
+  assert.match(handoff, /references replacing dumps/i);
+  assert.match(handoff, /not a diary, full history, repeated prompt, or imported raw\s+tool\/log output/i);
+
+  for (const concern of [
+    'functional outcome and happy path',
+    'authority, ownership of consumed resources',
+    'downstream contracts and consumers',
+    'tools, plugins, MCP servers, network access',
+    'concurrency, cancellation, retries, timeouts',
+    'exact tests and expected results',
+    'repository docs/instructions',
+    'runtime proof at the real boundary',
+  ]) assert.match(contract, new RegExp(concern, 'i'));
+});
+
+test('cost-efficient later phases use fresh bounded context, delta review, and a fallback ledger', () => {
+  const cost = read('references/cost-efficiency.md');
+  const fresh = section(cost, '## Fresh-context phase transitions', '## Ledger and acceptance').replace(/\s+/g, ' ');
+  const ledger = section(cost, '## Ledger and acceptance', '## Routing boundaries').replace(/\s+/g, ' ');
+  const acceptance = read('references/acceptance-workflows.md').replace(/\s+/g, ' ');
+
+  assert.match(fresh, /reviewer receives the contract, fixed point, candidate\/diff ID, and minimum references/i);
+  assert.match(fresh, /fixer receives only the open findings, files\s+and hunks, affected criteria, and required checks/i);
+  assert.match(fresh, /`fork_turns: "none"` by\s+default.*never use `fork_turns:\s+"all"` merely for convenience/is);
+  assert.match(fresh, /fresh-context Luna Max \(`gpt-5\.6-luna`,\s+effort `max`\)/i);
+  assert.match(fresh, /Owner may correct\s+directly only when.*surgical.*demonstrably cheaper/is);
+  assert.match(fresh, /bounded event-oriented window.*interrupt and redispatch a fresh\s+context.*preserved worktree\/state/is);
+  assert.match(fresh, /Do not discard partial work/i);
+  assert.match(fresh, /timeout with no state change creates no new\s+finding, polling loop, or narrative recap/i);
+
+  assert.match(ledger, /subagents or history controls are unavailable.*execute sequentially/is);
+  assert.match(ledger, /Work only on open findings and affected criteria/i);
+  assert.match(ledger, /criteria \(`pending`, `proven`,\s+or `open`\).*findings.*evidence/is);
+  assert.match(ledger, /Owner independently consolidates the ledger.*accepts only after/is);
+  assert.match(ledger, /Static repository tests can verify the written invariants.*cannot prove those runtime\s+effects/is);
+  assert.match(acceptance, /Owner reviews the correction delta and repeats the\s+tests and invariants it can affect/i);
+  assert.match(acceptance, /Repeat full validation only when the change\s+can invalidate other criteria/is);
+});
+
+test('higher-effort consultation remains conditional and uses the owner model', () => {
+  const consultation = section(read('references/codex.md'), '## Adaptive same-model consultation (Codex only)', '## Mandatory Luna Low surgical gate').replace(/\s+/g, ' ');
+  const pairs = [...consultation.matchAll(/medium (Astra|Sol) owner \(`([^`]+)`\) may consult only `([^`]+)` at\s+effort `high` or `xhigh`/gi)]
+    .map(([, owner, ownerModel, consultantModel]) => ({owner, ownerModel, consultantModel}));
+
+  assert.deepEqual(pairs, [
+    {owner: 'Astra', ownerModel: 'gpt-6-astra', consultantModel: 'gpt-6-astra'},
+    {owner: 'Sol', ownerModel: 'gpt-5.6-sol', consultantModel: 'gpt-5.6-sol'},
+  ]);
+  assert.match(consultation, /Do not consult merely because.*first correction.*mechanical\s+review/is);
+  assert.match(consultation, /one concrete question/i);
+  assert.match(consultation, /does not implement, delegate, accept, broaden scope, or review the whole change/i);
+  assert.doesNotMatch(consultation, /Sol.*effort `low`/i);
 });
 
 // These assertions protect the cohesive published written contract; they do not

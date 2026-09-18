@@ -8,7 +8,9 @@
    build, runtime flow, browser flow, benchmark, or log inspection.
 4. Exercise relevant adjacent behavior and edge cases when practical.
 5. Require the worker report to map every acceptance item to passing evidence;
-   return concrete defects to the same worker and re-verify the correction.
+   return concrete defects to the appropriate worker and re-verify the
+   correction. Under Codex `cost-efficiency`, follow the fresh-context fixer
+   and compact-ledger rules in [cost-efficient owner loop](cost-efficiency.md).
 6. The owner independently re-derives acceptance from the original request and
    applicable existing behavior, including negative/complementary assertions
    and the full affected flow when relevant; do not accept a reduced worker
@@ -62,6 +64,12 @@ only the delta of the execution contract: preserve criteria already satisfied,
 add the new slice, recalculate its risks and validations, and do not retransmit
 the old history. Keep the cost, corrections, and evidence for that new slice
 separate from the completed work.
+
+After a correction, the Owner reviews the correction delta and repeats the
+tests and invariants it can affect. Repeat full validation only when the change
+can invalidate other criteria, shared behavior, or a real boundary already
+proved. This incremental pass never permits an open material finding to be
+ignored, and final acceptance remains the Owner's decision.
 
 ## Bug fixes
 

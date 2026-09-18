@@ -41,6 +41,12 @@ handoffs, parallelism, review, visual routing, and stop conditions. The shared
 core applies to every host, but the selected adapter governs any host-specific
 routing, model, isolation, background, and fallback detail.
 
+When the selected host is Codex and the effective priority is
+`cost-efficiency` after applying current-request precedence, also read and
+apply the [cost-efficient owner loop](references/cost-efficiency.md).
+It compresses repeated Owner context while preserving the same contract,
+evidence standard, independent acceptance, and final ownership.
+
 For bug, performance, runtime, browser, integration, or worker acceptance work,
 also read [acceptance workflows](references/acceptance-workflows.md). When a
 significant UI surface is in scope, use the optional `design-intelligence`

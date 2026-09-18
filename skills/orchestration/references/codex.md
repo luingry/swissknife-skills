@@ -28,6 +28,18 @@ field; never duplicate either. An explicit priority in the current request has
 precedence for that task and does not change the persistent preference unless
 the user explicitly asks to update it.
 
+## Cost-efficient owner loop
+
+When the effective priority is `cost-efficiency` after applying the
+current-request precedence above, read and apply
+[cost-efficient owner loop](cost-efficiency.md) before substantive delegation.
+An explicit current-request `speed` priority does not activate this profile.
+The Task Owner closes the acceptance contract, makes material decisions,
+reviews the candidate diff/evidence, runs proportionate independent acceptance,
+and alone decides final acceptance. Extensive investigation, substantive
+implementation, prolonged correction, and repetitive exploration belong to the
+appropriate economical executor when delegation is available.
+
 ## Mandatory routing assessment
 
 Before exploration, repository/engineering tool calls, edits, or delegation,
@@ -82,8 +94,12 @@ review, and acceptance under this skill.
 - A worker saying `done`, or a component merely mounting/rendering or compiling,
   is not functional proof; use the shared core and acceptance workflow's
   complementary-state and proportional evidence rules.
-- When review finds a defect, return specific feedback to the same worker and
-  repeat worker -> review -> correction while it remains the appropriate tier;
+- When review finds a defect, return specific feedback to the appropriate
+  worker and repeat worker -> review -> correction while it remains the
+  appropriate tier. Under `cost-efficiency`, use the fresh-context correction
+  and compact-ledger rules in [cost-efficient owner loop](cost-efficiency.md);
+  outside that profile, reuse the same worker when practical. Never use an
+  elapsed round count to accept unresolved material findings;
   default next-pass review is targeted to re-verify the finding(s), adjacent
   regressions around the correction, and that previously satisfied criteria were
   not obviously invalidated. Broader review happens only if the correction
@@ -200,6 +216,11 @@ multi-file or multi-subsystem changes, substantive bugs, refactoring, new tests,
 API/database/application logic, performance implementation, routine debugging,
 and iterative code/test/fix work. Terra High is an alternate executor, not the
 default when no speed priority was requested.
+
+Terra High also remains available as a read-only reviewer when independent
+review is warranted by substantial security, authentication, concurrency, or
+resident-process risk. That review route does not make Terra the default
+implementer or transfer final acceptance away from the Task Owner.
 
 ## Adaptive same-model consultation (Codex only)
 
@@ -372,7 +393,9 @@ launcher's guarded direct mode; it never creates a worktree and never permits
 writes.
 
 The external CLI process is a normal supporting worker: delegation remains one
-level deep, recursive agents are disabled, JSONL evidence is captured, review
-and correction use the same worker/worktree when practical, and integration
-happens only after independent acceptance. Absence of the exact slug from the
-live catalog is real unavailability.
+level deep, recursive agents are disabled, JSONL evidence is captured, and
+integration happens only after independent acceptance. Review and correction
+use the same worker/worktree when practical except when the cost-efficient
+fresh-context rule applies; that rule preserves the existing worktree/state
+while replacing repeated conversation history. Absence of the exact slug from
+the live catalog is real unavailability.

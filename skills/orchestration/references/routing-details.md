@@ -34,6 +34,15 @@ the answer; then record the value once in the most specific project-root
 `AGENTS.md`. A current-request priority overrides the stored value for that
 task only unless the user explicitly asks to persist the update.
 
+When the effective priority is `cost-efficiency` after current-request
+precedence, read [cost-efficient owner loop](cost-efficiency.md) before
+substantive delegation. An explicit current-request `speed` priority keeps the
+speed route even if the project stores `cost-efficiency`. The profile governs
+the early acceptance contract, compact evidence return, fresh-context
+review/correction, incremental Owner acceptance, event-oriented waiting, and
+sequential ledger fallback. It changes context transfer, not the Owner's
+responsibility or the acceptance threshold.
+
 When an Astra or Sol Task Owner is at medium effort, any temporary consultation
 must use the same exact model slug at `high` or `xhigh`: Astra consults only
 `gpt-6-astra`, and Sol consults only `gpt-5.6-sol`. Never swap Astra and Sol,
@@ -100,6 +109,11 @@ explicitly prioritizes speed or the shortest delivery time. Terra High is also
 the fallback if Luna Max is genuinely unavailable. A user-selected supported
 model or effort overrides these defaults.
 
+Terra High remains available for a read-only review when substantial security,
+authentication, concurrency, or resident-process risk warrants independent
+specialist scrutiny. This does not change the default implementation route or
+the Owner's final acceptance responsibility.
+
 ## Handoff contract
 
 Read [shared core](shared-core.md) and close its smallest complete execution
@@ -127,6 +141,11 @@ The worker returns:
   contract-to-evidence mapping.
 - Validation: commands and outcomes.
 - Concerns/scope gaps: unresolved issues only.
+
+Under `cost-efficiency`, the more specific eight-field, approximately
+1,200-token return contract in [cost-efficient owner loop](cost-efficiency.md)
+replaces this generic return shape. Send references to diffs, logs, and
+artifacts instead of copying raw output or the task history.
 
 ## Shallow topology
 
@@ -213,3 +232,5 @@ separately, and neither is required for the fast path or depends on the other.
 - Recursive delegation.
 - Accepting worker claims without observable evidence.
 - Skipping eligible Luna Low surgical delegation because delegation has overhead.
+- Replaying the full Owner conversation into a later review or correction.
+- Accepting unresolved findings because a correction count or round budget elapsed.
