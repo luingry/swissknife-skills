@@ -6,6 +6,11 @@ All notable changes to this repository are documented here.
 
 ### Changed
 
+- `orchestration` now treats wait expiry as an event-oriented wake-up rather
+  than isolated stuck proof, renews waits while progress or a relevant process
+  is observable, and requires fresh-context recovery only after consecutive
+  no-progress windows with no active process.
+
 - `orchestration` now treats Astra (`gpt-6-astra`) and Sol (`gpt-5.6-sol`) as
   an equivalent Codex planning, architecture, critical-review, acceptance, and
   consultation tier. It selects one available, authorized model without

@@ -87,6 +87,26 @@ Do not discard partial work. A timeout with no state change creates no new
 finding, polling loop, or narrative recap; continue only when an event or
 concrete evidence requires action.
 
+## Progress-aware Codex wait loop
+
+The shared-core progress-aware waiting rules are authoritative. In Codex,
+prefer the host's event-oriented wait primitive (such as `wait_threads`) for a
+long wait, typically covering 5-10 minutes where the host permits it, rather
+than repeated snapshot reads. Use an initial lease of ~10 minutes for
+common work and ~20 minutes for debugging, builds, or runtime work. While
+checkpoints, tool activity, diffs or file changes, or an active test/build/
+runtime process are observable, renew the wait. Do not send commentary or an
+owner snapshot when the state is unchanged.
+
+When a lease expires without a completion result, use `send_message_to_thread`
+(or the host equivalent) to request a concrete checkpoint and grant about
+5 minutes. Count the checkpoint window as the first no-progress window only if
+it remains without real control/evidence; after a second consecutive
+no-progress window, confirm that no relevant process is active before
+interrupting. Preserve the workspace and partial diff, then create a truly new
+agent with a minimal finding-only brief. Never use `followup_task` on the
+interrupted agent and relabel it as fresh context.
+
 ## Ledger and acceptance
 
 When subagents or history controls are unavailable, execute sequentially from

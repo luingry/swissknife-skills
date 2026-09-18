@@ -21,6 +21,32 @@ Use semantic roles rather than vendor model names:
 
 Use one implementer by default. Do not create persistent agents automatically.
 
+## Progress-aware waiting and recovery
+
+Waiting is an event-oriented wake-up, never isolated proof that a worker is
+stuck. Prefer one long, event-driven wait appropriate to the work, typically
+5-10 minutes. Start a common task with an initial lease of ~10 minutes;
+debugging, build, and runtime tasks may use ~20 minutes. A wait returning
+is not itself a failure: when a checkpoint, tool activity, diff or file change,
+or active test/build/runtime process is observable, renew the wait and keep the
+worker running.
+
+Do not create a turn, commentary, or owner snapshot for an unchanged state. If
+the lease expires without a completion result, request a concrete checkpoint
+and allow a short ~5-minute checkpoint window. A checkpoint counts only when it
+gives the owner real control or evidence (for example, a changed artifact, tool
+result, process state, or explicit next action), not a repeated "still running"
+status. If that window also has no progress, wait one further bounded window;
+interrupt only when the two consecutive windows show no observable progress and
+no relevant process is active.
+
+Preserve workspace/state and partial work when interrupting. Dispatch a truly
+new worker with only the open finding(s), affected files/hunks, acceptance
+criteria, and required checks. Do not treat resuming or following up with the
+interrupted worker as fresh context. Owner review and acceptance advance only
+on new evidence or a final result; unchanged snapshots do not justify a review,
+acceptance, or progress update.
+
 ## Execution contract before delegation
 
 Before delegating, the owner closes the smallest complete execution contract.

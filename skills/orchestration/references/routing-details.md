@@ -23,6 +23,12 @@ solely because the requested product work is a performance, runtime-latency, or
 throughput optimization: such work still uses Luna Max by default unless the
 user also asks for faster agent delivery.
 
+All routes use the shared core's progress-aware waiting and recovery contract:
+a timeout is a wake-up, not standalone stuck proof; observable progress or an
+active relevant process renews the wait, while unchanged snapshots do not create
+owner commentary or acceptance. Codex's cost-efficient details are in the
+[cost-efficient owner loop](cost-efficiency.md).
+
 ## Codex project preference and adaptive consultation
 
 For Codex, read the most specific applicable project `AGENTS.md` before this

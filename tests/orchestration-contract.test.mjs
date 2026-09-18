@@ -314,6 +314,34 @@ test('workers report newly discovered behavior-contract gaps without asking user
   assert.doesNotMatch(contract, /worker(?:s)? (?:may|should|must) ask the user directly/i);
 });
 
+test('shared core treats waits as progress-aware wake-ups and preserves fresh recovery', () => {
+  const sharedCore = read('references/shared-core.md');
+  const waiting = section(sharedCore, '## Progress-aware waiting and recovery', '## Execution contract before delegation').replace(/\s+/g, ' ');
+
+  assert.match(waiting, /event-oriented wake-up.*never isolated proof.*stuck/i);
+  assert.match(waiting, /typically 5-10 minutes/i);
+  assert.match(waiting, /initial lease of ~10 minutes.*debugging, build, and runtime tasks.*~20 minutes/is);
+  assert.match(waiting, /checkpoint, tool activity, diff or file change, or active test\/build\/runtime process.*renew the wait/is);
+  assert.match(waiting, /Do not create a turn, commentary, or owner snapshot for an unchanged state/i);
+  assert.match(waiting, /lease expires.*request a concrete checkpoint.*~5-minute checkpoint window/is);
+  assert.match(waiting, /two consecutive windows show no observable progress and no relevant process is active/is);
+  assert.match(waiting, /Preserve workspace\/state and partial work.*truly new worker.*open finding.*affected files\/hunks/is);
+  assert.match(waiting, /following up with the interrupted worker as fresh context/i);
+  assert.match(waiting, /review and acceptance advance only on new evidence or a final result/i);
+});
+
+test('Codex cost loop binds timeout recovery to real control and a new agent', () => {
+  const cost = read('references/cost-efficiency.md');
+  const waiting = section(cost, '## Progress-aware Codex wait loop', '## Ledger and acceptance').replace(/\s+/g, ' ');
+
+  assert.match(waiting, /host's event-oriented wait primitive.*wait_threads/is);
+  assert.match(waiting, /5-10 minutes.*initial lease.*10 minutes.*20 minutes.*debugging, builds, or runtime work/is);
+  assert.match(waiting, /send_message_to_thread.*request a concrete checkpoint.*about 5 minutes/is);
+  assert.match(waiting, /second consecutive no-progress window.*no relevant process is active.*interrupting/is);
+  assert.match(waiting, /create a truly new agent.*minimal finding-only brief/is);
+  assert.match(waiting, /Never use `followup_task` on the interrupted agent.*fresh context/is);
+});
+
 test('Codex routes substantive work through authoritative contract and acceptance sections', () => {
   const codex = section(read('references/codex.md'), '## Invariants', '## Completion and verification');
 
