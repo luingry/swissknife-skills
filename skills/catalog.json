@@ -26,6 +26,12 @@
       "portability": "Conditional on Node.js, npm, and Remotion; capture modes may need Playwright, Chromium, adb, or simctl."
     },
     {
+      "name": "lightweight-windows-app",
+      "path": "skills/lightweight-windows-app",
+      "summary": "Builds, changes, fixes and releases lightweight C#/WPF Windows tray apps, widgets and modules with an original design system and proof on the installed exe.",
+      "portability": "Format-level compatible with standard Agent Skills hosts, but Windows-only at runtime: needs the .NET SDK, Windows PowerShell 5.1 and Inno Setup 6, and targets .NET Framework 4.8. Its scaffold and scripts were exercised on Windows 11 from Claude Code desktop on 2026-11-06, and not under Codex or Cursor."
+    },
+    {
       "name": "orchestration",
       "path": "skills/orchestration",
       "summary": "Routes repository work through the active host while the Task Owner integrates evidence and accepts the result.",

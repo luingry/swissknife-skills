@@ -1,0 +1,4 @@
+interface:
+  display_name: "Lightweight Windows App"
+  short_description: "Build and ship light, fully custom WPF tray apps"
+  default_prompt: "Use $lightweight-windows-app to build, change, fix or release this lightweight Windows desktop app."

@@ -1,0 +1,80 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - VERSION
+      - CHANGELOG.md
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Read version and matching changelog section
+        id: metadata
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = (Get-Content -LiteralPath VERSION -Raw).Trim()
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw "VERSION must be MAJOR.MINOR.PATCH; found '$version'." }
+
+          $lines = @(Get-Content -LiteralPath CHANGELOG.md)
+          $start = -1
+          for ($i = 0; $i -lt $lines.Count; $i++) {
+            if ($lines[$i] -match ('^## \[' + [regex]::Escape($version) + '\](?:\s|$)')) { $start = $i; break }
+          }
+          if ($start -lt 0) { throw "CHANGELOG.md has no section for version $version." }
+          $end = $lines.Count
+          for ($i = $start + 1; $i -lt $lines.Count; $i++) {
+            if ($lines[$i] -match '^## ') { $end = $i; break }
+          }
+          $notes = Join-Path $env:RUNNER_TEMP 'release-notes.md'
+          $lines[($start + 1)..($end - 1)] | Set-Content -LiteralPath $notes -Encoding utf8
+
+          "version=$version" >> $env:GITHUB_OUTPUT
+          "tag=v$version" >> $env:GITHUB_OUTPUT
+          "notes=$notes" >> $env:GITHUB_OUTPUT
+
+      - name: Build and test installer
+        shell: pwsh
+        run: ./scripts/build-installer.ps1
+
+      - name: Publish release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tag = '${{ steps.metadata.outputs.tag }}'
+          # A published version is immutable: fixes ship as a new version.
+          gh release view $tag --json tagName 2>$null | Out-Null
+          if ($LASTEXITCODE -eq 0) {
+            Write-Host "$tag already exists; nothing to publish."
+            $global:LASTEXITCODE = 0
+            return
+          }
+          $global:LASTEXITCODE = 0
+          gh release create $tag "artifacts/__APP__-Setup-${{ steps.metadata.outputs.version }}.exe" `
+            --title "__APP__ ${{ steps.metadata.outputs.version }}" `
+            --notes-file '${{ steps.metadata.outputs.notes }}' `
+            --latest
+          if ($LASTEXITCODE) { throw "Could not create release $tag." }
+
+      - name: Keep only the 3 latest releases
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: ./scripts/release-retention.ps1 -Keep 3 -Apply
