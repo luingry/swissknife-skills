@@ -6,7 +6,6 @@ Describe the user-visible or maintenance outcome.
 
 - [ ] `npm run validate`
 - [ ] `npm test`
-- [ ] Template typecheck, when applicable
 - [ ] `git diff --check`
 
 ## Compatibility and behavior

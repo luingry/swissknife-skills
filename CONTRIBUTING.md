@@ -11,7 +11,6 @@ to change it.
 3. Update the README, [skills/catalog.json](skills/catalog.json), and compatibility
    documentation when a public skill contract changes.
 4. Run `npm ci`, `npm run validate`, `npm test`, and `git diff --check`.
-5. For template changes, run the template typecheck too.
 
 Please make changes narrowly, explain runtime requirements, and do not claim
 cross-host behavior without dated reproducible evidence.
