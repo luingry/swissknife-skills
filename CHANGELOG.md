@@ -43,8 +43,11 @@ All notable changes to this repository are documented here.
 - Machine-readable skill catalog, offline structural validator, unit tests, and CI.
 - Compatibility, authoring, testing, contribution, and security documentation.
 
+### Removed
+
+- `juicy-scrn-cptr` and its Remotion template, along with the template's CI job.
+
 ### Fixed
 
 - `juicy-scrn-cptr` frontmatter description now meets the Agent Skills 1024-character limit.
 - Remotion template Playwright dependency now meets the minimum version that fixes GHSA-7mvr-c777-76hp.
-- Remotion template now uses Remotion 4.0.541 and patched transitive dependencies, which clears the high-severity `npm audit` findings.

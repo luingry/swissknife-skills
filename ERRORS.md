@@ -1,19 +1,5 @@
 # ERRORS.md — erros não-triviais e soluções
 
-## Job do template Remotion falhava em `npm audit` sem mudança no template
-
-- **Sintoma:** em 2026-11-06, o job `Remotion template typecheck` falhou em um PR
-  que não tocava o template, com 8 vulnerabilidades (7 altas) em `zod`,
-  `source-map-js`, `fast-uri` e no Remotion 4.0.495.
-- **Causa raiz:** avisos publicados depois do último commit em `main` atingiram o
-  lockfile; a mesma auditoria falhava no lockfile de `origin/main`. `zod` vinha
-  fixado pelo próprio Remotion, então `npm audit fix` não bastava.
-- **Solução:** atualizar os pacotes do Remotion juntos para 4.0.541 com versões
-  exatas e depois rodar `npm audit fix` para as dependências transitivas.
-- **Prevenção:** conferir a auditoria em `origin/main` antes de atribuir a falha ao
-  PR. Para validar o render, `public/shot-1.png` e `public/shot-2.png` precisam
-  existir; sem elas, o render falha por 404, sem relação com a atualização.
-
 ## GitHub Actions falhava ao descobrir testes no Node 24
 
 - **Sintoma:** o job em `lts/*` falhava no Node 24.19.0, em Ubuntu e Windows,

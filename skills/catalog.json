@@ -20,12 +20,6 @@
       "portability": "Conditional on host file access; the design-taste memory is optional."
     },
     {
-      "name": "juicy-scrn-cptr",
-      "path": "skills/juicy-scrn-cptr",
-      "summary": "Builds Screen Studio-style desktop/mobile demos and framed screenshots from real captures or declarative timelines using React and Remotion.",
-      "portability": "Conditional on Node.js, npm, and Remotion; capture modes may need Playwright, Chromium, adb, or simctl."
-    },
-    {
       "name": "lightweight-windows-app",
       "path": "skills/lightweight-windows-app",
       "summary": "Builds, changes, fixes and releases lightweight C#/WPF Windows tray apps, widgets and modules with an original design system and proof on the installed exe.",

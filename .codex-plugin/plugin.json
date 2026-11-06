@@ -11,7 +11,7 @@
   "interface": {
     "displayName": "Luingry Swissknife Skills",
     "shortDescription": "Practical product-work skills",
-    "longDescription": "A small, standards-based skill collection for product, engineering, verification, and demo-video work.",
+    "longDescription": "A small, standards-based skill collection for product, engineering, verification, and Windows desktop app work.",
     "developerName": "luingry",
     "category": "Productivity",
     "capabilities": ["Skills"],

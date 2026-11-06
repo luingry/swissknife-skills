@@ -10,8 +10,7 @@
 - thin plugin adapters pointing at `./skills/` and the root Agent Plugin manifest.
 
 `npm test` runs unit tests for the validator with temporary fixtures. The CI
-workflow runs both on Ubuntu and Windows. The Remotion template has a separate
-dependency install and TypeScript typecheck.
+workflow runs both on Ubuntu and Windows.
 
 These are structural and infrastructure checks. They are **not** a behavioral
 benchmark of any model, do not prove skill activation, and do not claim runtime
