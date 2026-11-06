@@ -1,6 +1,6 @@
 # Manual installation
 
-Clone the repository, then copy the skills you want. The commands below copy all five skills.
+Clone the repository, then copy the skills you want. The commands below copy all four skills.
 To install only the recommended default set, omit `lightweight-windows-app` deliberately.
 
 ## Codex
@@ -9,7 +9,7 @@ Codex discovers user skills in `~/.agents/skills`.
 
 ```powershell
 New-Item -ItemType Directory -Force ~/.agents/skills | Out-Null
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-closer', 'delivery-verification', 'lightweight-windows-app') {
+foreach ($skill in 'design-intelligence', 'delivery-closer', 'delivery-verification', 'lightweight-windows-app') {
   Copy-Item -Recurse -Force ".\skills\$skill" ~/.agents/skills/
 }
 if (-not (Test-Path ~/.agents/design-taste.md)) {
@@ -19,7 +19,7 @@ if (-not (Test-Path ~/.agents/design-taste.md)) {
 
 ```sh
 mkdir -p ~/.agents/skills
-for skill in design-intelligence orchestration delivery-closer delivery-verification lightweight-windows-app; do
+for skill in design-intelligence delivery-closer delivery-verification lightweight-windows-app; do
   cp -R "./skills/$skill" ~/.agents/skills/
 done
 [ -e ~/.agents/design-taste.md ] || cp ./design-taste.md ~/.agents/design-taste.md
@@ -31,14 +31,14 @@ Claude Code discovers user skills in `~/.claude/skills`.
 
 ```powershell
 New-Item -ItemType Directory -Force ~/.claude/skills | Out-Null
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-closer', 'delivery-verification', 'lightweight-windows-app') {
+foreach ($skill in 'design-intelligence', 'delivery-closer', 'delivery-verification', 'lightweight-windows-app') {
   Copy-Item -Recurse -Force ".\skills\$skill" ~/.claude/skills/
 }
 ```
 
 ```sh
 mkdir -p ~/.claude/skills
-for skill in design-intelligence orchestration delivery-closer delivery-verification lightweight-windows-app; do
+for skill in design-intelligence delivery-closer delivery-verification lightweight-windows-app; do
   cp -R "./skills/$skill" ~/.claude/skills/
 done
 ```
@@ -61,14 +61,14 @@ user-wide install. For a repository-local installation, copy selected folders in
 
 ```powershell
 New-Item -ItemType Directory -Force .cursor/skills | Out-Null
-foreach ($skill in 'design-intelligence', 'orchestration', 'delivery-closer', 'delivery-verification', 'lightweight-windows-app') {
+foreach ($skill in 'design-intelligence', 'delivery-closer', 'delivery-verification', 'lightweight-windows-app') {
   Copy-Item -Recurse -Force ".\skills\$skill" .cursor/skills/
 }
 ```
 
 ```sh
 mkdir -p .cursor/skills
-for skill in design-intelligence orchestration delivery-closer delivery-verification lightweight-windows-app; do
+for skill in design-intelligence delivery-closer delivery-verification lightweight-windows-app; do
   cp -R "./skills/$skill" .cursor/skills/
 done
 ```

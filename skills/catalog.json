@@ -24,12 +24,6 @@
       "path": "skills/lightweight-windows-app",
       "summary": "Builds, changes, fixes and releases lightweight C#/WPF Windows tray apps, widgets and modules with an original design system and proof on the installed exe.",
       "portability": "Format-level compatible with standard Agent Skills hosts, but Windows-only at runtime: needs the .NET SDK, Windows PowerShell 5.1 and Inno Setup 6, and targets .NET Framework 4.8. Its scaffold and scripts were exercised on Windows 11 from Claude Code desktop on 2026-11-06, and not under Codex or Cursor."
-    },
-    {
-      "name": "orchestration",
-      "path": "skills/orchestration",
-      "summary": "Routes repository work through the active host while the Task Owner integrates evidence and accepts the result.",
-      "portability": "Conditional operational adapters select one Codex, Claude Code, or Cursor route without mixing host APIs; unavailable capabilities fall back to sequential Task Owner execution. Codex-only routing uses Astra/Sol for planning and acceptance, Luna Low for read-only reconnaissance and six-criterion surgical edits, Luna Max as the default substantive executor, Terra High when agent/orchestration delivery speed is explicitly prioritized or Luna Max is unavailable, and the guarded CLI worktree launcher, model catalog, and JSONL evidence remain Codex-only."
     }
   ]
 }

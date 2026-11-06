@@ -36,9 +36,9 @@ identical activation, model behavior, or tool availability.
 
 | Host | Standard format | Documented discovery route used here | Runtime confidence |
 | --- | --- | --- | --- |
-| Codex | Yes | Standalone: `~/.agents/skills`. Package: `.codex-plugin/plugin.json` after the Codex plugin install/import/development flow. | Conditional operational adapter: preserves Astra/Sol planning and review, Luna Low reconnaissance and six-criterion surgical routing, Luna Max default implementation, Terra High speed routing, plus guarded Codex CLI fallback when available. |
-| Claude Code | Yes | Standalone: `~/.claude/skills`. Package: `.claude-plugin/plugin.json` after the Claude plugin install/import/development flow. | Conditional operational adapter: owner plus available Explore/already-defined subagents; sequential fallback when capabilities are absent. |
-| Cursor | Yes | Standalone: `~/.agents/skills` or `.cursor/skills`. Package: root `plugin.json` after the Cursor Agent Plugin install/import/development flow. | Conditional operational adapter: parent owner plus available Explore/Task/already-defined subagents; sequential fallback when capabilities are absent. |
+| Codex | Yes | Standalone: `~/.agents/skills`. Package: `.codex-plugin/plugin.json` after the Codex plugin install/import/development flow. | Conditional on the tools the host exposes for each skill; see the skill matrix. |
+| Claude Code | Yes | Standalone: `~/.claude/skills`. Package: `.claude-plugin/plugin.json` after the Claude plugin install/import/development flow. | Conditional on the tools the host exposes for each skill; see the skill matrix. |
+| Cursor | Yes | Standalone: `~/.agents/skills` or `.cursor/skills`. Package: root `plugin.json` after the Cursor Agent Plugin install/import/development flow. | Conditional on the tools the host exposes for each skill; see the skill matrix. |
 
 ## Skill matrix
 
@@ -47,7 +47,6 @@ identical activation, model behavior, or tool availability.
 | `delivery-closer` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Conditional: it needs current host-visible state and authority from the full request and Task Owner handoff for any terminal mutation. It does not edit implementation artifacts, delegate, or replace acceptance. |
 | `delivery-verification` | Standard Agent Skills frontmatter and relative resources. | Expected where the host recognizes the documented skill path. | Most portable: it needs task evidence and whatever inspection tools the host provides. |
 | `design-intelligence` | Standard format. | Expected through the documented paths. | Conditional on filesystem access. Its `design-taste.md` location is Codex-oriented; absence must be handled as missing optional taste memory. |
-| `orchestration` | Standard format. | Expected through the documented paths. | **Conditional operational adapters.** It selects exactly one documented Codex, Claude Code, or Cursor route and falls back to a sequential Task Owner when required capabilities are absent. Astra/Sol planning and review, Luna Low reconnaissance and six-criterion surgical routing, Luna Max default implementation, Terra High speed routing, Codex CLI catalog, JSONL, and CLI worker workflow remain Codex-only. Claude Code and Cursor behavior is documentation-derived, not behaviorally tested here. |
 | `lightweight-windows-app` | Standard format. | Expected through the documented paths. | Windows only. Needs the .NET SDK, Windows PowerShell 5.1 and Inno Setup 6, and targets .NET Framework 4.8. Its scaffold and scripts were exercised on Windows 11 from Claude Code desktop on 2026-11-06; Codex and Cursor behavior is not tested here. |
 
 ## Plugin adapters
@@ -83,39 +82,3 @@ reports can illustrate operational variation only: for example, this
 [Cursor community thread](https://forum.cursor.com/t/how-to-use-agent-skills-in-cursor-ide/149860)
 is anecdotal evidence that manual and automatic handling can vary, not evidence
 of compatibility or quality. Official host documentation remains the primary basis here.
-
-## Orchestration runtime boundary
-
-The `orchestration` entrypoint is deliberately host-neutral: it identifies the
-active surface, selects one adapter only, and shares a portable owner/handoff/
-acceptance contract. It does not mix APIs, model names, config files, worktree
-semantics, logs, or cloud facilities between hosts. The maintained evidence is
-[the host-capability evidence](../skills/orchestration/references/host-capability-evidence.md).
-
-- **Codex:** preserves mandatory Luna Low reconnaissance, six-criterion Luna Low
-  surgical routing in repository/worktree write mode, Astra/Sol planning and
-  review, Luna Max as the default substantive implementation tier, Terra High
-  when the user explicitly prioritizes agent/orchestration delivery speed or
-  Luna Max is unavailable, live CLI model catalog, guarded worktree launcher,
-  JSONL evidence, and shallow topology. This is a user-directed routing policy,
-  not a claim of universal model behavior.
-- **Claude Code:** uses the owner session plus available Explore/custom
-  subagents; concurrent writers require available `isolation: worktree`.
-  Agent Teams are never enabled automatically; before Agent/subagent use, the
-  adapter checks the effective experimental-flag state. If it cannot confirm
-  Teams disabled, it remains owner-sequential unless Teams are confirmed enabled
-  and explicitly authorized.
-- **Cursor:** uses the parent Agent plus available Explore/custom Task
-  subagents; parallel writers require a confirmed worktree/copy/isolated branch.
-  Cloud handoff is used only when already available and authorized.
-
-No benchmark or practical Claude Code/Cursor execution has been performed.
-Each adapter must fall back to sequential execution if tools, permissions,
-model settings, isolation, background mode, or cloud access are unavailable.
-During significant visual work, `design-intelligence` is an independent optional
-capability. Near conclusion, `delivery-verification` and `delivery-closer` are
-independent optional capabilities. The active host must make each one available;
-its absence preserves the same proportional owner contract rather than skipping
-visual acceptance, delivery acceptance, or an authorized terminal close. No
-offline check proves that a host will activate a capability or that its runtime
-evidence is complete.

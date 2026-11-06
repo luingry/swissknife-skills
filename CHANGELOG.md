@@ -46,6 +46,7 @@ All notable changes to this repository are documented here.
 ### Removed
 
 - `juicy-scrn-cptr` and its Remotion template, along with the template's CI job.
+- `orchestration`, which is out of date and no longer used.
 
 ### Fixed
 

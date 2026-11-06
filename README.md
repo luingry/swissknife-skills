@@ -3,17 +3,15 @@
 [![skills.sh](https://skills.sh/b/luingry/swissknife-skills)](https://skills.sh/luingry/swissknife-skills)
 
 A small, MIT-licensed collection of reusable [Agent Skills](https://agentskills.io/specification)
-for product design, engineering orchestration, terminal delivery closure, verification,
-and lightweight Windows desktop apps. `skills/` is the single canonical source; host-specific plugin manifests are thin
+for product design, terminal delivery closure, verification, and lightweight Windows
+desktop apps. `skills/` is the single canonical source; host-specific plugin manifests are thin
 packaging/install adapters and contain no copied skill content.
 
 ## Scope and compatibility
 
 This repository documents installation for **Codex**, **Claude Code**, and **Cursor**
 only. A host may support the same `SKILL.md` format without discovering or executing
-every workflow identically. `orchestration` has a portable entrypoint and conditional
-Codex, Claude Code, and Cursor adapters; it degrades to a sequential owner
-workflow when a required host capability is unavailable. Cloning this repository
+every workflow identically. Cloning this repository
 alone does not cause a host to load a plugin manifest; install standalone skills
 at a documented skill path or use that host's plugin import/install/development
 flow. See the evidence, capability matrix, and limitations in
@@ -24,13 +22,12 @@ flow. See the evidence, capability matrix, and limitations in
 | Skill | Purpose | Runtime note |
 | --- | --- | --- |
 | [`design-intelligence`](skills/design-intelligence) | Guides significant UI/UX work with product-specific direction and practical visual verification. | Needs file access; its taste memory is optional. |
-| [`orchestration`](skills/orchestration) | Routes repository work through the active host while the Task Owner integrates evidence and accepts the result. | Selects one Codex, Claude Code, or Cursor adapter; Codex tiers and CLI remain Codex-only. |
 | [`delivery-closer`](skills/delivery-closer) | Completes and proves an explicitly authorized terminal delivery action after implementation. | Optional; needs authority from the full request and Task Owner handoff plus current host-visible evidence. It does not edit implementation code. |
 | [`delivery-verification`](skills/delivery-verification) | Returns an evidence-based PASS/FAIL when material uncertainty remains after implementation. | Most portable; needs host-available evidence/tools and never edits artifacts. |
 | [`lightweight-windows-app`](skills/lightweight-windows-app) | Builds, changes, fixes and releases lightweight C#/WPF Windows tray apps, widgets and modules with an original design system and proof on the installed exe. | Windows only; needs the .NET SDK, Windows PowerShell 5.1 and Inno Setup 6. |
 
 The machine-readable catalog is [skills/catalog.json](skills/catalog.json). The recommended default set is
-`design-intelligence`, `orchestration`, `delivery-closer`, and `delivery-verification`; `lightweight-windows-app` is an
+`design-intelligence`, `delivery-closer`, and `delivery-verification`; `lightweight-windows-app` is an
 explicit opt-in because it only applies to Windows desktop apps.
 
 ## Structure
