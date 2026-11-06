@@ -31,6 +31,11 @@ All notable changes to this repository are documented here.
 
 ### Added
 
+- `lightweight-windows-app` builds, changes, fixes and releases lightweight C#/WPF
+  Windows tray apps, widgets and modules. It bundles a compile-verified project
+  scaffold with placeholder design tokens, and an installed-exe proof script that
+  reads through WMI, so results stay correct inside MSIX-packaged agent hosts.
+
 - `delivery-closer`, a focused terminal-delivery skill that completes and proves
   only explicitly authorized actions without editing implementation artifacts.
 

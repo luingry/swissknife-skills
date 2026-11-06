@@ -1,0 +1,70 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                    mc:Ignorable="po">
+    <!-- Every value in this file is a PLACEHOLDER, to be replaced by the product's own design (docs/DESIGN_SYSTEM.md).
+         The colors are ugly on purpose and none of this is a starting look. Delete each tag as its value becomes real:
+         scripts/build-installer.ps1 refuses to build while any tag remains. -->
+
+    <!-- Surfaces -->
+    <SolidColorBrush x:Key="Brush.Backdrop" Color="#8A3D8A" po:Freeze="True" /> <!-- PLACEHOLDER: behind windows in snapshots -->
+    <SolidColorBrush x:Key="Brush.Surface" Color="#FFB8F6" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Surface.Raised" Color="#FF9CF0" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <!-- Text -->
+    <SolidColorBrush x:Key="Brush.Text.Primary" Color="#2E002E" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Text.Secondary" Color="#4F004F" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Text.Tertiary" Color="#6B006B" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <!-- Accent -->
+    <SolidColorBrush x:Key="Brush.Accent" Color="#E000E0" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <!-- Meaning -->
+    <SolidColorBrush x:Key="Brush.Meaning.Good" Color="#B000FF" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Meaning.Bad" Color="#C00060" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <!-- Interaction -->
+    <SolidColorBrush x:Key="Brush.Hover" Color="#40E000E0" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Press" Color="#70E000E0" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Focus" Color="#A0E000E0" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Track" Color="#C070C0" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <SolidColorBrush x:Key="Brush.Knob" Color="#FFF0FF" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Opacity.Disabled">0.5</sys:Double> <!-- PLACEHOLDER -->
+    <!-- Type: at most two sans-serif families, each with a clear job -->
+    <FontFamily x:Key="Font.Text">Comic Sans MS, Segoe UI</FontFamily> <!-- PLACEHOLDER -->
+    <FontFamily x:Key="Font.Numeral">Trebuchet MS, Segoe UI</FontFamily> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Type.Label">14</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Type.Caption">12</sys:Double> <!-- PLACEHOLDER -->
+    <!-- Space -->
+    <Thickness x:Key="Space.ShadowRoom">28,20,28,36</Thickness> <!-- PLACEHOLDER: outer window margin, room for Elevation.Panel -->
+    <Thickness x:Key="Space.Panel">28</Thickness> <!-- PLACEHOLDER -->
+    <Thickness x:Key="Space.IconGap">0,8,0,28</Thickness> <!-- PLACEHOLDER -->
+    <Thickness x:Key="Space.MenuPanel">6</Thickness> <!-- PLACEHOLDER -->
+    <Thickness x:Key="Space.MenuItem">14,8</Thickness> <!-- PLACEHOLDER -->
+    <Thickness x:Key="Space.CloseButton">0,12,12,0</Thickness> <!-- PLACEHOLDER -->
+    <Thickness x:Key="Space.Glow">-4</Thickness> <!-- PLACEHOLDER -->
+    <Thickness x:Key="Space.KnobInset">3,0</Thickness> <!-- PLACEHOLDER -->
+    <!-- Radius: a pill is half the element's height, never 999 -->
+    <CornerRadius x:Key="Radius.Panel">20</CornerRadius> <!-- PLACEHOLDER -->
+    <CornerRadius x:Key="Radius.Menu">14</CornerRadius> <!-- PLACEHOLDER -->
+    <CornerRadius x:Key="Radius.Control">8</CornerRadius> <!-- PLACEHOLDER -->
+    <CornerRadius x:Key="Radius.Glow">12</CornerRadius> <!-- PLACEHOLDER -->
+    <CornerRadius x:Key="Radius.Switch">13</CornerRadius> <!-- PLACEHOLDER: half of Size.SwitchHeight -->
+    <CornerRadius x:Key="Radius.SwitchGlow">17</CornerRadius> <!-- PLACEHOLDER: half of Size.SwitchHeight plus both glow margins -->
+    <!-- Size -->
+    <sys:Double x:Key="Size.SettingsWidth">400</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.AppIcon">84</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.MenuMinWidth">176</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.IconButton">32</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.IconStroke">1.6</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.SwitchWidth">46</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.SwitchHeight">26</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.SwitchKnob">20</sys:Double> <!-- PLACEHOLDER -->
+    <sys:Double x:Key="Size.SwitchTravel">20</sys:Double> <!-- PLACEHOLDER: width minus knob minus both insets -->
+    <sys:Double x:Key="Size.SwitchTravelBack">-20</sys:Double> <!-- PLACEHOLDER -->
+    <StreamGeometry x:Key="Icon.Close" po:Freeze="True">M 0,0 L 10,10 M 10,0 L 0,10</StreamGeometry> <!-- PLACEHOLDER -->
+    <!-- Motion -->
+    <Duration x:Key="Motion.Fast">0:0:0.14</Duration> <!-- PLACEHOLDER -->
+    <CubicEase x:Key="Motion.Ease" EasingMode="EaseOut" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <!-- Elevation: floating layers only -->
+    <DropShadowEffect x:Key="Elevation.Panel" BlurRadius="28" ShadowDepth="8" Direction="270" Opacity="0.45" Color="#400040" po:Freeze="True" /> <!-- PLACEHOLDER -->
+    <DropShadowEffect x:Key="Elevation.Knob" BlurRadius="6" ShadowDepth="1" Direction="270" Opacity="0.4" Color="#400040" po:Freeze="True" /> <!-- PLACEHOLDER -->
+</ResourceDictionary>

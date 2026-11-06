@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>__APP__</RootNamespace>
+    <AssemblyName>__APP__</AssemblyName>
+    <UseWPF>true</UseWPF>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon Condition="Exists('..\..\assets\__APP_LOWER__.ico')">..\..\assets\__APP_LOWER__.ico</ApplicationIcon>
+  </PropertyGroup>
+</Project>

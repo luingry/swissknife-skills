@@ -3,8 +3,8 @@
 [![skills.sh](https://skills.sh/b/luingry/swissknife-skills)](https://skills.sh/luingry/swissknife-skills)
 
 A small, MIT-licensed collection of reusable [Agent Skills](https://agentskills.io/specification)
-for product design, engineering orchestration, terminal delivery closure, verification, and
-polished product demos. `skills/` is the single canonical source; host-specific plugin manifests are thin
+for product design, engineering orchestration, terminal delivery closure, verification,
+polished product demos, and lightweight Windows desktop apps. `skills/` is the single canonical source; host-specific plugin manifests are thin
 packaging/install adapters and contain no copied skill content.
 
 ## Scope and compatibility
@@ -28,10 +28,11 @@ flow. See the evidence, capability matrix, and limitations in
 | [`delivery-closer`](skills/delivery-closer) | Completes and proves an explicitly authorized terminal delivery action after implementation. | Optional; needs authority from the full request and Task Owner handoff plus current host-visible evidence. It does not edit implementation code. |
 | [`delivery-verification`](skills/delivery-verification) | Returns an evidence-based PASS/FAIL when material uncertainty remains after implementation. | Most portable; needs host-available evidence/tools and never edits artifacts. |
 | [`juicy-scrn-cptr`](skills/juicy-scrn-cptr) | Builds Screen Studio-style desktop/mobile demos and framed screenshots from real captures or declarative timelines using React and Remotion. | Needs Node.js, npm, and Remotion; capture modes may need Playwright, Chromium, `adb`, or `simctl`. |
+| [`lightweight-windows-app`](skills/lightweight-windows-app) | Builds, changes, fixes and releases lightweight C#/WPF Windows tray apps, widgets and modules with an original design system and proof on the installed exe. | Windows only; needs the .NET SDK, Windows PowerShell 5.1 and Inno Setup 6. |
 
 The machine-readable catalog is [skills/catalog.json](skills/catalog.json). The recommended default set is
 `design-intelligence`, `orchestration`, `delivery-closer`, and `delivery-verification`; `juicy-scrn-cptr` is an
-explicit opt-in because it carries a local media toolchain.
+explicit opt-in because it carries a local media toolchain, and so is `lightweight-windows-app`, because it only applies to Windows desktop apps.
 
 ## Structure
 
@@ -41,6 +42,7 @@ skills/                       canonical skill source
   <skill>/agents/openai.yaml  optional Codex UI metadata
   <skill>/references/         conditional guidance
   <skill>/assets/             reusable output assets/templates
+  <skill>/scripts/            optional deterministic helpers
 docs/                         compatibility, authoring, and validation guidance
 scripts/validate-repository.mjs
 tests/                        offline structural checks
@@ -64,7 +66,7 @@ npx skills add luingry/swissknife-skills
 Clone the repository and copy the skills you want. The documented PowerShell and Unix commands
 for Codex, Claude Code, and Cursor, including the optional `design-taste.md` starter memory,
 are in [docs/installation.md](docs/installation.md). To install only the recommended default
-set, omit `juicy-scrn-cptr` deliberately.
+set, omit `juicy-scrn-cptr` and `lightweight-windows-app` deliberately.
 
 Read [docs/compatibility.md](docs/compatibility.md) before relying on a skill's runtime behavior
 outside Codex.
