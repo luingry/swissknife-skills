@@ -47,3 +47,4 @@ All notable changes to this repository are documented here.
 
 - `juicy-scrn-cptr` frontmatter description now meets the Agent Skills 1024-character limit.
 - Remotion template Playwright dependency now meets the minimum version that fixes GHSA-7mvr-c777-76hp.
+- Remotion template now uses Remotion 4.0.541 and patched transitive dependencies, which clears the high-severity `npm audit` findings.
